@@ -15,8 +15,6 @@ export ENVSETTINGS="
     -e PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
 "
 export NETWORKSETTINGS="
-    -p 7080:8080
-    -p 7443:8443
     --net http_proxy
     --ip 10.1.1.${IMGID}
 "

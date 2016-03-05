@@ -38,7 +38,6 @@ if [ -z "$1" ]; then
 else
     cmd=$@
 fi
-
 docker_run="docker run $runopt $useropt --hostname=$CONTAINERNAME --name=$CONTAINERNAME
     $ENVSETTINGS $NETWORKSETTINGS $VOLMAPPING $IMAGENAME $cmd"
 
