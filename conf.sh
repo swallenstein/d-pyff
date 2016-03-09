@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# data shared between containers goes via these definitions:
+dockervol_root='/docker_volumes'
+shareddata_root="${dockervol_root}/1shared_data"
+
 # configure container
 export IMGID='3'  # range from 2 .. 99; must be unique
 export IMAGENAME="r2h2/pyff${IMGID}"
@@ -16,15 +20,15 @@ export ENVSETTINGS="
 "
 export NETWORKSETTINGS="
     --net http_proxy
-    --ip 10.1.1.${IMGID}
+    --ip 10.1.1.${IMGID}mo
 "
-export VOLROOT="/docker_volumes/$CONTAINERNAME"  # container volumes on docker host
+export VOLROOT="${dockervol_root}/$CONTAINERNAME"  # container volumes on docker host
 export VOLMAPPING="
     -v $VOLROOT/etc/pki:/etc/pki:Z
     -v $VOLROOT/etc/pyff:/etc/pyff:Z
     -v $VOLROOT/var/log:/var/log:Z
     -v $VOLROOT/var/md_agg:/var/md_agg:Z
-    -v $VOLROOT/var/md_feed:/var/md_feed:Z
+    -v $shareddata_root/md_feed:/var/md_feed:Z
     -v $VOLROOT/var/md_source:/var/md_source:Z
 "
 export STARTCMD='/start_pyffd.sh'
