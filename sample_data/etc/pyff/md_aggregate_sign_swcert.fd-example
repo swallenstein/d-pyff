@@ -1,5 +1,6 @@
 - load:
    - /var/md_source
+#- select: "!//md:EntityDescriptor[md:IDPSSODescriptor]"
 - select
 - store:
      directory: /tmp/
