@@ -2,6 +2,10 @@
 # container entrypoint for initializing mounted volumes with test data
 
 echo "initailizing /etc/pki /etc/pyff /var/md_source with sample data"
+if [ -d "/etc/pki/pyff/metadata_signing-key.pem" ]; then
+    echo "/etc/pki/pyff/metadata_signing-key.pem already exists: stopping"
+    exit 0
+fi
 mkdir -p /etc/pki/tls /etc/pki/pyff
 cp -p /opt/sample_data/etc/pki/tls/openssl.cnf  /etc/pki/tls/
 openssl genrsa -out /etc/pki/pyff/metadata_signing-key.pem 2048
