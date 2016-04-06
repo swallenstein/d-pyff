@@ -38,10 +38,7 @@ if ! id -u $CONTAINERUSER &>/dev/null; then
     groupadd -g $CONTAINERUID $CONTAINERUSER
     adduser -M -g $CONTAINERUID -u $CONTAINERUID $CONTAINERUSER
 fi
-if [ -d $VOLROOT/var/log/$CONTAINERNAME ]; then
-    mkdir -p $VOLROOT/var/log
-    chown $CONTAINERUSER:$CONTAINERUSER $VOLROOT/var/log
-fi
+
 # create dir with given user if not existing, relative to $HOSTVOLROOT
 function chkdir {
     dir=$1
