@@ -2,7 +2,7 @@ FROM centos:centos7
 MAINTAINER Rainer Hörbe <r2h2@hoerbe.at>
 
 RUN yum -y install epel-release curl ip lsof net-tools \
- && yum -y install usbutils gcc gcc-c++ redhat-lsb-core opensc pcsc-lite \
+ && yum -y install usbutils gcc gcc-c++ openssl redhat-lsb-core opensc pcsc-lite \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all \
  && pip install --upgrade pip \
@@ -28,8 +28,9 @@ RUN groupadd -g $UID $USERNAME \
  && mkdir -p /opt \
  && chmod 750 /opt
 
-COPY sample_data /opt/sample_data
-COPY init_sample.sh start*.sh /
+COPY install/sample_data /opt/sample_data
+COPY install/sample_data/etc/pki/tls/openssl.cnf /etc/pki/tls/
+COPY install/scripts/*.sh /
 RUN chmod +x /start*.sh \
  && chmod -R 755 /opt
 
