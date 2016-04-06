@@ -1,6 +1,6 @@
 - load:
    - /var/md_source
-#- select: "!//md:EntityDescriptor[md:IDPSSODescriptor]"
+#- select: "!//md:EntityDescriptor[md:SPSSODescriptor]"
 - select
 - store:
      directory: /tmp/
@@ -9,7 +9,7 @@
      validUntil: P10D
      ID: OurFederationSignedMetadata_
 - sign:
-    key: /etc/pki/metadata_key.pem
-    cert: /etc/pki/metadata_crt.pem
+    key: /etc/pki/metadata_test_key.pem
+    cert: /etc/pki/metadata_test_crt.pem
 - publish: /var/md_feed/metadata.xml
 

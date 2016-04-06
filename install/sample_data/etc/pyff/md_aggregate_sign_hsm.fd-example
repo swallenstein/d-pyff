@@ -1,6 +1,6 @@
 - load:
   - /var/md_source
-#- select: "!//md:EntityDescriptor[md:IDPSSODescriptor]"
+#- select: "!//md:EntityDescriptor[md:SPSSODescriptor]"
 - select
 - xslt:
     stylesheet: tidy.xsl
