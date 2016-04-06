@@ -10,6 +10,10 @@ export IMAGENAME="r2h2/pyff${IMGID}"
 export CONTAINERNAME="${IMGID}pyffTestWpv"
 export CONTAINERUSER="pyff${IMGID}"   # group and user to run container
 export CONTAINERUID="800${IMGID}"   # gid and uid for CONTAINERUSER
+export BUILDARGS="
+    --build-arg "USERNAME=$CONTAINERUSER" \
+    --build-arg "UID=$CONTAINERUID" \
+"
 export ENVSETTINGS="
     -e FREQUENCY=600
     -e LOGDIR=/var/log
@@ -28,8 +32,8 @@ export VOLMAPPING="
     -v $VOLROOT/etc/pyff:/etc/pyff:Z
     -v $VOLROOT/var/log:/var/log:Z
     -v $VOLROOT/var/md_agg:/var/md_agg:Z
-    -v $shareddata_root/md_feed:/var/md_feed:Z
     -v $VOLROOT/var/md_source:/var/md_source:Z
+    -v $shareddata_root/testWpvPvAt/md_feed:/var/md_feed:Z
 "
 export STARTCMD='/start_pyffd.sh'
 
@@ -50,5 +54,7 @@ chkdir etc/pki $CONTAINERUSER
 chkdir etc/pyff $CONTAINERUSER
 chkdir var/log $CONTAINERUSER
 chkdir var/md_agg $CONTAINERUSER
-chkdir var/md_feed $CONTAINERUSER
 chkdir var/md_source $CONTAINERUSER
+
+mkdir -p $shareddata_root/testWpvPvAt/md_feed
+chown -R $CONTAINERUSER:$CONTAINERUSER $shareddata_root/testWpvPvAt/md_feed

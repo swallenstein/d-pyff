@@ -38,6 +38,7 @@ shift $((OPTIND-1))
 
 SCRIPTDIR=$(cd $(dirname $BASH_SOURCE[0]) && pwd)
 source $SCRIPTDIR/conf${config_nr}.sh
+
 if [ -z "$runopt" ]; then
     runopt='-d --restart=unless-stopped'
 fi

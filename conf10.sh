@@ -5,17 +5,21 @@ dockervol_root='/docker_volumes'
 shareddata_root="${dockervol_root}/1shared_data"
 
 # configure container
-export IMGID='3'  # range from 2 .. 99; must be unique
+export IMGID='10'  # range from 2 .. 99; must be unique
 export IMAGENAME="r2h2/pyff${IMGID}"
-export CONTAINERNAME="${IMGID}pyffTestWpv"
+export CONTAINERNAME="${IMGID}pyffTestPvGvAt"
 export CONTAINERUSER="pyff${IMGID}"   # group and user to run container
 export CONTAINERUID="800${IMGID}"   # gid and uid for CONTAINERUSER
+export BUILDARGS="
+    --build-arg "USERNAME=$CONTAINERUSER" \
+    --build-arg "UID=$CONTAINERUID" \
+"
 export ENVSETTINGS="
     -e FREQUENCY=600
     -e LOGDIR=/var/log
     -e LOGLEVEL=INFO
     -e PIDFILE=/var/log/pyffd.pid
-    -e PIPELINEBATCH=/etc/pyff/md_aggregator.fd
+    -e PIPELINEBATCH=/etc/pyff/md_aggregate_sign.fd
     -e PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
 "
 export NETWORKSETTINGS="
@@ -28,8 +32,8 @@ export VOLMAPPING="
     -v $VOLROOT/etc/pyff:/etc/pyff:Z
     -v $VOLROOT/var/log:/var/log:Z
     -v $VOLROOT/var/md_agg:/var/md_agg:Z
-    -v $shareddata_root/md_feed:/var/md_feed:Z
     -v $VOLROOT/var/md_source:/var/md_source:Z
+    -v $shareddata_root/testPvGvAt/md_feed:/var/md_feed:Z
 "
 export STARTCMD='/start_pyffd.sh'
 
@@ -50,5 +54,7 @@ chkdir etc/pki $CONTAINERUSER
 chkdir etc/pyff $CONTAINERUSER
 chkdir var/log $CONTAINERUSER
 chkdir var/md_agg $CONTAINERUSER
-chkdir var/md_feed $CONTAINERUSER
 chkdir var/md_source $CONTAINERUSER
+
+mkdir -p $shareddata_root/testPvGvAt/md_feed
+chown -R $CONTAINERUSER:$CONTAINERUSER $shareddata_root/testPvGvAt/md_feed

@@ -6,6 +6,4 @@
 /usr/bin/pyff --loglevel=$LOGLEVEL $PIPELINEBATCH
 
 # make metadata files availabe to nginx container:
-chmod 644 $VOLROOT/var/md_feed/*.xml
-
-tail -1 /etc/hosts
+chmod 644 /var/md_feed/*.xml 2> /dev/null
