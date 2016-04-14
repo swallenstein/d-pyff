@@ -3,7 +3,7 @@
 while getopts ":hin:p" opt; do
   case $opt in
     i)
-      runopt='-it --rm'
+      runopt='-it'
       ;;
     n)
       re='^[0-9][0-9]?$'
