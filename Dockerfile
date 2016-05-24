@@ -16,9 +16,9 @@ RUN pip install future iso8601==0.1.9 \
  && pip install lxml \
  && pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
 
-# mdsplit function has not been pushed upstream yet:
+# mdsplit function has not been pushed upstream yet - used rhoerbe fork
+COPY install/opt/pyff /opt/source/pyff
 WORKDIR /opt/source/pyff
-RUN git clone https://github.com/rhoerbe/pyff.git .
 RUN python setup.py install
 
 # forward request and error logs to docker log collector

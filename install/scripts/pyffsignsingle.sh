@@ -2,7 +2,7 @@
 # create a signed XML file per EntityDescriptor for ADFS
 
 # Step 1. Split aggregate and create an XML and a pipeline file per EntityDescriptor
-/usr/bin/pyffsplit \
+/usr/bin/mdsplit.py \
     -c /etc/pki/pyff/metadata_signing-crt.pem \
     -k /etc/pki/pyff/metadata_signing-key.pem \
     -l /var/log/pyffsplit.log \
