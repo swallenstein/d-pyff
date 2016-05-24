@@ -40,4 +40,5 @@ source $SCRIPTDIR/conf${config_nr}.sh
 if [ $(id -u) -ne 0 ]; then
     sudo="sudo"
 fi
-${sudo} docker exec $runopt $CONTAINERNAME /start_pyff_batch.sh
+${sudo} docker exec $runopt $CONTAINERNAME /pyff_batch.sh
+${sudo} docker exec $runopt $CONTAINERNAME /pyffsignsingle.sh

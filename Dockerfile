@@ -2,7 +2,7 @@ FROM centos:centos7
 MAINTAINER Rainer Hörbe <r2h2@hoerbe.at>
 
 RUN yum -y install epel-release curl ip lsof net-tools \
- && yum -y install usbutils gcc gcc-c++ openssl redhat-lsb-core opensc pcsc-lite \
+ && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core opensc pcsc-lite \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all \
  && pip install --upgrade pip \
@@ -12,9 +12,14 @@ RUN yum -y install epel-release curl ip lsof net-tools \
 RUN easy_install --upgrade six \
  && pip install importlib
 #using iso8601 0.1.9 because of str/int compare bug in pyff
-RUN pip install iso8601==0.1.9 \
- && pip install pyff \
- && pip install pykcs11==1.3.0  # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
+RUN pip install future iso8601==0.1.9 \
+ && pip install lxml \
+ && pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
+
+# mdsplit function has not been pushed upstream yet:
+WORKDIR /opt/source/pyff
+RUN git clone https://github.com/rhoerbe/pyff.git .
+RUN python setup.py install
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
@@ -31,6 +36,6 @@ RUN groupadd -g $UID $USERNAME \
 COPY install/sample_data /opt/sample_data
 COPY install/sample_data/etc/pki/tls/openssl.cnf /etc/pki/tls/
 COPY install/scripts/*.sh /
-RUN chmod +x /start*.sh \
+RUN chmod +x /*.sh \
  && chmod -R 755 /opt
 
