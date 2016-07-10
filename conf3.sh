@@ -31,7 +31,6 @@ export VOLMAPPING="
     -v $VOLROOT/etc/pki:/etc/pki:Z
     -v $VOLROOT/etc/pyff:/etc/pyff:Z
     -v $VOLROOT/var/log:/var/log:Z
-    -v $VOLROOT/var/md_agg:/var/md_agg:Z
     -v $VOLROOT/var/md_source:/var/md_source:Z
     -v $shareddata_root/testWpvPvAt/md_feed:/var/md_feed:Z
 "
@@ -53,7 +52,6 @@ function chkdir {
 chkdir etc/pki $CONTAINERUSER
 chkdir etc/pyff $CONTAINERUSER
 chkdir var/log $CONTAINERUSER
-chkdir var/md_agg $CONTAINERUSER
 chkdir var/md_source $CONTAINERUSER
 
 mkdir -p $shareddata_root/testWpvPvAt/md_feed
