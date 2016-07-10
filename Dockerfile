@@ -21,6 +21,11 @@ COPY install/opt/pyff /opt/source/pyff
 WORKDIR /opt/source/pyff
 RUN python setup.py install
 
+# install Shibboleth XMLSECTOOL used in pyffsplit.sh (requires JRE, but installing JDK because of /etc/alternatives support)
+RUN yum -y install java-1.8.0-openjdk-devel.x86_64
+ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
+COPY install/opt/xmlsectool-2 /opt/xmlsectool-2
+
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
  && ln -sf /dev/stderr /var/log/pyff_batch.error
