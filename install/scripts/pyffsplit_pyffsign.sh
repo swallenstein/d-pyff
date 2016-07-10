@@ -1,5 +1,7 @@
 #!/bin/sh
 # create a signed XML file per EntityDescriptor for ADFS
+# Problem: pyff does not create signatures with exclusive c14n (http://www.w3.org/2001/10/xml-exc-c14n#)
+# -> use xmlsectool for ADFS
 
 # Step 1. Split aggregate and create an XML and a pipeline file per EntityDescriptor
 /usr/bin/mdsplit.py \
