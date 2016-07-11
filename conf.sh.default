@@ -37,22 +37,27 @@ export VOLMAPPING="
 export STARTCMD='/start_pyffd.sh'
 
 # first start: create user/group/host directories
+if [ $(id -u) -ne 0 ]; then
+    sudo="sudo"
+fi
 if ! id -u $CONTAINERUSER &>/dev/null; then
-    groupadd -g $CONTAINERUID $CONTAINERUSER
-    adduser -M -g $CONTAINERUID -u $CONTAINERUID $CONTAINERUSER
+    $sudo groupadd -g $CONTAINERUID $CONTAINERUSER
+    $sudo adduser -M --gid $CONTAINERUID --uid $CONTAINERUID $CONTAINERUSER  #CentOS
+    #$sudo adduser --gid $CONTAINERUID --disabled-password --gecos "" --uid $CONTAINERUID $CONTAINERUSER #Debian
 fi
 
 # create dir with given user if not existing, relative to $HOSTVOLROOT
 function chkdir {
     dir=$1
     user=$2
-    mkdir -p "$VOLROOT/$dir"
-    chown -R $user:$user "$VOLROOT/$dir"
+    $sudo mkdir -p "$VOLROOT/$dir"
+    $sudo chown -R $user:$user "$VOLROOT/$dir"
 }
+
 chkdir etc/pki $CONTAINERUSER
 chkdir etc/pyff $CONTAINERUSER
 chkdir var/log $CONTAINERUSER
 chkdir var/md_source $CONTAINERUSER
 
-mkdir -p $shareddata_root/testWpvPvAt/md_feed
-chown -R $CONTAINERUSER:$CONTAINERUSER $shareddata_root/testWpvPvAt/md_feed
+$sudo mkdir -p $shareddata_root/testWpvPvAt/md_feed
+$sudo chown -R $CONTAINERUSER:$CONTAINERUSER $shareddata_root/testWpvPvAt/md_feed
