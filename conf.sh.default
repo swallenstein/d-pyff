@@ -21,10 +21,13 @@ export ENVSETTINGS="
     -e PIDFILE=/var/log/pyffd.pid
     -e PIPELINEBATCH=/etc/pyff/md_aggregator.fd
     -e PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
+    -e MDSIGN_CERT=/etc/pki/metadata_crt.pem
+    -e MDSIGN_KEY=/etc/pki/metadata_key.pem
+    -e MD_AGGREGATE=/var/md_feed/metadata.xml
 "
 export NETWORKSETTINGS="
     --net http_proxy
-    --ip 10.1.1.${IMGID}mo
+    --ip 10.1.1.${IMGID}
 "
 export VOLROOT="${dockervol_root}/$CONTAINERNAME"  # container volumes on docker host
 export VOLMAPPING="
