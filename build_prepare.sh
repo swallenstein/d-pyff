@@ -17,18 +17,24 @@ get_or_update_repo() {
 }
 
 
+# --- pyXMLSecurity ---
+repodir='install/opt/pyXMLSecurity'
+repourl='https://github.com/rhoerbe/pyXMLSecurity'
+get_or_update_repo
+
 # --- pyFF ---
 repodir='install/opt/pyff'
-repourl='https://github.com/rhoerbe/pyFF'
+repourl='https://github.com/identinetics/pyFF'
 get_or_update_repo
 
 # --- XMLSECTOOL ---
 repodir='xmlsectool-2'
-cd $workdir/install/opt/
+version='2.0.0'
+cd "$workdir/install/opt/"
 if [ ! -e $repodir ]; then
-    echo "downloading xmlsectool-2.0.0-beta-1-bin.zip"
-    wget https://shibboleth.net/downloads/tools/xmlsectool/2.0.0-beta-1/xmlsectool-2.0.0-beta-1-bin.zip
-    unzip xmlsectool-2.0.0-beta-1-bin.zip
-    ln -s xmlsectool-2.0.0-beta-1 $repodir
-    rm xmlsectool-2.0.0-beta-1-bin.zip
+    echo "downloading xmlsectool-${version}-bin.zip"
+    wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip"
+    unzip "xmlsectool-${version}-bin.zip"
+    ln -s "xmlsectool-${version}" $repodir
+    rm "xmlsectool-${version}-bin.zip"
 fi

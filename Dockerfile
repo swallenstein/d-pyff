@@ -16,6 +16,11 @@ RUN pip install future iso8601==0.1.9 \
  && pip install lxml \
  && pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
 
+# changed defaults for c14n, digest & signing alg - used rhoerbe fork
+COPY install/opt/pyXMLSecurity /opt/source/pyXMLSecurity
+WORKDIR /opt/source/pyXMLSecurity
+RUN python setup.py install
+
 # mdsplit function has not been pushed upstream yet - used rhoerbe fork
 COPY install/opt/pyff /opt/source/pyff
 WORKDIR /opt/source/pyff
@@ -37,6 +42,8 @@ RUN groupadd -g $UID $USERNAME \
  && adduser -g $UID -u $UID $USERNAME \
  && mkdir -p /opt \
  && chmod 750 /opt
+ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
+ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 
 COPY install/sample_data /opt/sample_data
 COPY install/sample_data/etc/pki/tls/openssl.cnf /etc/pki/tls/
