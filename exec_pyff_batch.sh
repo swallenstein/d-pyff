@@ -41,4 +41,4 @@ if [ $(id -u) -ne 0 ]; then
     sudo="sudo"
 fi
 ${sudo} docker exec $runopt $CONTAINERNAME /pyff_batch.sh
-${sudo} docker exec $runopt $CONTAINERNAME /pyffsignsingle.sh
+${sudo} docker exec $runopt $CONTAINERNAME /pyff_split_sign_xmlsectool.sh
