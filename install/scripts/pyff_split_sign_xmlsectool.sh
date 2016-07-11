@@ -3,13 +3,13 @@ set -e
 # create a signed XML file per EntityDescriptor for ADFS
 
 # MDSIGN_CERT, MDSIGN_KEY and MDAGGREGATE must be passed via env
-[ $MDSIGN_CERT ] || echo "MDSIGN_CERT must be set and point to an existing file" && exit 1
-[ $MDSIGN_KEY ] || echo "MDSIGN_KEY must be set and point to an existing file" && exit 1
-[ $MD_AGGREGATE ]|| echo "MD_AGGREGATE must be set and point to an existing file" && exit 1
+if [ ! -e $MDSIGN_CERT ]; then echo "MDSIGN_CERT must be set and point to an existing file" && exit 1; fi
+if [ ! -e $MDSIGN_KEY ]; then echo "MDSIGN_KEY must be set and point to an existing file" && exit 1; fi
+if [ ! -e $MD_AGGREGATE ]|| echo "MD_AGGREGATE must be set and point to an existing file" && exit 1; fi
 # Setting defaults
-[ $MDSPLIT_UNSIGNED ] || MDSPLIT_UNSIGNED='/var/md_source/split/'
-[ $MDSPLIT_SIGNED ] || MDSPLIT_SIGNED='/var/md_feed/split/'
-[ $LOGFILE ] || LOGFILE='/var/log/pyffsplit.log'
+if [ ! -e $MDSPLIT_UNSIGNED ]; then MDSPLIT_UNSIGNED='/var/md_source/split/'; fi
+if [ ! -e $MDSPLIT_SIGNED ]; then MDSPLIT_SIGNED='/var/md_feed/split/'; fi
+if [ ! -e $LOGFILE ]; then LOGFILE='/var/log/pyffsplit.log'; fi
 
 
 # Step 1. Split aggregate and create an XML and a pipeline file per EntityDescriptor
