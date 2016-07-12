@@ -16,7 +16,7 @@ if [ -z "$LOGFILE" ]; then LOGFILE='/var/log/pyff_mdsplit.log'; fi
 [ "$LOGLEVEL" == "DEBUG" ] && echo "processing md aggregate"
 /usr/bin/pyff_mdsplit.py \
     --certfile $MDSIGN_CERT --keyfile $MDSIGN_KEY \
-    --outdir_signed pyff_split_sign_xmlsectool.sh \
+    --outdir_signed $MDSPLIT_SIGNED \
     --logfile $LOGFILE --loglevel DEBUG \
     $MD_AGGREGATE $MDSPLIT_UNSIGNED
 
