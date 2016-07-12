@@ -5,7 +5,7 @@ set -e
 # MDSIGN_CERT, MDSIGN_KEY and MDAGGREGATE must be passed via env
 if [ ! -e $MDSIGN_CERT ]; then echo "MDSIGN_CERT must be set and point to an existing file" && exit 1; fi
 if [ ! -e $MDSIGN_KEY ]; then echo "MDSIGN_KEY must be set and point to an existing file" && exit 1; fi
-if [ ! -e $MD_AGGREGATE ]|| echo "MD_AGGREGATE must be set and point to an existing file" && exit 1; fi
+if [ ! -e $MD_AGGREGATE ]; then echo "MD_AGGREGATE must be set and point to an existing file" && exit 1; fi
 # Setting defaults
 if [ ! -e $MDSPLIT_UNSIGNED ]; then MDSPLIT_UNSIGNED='/var/md_source/split/'; fi
 if [ ! -e $MDSPLIT_SIGNED ]; then MDSPLIT_SIGNED='/var/md_feed/split/'; fi
