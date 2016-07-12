@@ -7,9 +7,9 @@ if [ ! -e "$MDSIGN_CERT" ]; then echo "MDSIGN_CERT must be set and point to an e
 if [ ! -e "$MDSIGN_KEY" ]; then echo "MDSIGN_KEY must be set and point to an existing file" && exit 1; fi
 if [ ! -e "$MD_AGGREGATE" ]; then echo "MD_AGGREGATE must be set and point to an existing file" && exit 1; fi
 # Setting defaults
-if [ ! -z "$MDSPLIT_UNSIGNED" ]; then MDSPLIT_UNSIGNED='/var/md_source/split/'; fi
-if [ ! -z "$MDSPLIT_SIGNED" ]; then MDSPLIT_SIGNED='/var/md_feed/split/'; fi
-if [ ! -z "$LOGFILE" ]; then LOGFILE='/var/log/pyff_mdsplit.log'; fi
+if [ -z "$MDSPLIT_UNSIGNED" ]; then MDSPLIT_UNSIGNED='/var/md_source/split/'; fi
+if [ -z "$MDSPLIT_SIGNED" ]; then MDSPLIT_SIGNED='/var/md_feed/split/'; fi
+if [ -z "$LOGFILE" ]; then LOGFILE='/var/log/pyff_mdsplit.log'; fi
 
 
 # Step 1. Split aggregate and create an XML and a pipeline file per EntityDescriptor
