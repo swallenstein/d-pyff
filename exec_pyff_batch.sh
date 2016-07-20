@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-while getopts ":hin:p" opt; do
+while getopts ":hin:s" opt; do
   case $opt in
     i)
       runopt='-it'
@@ -12,21 +12,19 @@ while getopts ":hin:p" opt; do
       fi
       config_nr=$OPTARG
       ;;
-    p)
-      print="True"
+    s)
+      split="True"
       ;;
     :)
       echo "Option -$OPTARG requires an argument"
       exit 1
       ;;
     *)
-      echo "usage: $0 [-h] [-i] [-p] [-r] [cmd]
+      echo "usage: $0 [-h] [-i] [-s]
    -h  print this help text
    -i  interactive mode
    -n  configuration number ('<NN>' in conf<NN>.sh)
-   -p  print docker run command on stdout
-   -r  start command as root user (default is $CONTAINERUSER)
-   cmd shell command to be executed (default is $STARTCMD)"
+   -s  split and sign md aggregate
       exit 0
       ;;
   esac
@@ -41,4 +39,6 @@ if [ $(id -u) -ne 0 ]; then
     sudo="sudo"
 fi
 ${sudo} docker exec $runopt $CONTAINERNAME /pyff_aggregate.sh
-${sudo} docker exec $runopt $CONTAINERNAME /pyff_mdsplit.sh
+if [ "$split" = "True" ]; then
+    ${sudo} docker exec $runopt $CONTAINERNAME /pyff_mdsplit.sh
+fi
