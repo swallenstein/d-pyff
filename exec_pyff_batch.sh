@@ -13,7 +13,7 @@ while getopts ":hin:s" opt; do
       config_nr=$OPTARG
       ;;
     s)
-      split="True"
+      split='True'
       ;;
     :)
       echo "Option -$OPTARG requires an argument"
@@ -24,7 +24,7 @@ while getopts ":hin:s" opt; do
    -h  print this help text
    -i  interactive mode
    -n  configuration number ('<NN>' in conf<NN>.sh)
-   -s  split and sign md aggregate
+   -s  split and sign md aggregate"
       exit 0
       ;;
   esac
