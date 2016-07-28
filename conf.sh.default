@@ -7,7 +7,7 @@ shareddata_root="${dockervol_root}/01shared_data"
 # configure container
 export IMGID='99'  # range from 02 .. 99; must be unique per node
 export IMAGENAME="rhoerbe/pyff${IMGID}"
-export CONTAINERNAME="${IMGID}pyffTestWpv"
+export CONTAINERNAME="${IMGID}pyff"
 export CONTAINERUSER="pyff${IMGID}"   # group and user to run container
 export CONTAINERUID="80${IMGID}"   # gid and uid for CONTAINERUSER
 export BUILDARGS="
@@ -35,7 +35,7 @@ export VOLMAPPING="
     -v $VOLROOT/etc/pyff:/etc/pyff:Z
     -v $VOLROOT/var/log:/var/log:Z
     -v $VOLROOT/var/md_source:/var/md_source:Z
-    -v $shareddata_root/myfederation/md_feed:/var/md_feed:Z
+    -v $shareddata_root/$CONTAINERNAME/md_feed:/var/md_feed:Z
 "
 export STARTCMD='/start_pyffd.sh'
 
@@ -69,4 +69,4 @@ function chk_shared_dir() {
     $sudo chown -R $user:$group "$shareddata_root/$dir"
 }
 
-chk_shared_dir 'myfederation/md_feed' $CONTAINERUSER $SHARED_CONTAINERS_GROUP
+chk_shared_dir "$CONTAINERNAME/md_feed" $CONTAINERUSER $SHARED_CONTAINERS_GROUP
