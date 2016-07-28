@@ -2,7 +2,7 @@
 
 # data shared between containers goes via these definitions:
 dockervol_root='/docker_volumes'
-shareddata_root="${dockervol_root}/1shared_data"
+shareddata_root="${dockervol_root}/01shared_data"
 
 # configure container
 export IMGID='99'  # range from 02 .. 99; must be unique per node
@@ -35,7 +35,7 @@ export VOLMAPPING="
     -v $VOLROOT/etc/pyff:/etc/pyff:Z
     -v $VOLROOT/var/log:/var/log:Z
     -v $VOLROOT/var/md_source:/var/md_source:Z
-    -v $shareddata_root/testWpvPvAt/md_feed:/var/md_feed:Z
+    -v $shareddata_root/myfederation/md_feed:/var/md_feed:Z
 "
 export STARTCMD='/start_pyffd.sh'
 
@@ -45,22 +45,28 @@ if [ $(id -u) -ne 0 ]; then
 fi
 if ! id -u $CONTAINERUSER &>/dev/null; then
     $sudo groupadd -g $CONTAINERUID $CONTAINERUSER
+    $sudo groupadd -g $SHARED_CONTAINERS_GROUPID $SHARED_CONTAINERS_GROUP 2> /dev/null
     $sudo adduser -M --gid $CONTAINERUID --uid $CONTAINERUID $CONTAINERUSER  #CentOS
     #$sudo adduser --gid $CONTAINERUID --disabled-password --gecos "" --uid $CONTAINERUID $CONTAINERUSER #Debian
 fi
 
-# create dir with given user if not existing, relative to $HOSTVOLROOT
-function chkdir {
-    dir=$1
-    user=$2
+# create dir with given user if not existing, relative to $HOSTVOLROOT; set/repair ownership
+function chk_own_dir() {
+    dir=$1; user=$2
     $sudo mkdir -p "$VOLROOT/$dir"
     $sudo chown -R $user:$user "$VOLROOT/$dir"
 }
 
-chkdir etc/pki $CONTAINERUSER
-chkdir etc/pyff $CONTAINERUSER
-chkdir var/log $CONTAINERUSER
-chkdir var/md_source $CONTAINERUSER
+chk_own_dir etc/pki $CONTAINERUSER
+chk_own_dir etc/pyff $CONTAINERUSER
+chk_own_dir var/log $CONTAINERUSER
+chk_own_dir var/md_source $CONTAINERUSER
 
-$sudo mkdir -p $shareddata_root/testWpvPvAt/md_feed
-$sudo chown -R $CONTAINERUSER:$CONTAINERUSER $shareddata_root/testWpvPvAt/md_feed
+# as above, but for shared dir
+function chk_shared_dir() {
+    dir=$1; user=$2; group=$3
+    $sudo mkdir -p "$shareddata_root/$dir"
+    $sudo chown -R $user:$group "$shareddata_root/$dir"
+}
+
+chk_shared_dir 'myfederation/md_feed' $CONTAINERUSER $SHARED_CONTAINERS_GROUP
