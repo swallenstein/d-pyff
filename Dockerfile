@@ -24,7 +24,9 @@ RUN python setup.py install
 # mdsplit function has not been pushed upstream yet - used rhoerbe fork
 COPY install/opt/pyff /opt/source/pyff
 WORKDIR /opt/source/pyff
-RUN python setup.py install
+# auto-installing  Cherry-Py dependency failed with 7.1.0 (UnicodeDecodeError)
+RUN pip install cherrypy \
+ && python setup.py install
 
 # install Shibboleth XMLSECTOOL used in pyffsplit.sh (requires JRE, but installing JDK because of /etc/alternatives support)
 RUN yum -y install java-1.8.0-openjdk-devel.x86_64
