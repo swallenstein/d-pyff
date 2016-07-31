@@ -32,6 +32,7 @@ RUN pip install cherrypy \
 RUN yum -y install java-1.8.0-openjdk-devel.x86_64
 ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
 COPY install/opt/xmlsectool-2 /opt/xmlsectool-2
+ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
@@ -44,8 +45,6 @@ RUN groupadd -g $UID $USERNAME \
  && adduser -g $UID -u $UID $USERNAME \
  && mkdir -p /opt \
  && chmod 750 /opt
-ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
-ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 
 COPY install/sample_data /opt/sample_data
 COPY install/sample_data/etc/pki/tls/openssl.cnf /etc/pki/tls/
