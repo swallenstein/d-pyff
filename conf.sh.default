@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-# data shared between containers goes via these definitions:
 dockervol_root='/docker_volumes'
+# data shared between containers goes via these definitions:
 shareddata_root="${dockervol_root}/01shared_data"
 
 # configure container
-export IMGID='99'  # range from 02 .. 99; must be unique per node
+IMGID='99'  # range from 02 .. 99; must be unique per node
 export IMAGENAME="rhoerbe/pyff${IMGID}"
 export CONTAINERNAME="${IMGID}pyff"
 export CONTAINERUSER="pyff${IMGID}"   # group and user to run container
 export CONTAINERUID="80${IMGID}"   # gid and uid for CONTAINERUSER
+SHARED_CONTAINERS_GROUP="sharedcont"   # group shared by other containers
+SHARED_CONTAINERS_GROUPID="8000"
 export BUILDARGS="
     --build-arg "USERNAME=$CONTAINERUSER" \
     --build-arg "UID=$CONTAINERUID" \
@@ -50,23 +52,16 @@ if ! id -u $CONTAINERUSER &>/dev/null; then
     #$sudo adduser --gid $CONTAINERUID --disabled-password --gecos "" --uid $CONTAINERUID $CONTAINERUSER #Debian
 fi
 
-# create dir with given user if not existing, relative to $HOSTVOLROOT; set/repair ownership
-function chk_own_dir() {
-    dir=$1; user=$2
-    $sudo mkdir -p "$VOLROOT/$dir"
-    $sudo chown -R $user:$user "$VOLROOT/$dir"
+# create dir $1 with given user $2if not existing, relative to $4; set/repair ownership
+# arg 1: dir, arg 2: user; arg 3: group (defaults to user); arg 4: vol root (defaults to $VOLROOT)
+function chkdir() {
+    dir=$1; user=$2; group=${3:-$user} volroot=${4:-$VOLROOT}
+    $sudo mkdir -p "$volroot/$dir"
+    $sudo chown -R $user:$user "$volroot/$dir"
 }
 
-chk_own_dir etc/pki $CONTAINERUSER
-chk_own_dir etc/pyff $CONTAINERUSER
-chk_own_dir var/log $CONTAINERUSER
-chk_own_dir var/md_source $CONTAINERUSER
-
-# as above, but for shared dir
-function chk_shared_dir() {
-    dir=$1; user=$2; group=$3
-    $sudo mkdir -p "$shareddata_root/$dir"
-    $sudo chown -R $user:$group "$shareddata_root/$dir"
-}
-
-chk_shared_dir "$CONTAINERNAME/md_feed" $CONTAINERUSER $SHARED_CONTAINERS_GROUP
+chkdir etc/pki/pyff $CONTAINERUSER
+chkdir etc/pyff $CONTAINERUSER
+chkdir var/log $CONTAINERUSER
+chkdir var/md_source $CONTAINERUSER
+chkdir "$CONTAINERNAME/md_feed" $CONTAINERUSER $SHARED_CONTAINERS_GROUP $shareddata_root

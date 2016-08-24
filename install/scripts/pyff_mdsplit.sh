@@ -12,9 +12,10 @@ if [ -z "$MDSPLIT_SIGNED" ]; then MDSPLIT_SIGNED='/var/md_feed/split/'; fi
 if [ -z "$LOGFILE" ]; then LOGFILE='/var/log/pyff_mdsplit.log'; fi
 
 
+
 # Step 1. Split aggregate and create an XML and a pipeline file per EntityDescriptor
 [ "$LOGLEVEL" == "DEBUG" ] && echo "processing md aggregate"
-/usr/bin/pyff_mdsplit.py \
+/usr/bin/pyff_mdsplit.py $* \
     --certfile $MDSIGN_CERT --keyfile $MDSIGN_KEY \
     --outdir_signed $MDSPLIT_SIGNED \
     --logfile $LOGFILE --loglevel DEBUG \
