@@ -1,4 +1,4 @@
 .DS_Store
 .idea
 conf*.sh
-install
+install/opt
