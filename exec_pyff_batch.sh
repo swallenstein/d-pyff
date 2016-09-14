@@ -27,7 +27,7 @@ while getopts ":hin:sS" opt; do
    -h  print this help text
    -i  interactive mode
    -n  configuration number ('<NN>' in conf<NN>.sh)
-   -s  split and sign md aggregate using pyff for signing"
+   -s  split and sign md aggregate using pyff for signing
    -S  split and sign md aggregate using xmlsectool for signing"
       exit 0
       ;;
