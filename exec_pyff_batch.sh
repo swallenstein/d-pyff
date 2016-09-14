@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-while getopts ":hin:s" opt; do
+while getopts ":hin:sS" opt; do
   case $opt in
     i)
       runopt='-it'
@@ -13,7 +13,10 @@ while getopts ":hin:s" opt; do
       config_nr=$OPTARG
       ;;
     s)
-      split='True'
+      split='pyff'
+      ;;
+    S)
+      split='xmlsectool'
       ;;
     :)
       echo "Option -$OPTARG requires an argument"
@@ -24,7 +27,8 @@ while getopts ":hin:s" opt; do
    -h  print this help text
    -i  interactive mode
    -n  configuration number ('<NN>' in conf<NN>.sh)
-   -s  split and sign md aggregate"
+   -s  split and sign md aggregate using pyff for signing"
+   -S  split and sign md aggregate using xmlsectool for signing"
       exit 0
       ;;
   esac
@@ -39,6 +43,9 @@ if [ $(id -u) -ne 0 ]; then
     sudo="sudo"
 fi
 ${sudo} docker exec $runopt $CONTAINERNAME /pyff_aggregate.sh
-if [ "$split" = "True" ]; then
+if [ "$split" = "pyff" ]; then
     ${sudo} docker exec $runopt $CONTAINERNAME /pyff_mdsplit.sh
+fi
+if [ "$split" = "xmlsectool" ]; then
+    ${sudo} docker exec $runopt $CONTAINERNAME /pyff_mdsplit_xmlsectool.sh
 fi
