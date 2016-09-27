@@ -57,7 +57,7 @@ fi
 function chkdir() {
     dir=$1; user=$2; group=${3:-$user} volroot=${4:-$VOLROOT}
     $sudo mkdir -p "$volroot/$dir"
-    $sudo chown -R $user:$user "$volroot/$dir"
+    $sudo chown -R $user:group "$volroot/$dir"
 }
 
 chkdir etc/pki/pyff $CONTAINERUSER
