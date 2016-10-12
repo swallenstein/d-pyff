@@ -14,6 +14,7 @@ if [ -z "$LOGFILE" ]; then LOGFILE='/var/log/pyff_mdsplit.log'; fi
 
 
 # Step 1. Split aggregate and create an XML and a pipeline file per EntityDescriptor
+rm -f $MDSPLIT_UNSIGNED/*.xml
 [ "$LOGLEVEL" == "DEBUG" ] && echo "processing md aggregate"
 /usr/bin/pyff_mdsplit.py $* \
     --certfile $MDSIGN_CERT --keyfile $MDSIGN_KEY \
@@ -21,6 +22,9 @@ if [ -z "$LOGFILE" ]; then LOGFILE='/var/log/pyff_mdsplit.log'; fi
     --logfile $LOGFILE --loglevel DEBUG \
     $MD_AGGREGATE $MDSPLIT_UNSIGNED
 
-# Step 2. Execute pyff to sign each EntityDescriptor
+# Step 2. Delete stale files (EDs removed from aggregate or failure to sign)
+find $MDSPLIT_SIGNED -maxdepth 1 -mmin +59 -type f -name "*.xml" -exec rm -f {} \;
+
+# Step 3. Execute pyff to sign each EntityDescriptor
 chmod 644 $MDSPLIT_SIGNED/*.xml 2> /dev/null
 

@@ -14,6 +14,7 @@ if [ -z "$LOGFILE" ]; then LOGFILE='/var/log/pyff_mdsplit.log'; fi
 
 
 # Step 1. Split aggregate and create an XML and a pipeline file per EntityDescriptor
+rm -f $MDSPLIT_UNSIGNED/*.xml
 [ "$LOGLEVEL" == "DEBUG" ] && echo "processing md aggregate"
 /usr/bin/pyff_mdsplit.py $* \
     --nocleanup \
@@ -37,6 +38,9 @@ for fn in *; do
         --certificate $MDSIGN_CERT $VERBOSE
 done
 
-# Step 3. Make metadata files availabe to nginx container
+# Step 3. Delete stale files (EDs removed from aggregate or failure to sign)
+find $MDSPLIT_SIGNED -maxdepth 1 -mmin +59 -type f -name "*.xml" -exec rm -f {} \;
+
+# Step 4. Make metadata files availabe to nginx container
 chmod 644 $MDSPLIT_SIGNED/*.xml 2> /dev/null
 

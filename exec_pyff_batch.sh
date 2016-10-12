@@ -43,6 +43,8 @@ if [ $(id -u) -ne 0 ]; then
     sudo="sudo"
 fi
 ${sudo} docker exec $runopt $CONTAINERNAME /pyff_aggregate.sh
+
+
 if [ "$split" = "pyff" ]; then
     ${sudo} docker exec $runopt $CONTAINERNAME /pyff_mdsplit.sh
 fi
