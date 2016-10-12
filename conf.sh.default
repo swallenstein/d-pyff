@@ -46,10 +46,24 @@ if [ $(id -u) -ne 0 ]; then
     sudo="sudo"
 fi
 if ! id -u $CONTAINERUSER &>/dev/null; then
-    $sudo groupadd -g $CONTAINERUID $CONTAINERUSER
-    $sudo groupadd -g $SHARED_CONTAINERS_GROUPID $SHARED_CONTAINERS_GROUP 2> /dev/null
-    $sudo adduser -M --gid $CONTAINERUID --uid $CONTAINERUID $CONTAINERUSER  #CentOS
-    #$sudo adduser --gid $CONTAINERUID --disabled-password --gecos "" --uid $CONTAINERUID $CONTAINERUSER #Debian
+    case ${OSTYPE//[0-9.]/} in
+        darwin) # OSX
+            $sudo sudo dseditgroup -o create -i $CONTAINERUID $CONTAINERUSER
+            $sudo dscl . create /Users/$CONTAINERUSER UniqueID $CONTAINERUID
+            $sudo dscl . create /Users/$CONTAINERUSER PrimaryGroupID $CONTAINERUID
+            ;;
+        linux-gnu) #CentOs
+            $sudo groupadd -g $CONTAINERUID $CONTAINERUSER
+            $sudo adduser --gid $CONTAINERUID --disabled-password --gecos "" --uid $CONTAINERUID $CONTAINERUSER
+            ;;
+        linux)  #Debian
+            $sudo groupadd -g $CONTAINERUID $CONTAINERUSER
+            $sudo adduser --gid $CONTAINERUID --no-create-home --disabled-password --gecos "" --uid $CONTAINERUID $CONTAINERUSER
+            ;;
+        *)
+            echo "do not know how to add user/group for OS ${OSTYPE}"
+            ;;
+    esac
 fi
 
 # create dir $1 with given user $2if not existing, relative to $4; set/repair ownership
