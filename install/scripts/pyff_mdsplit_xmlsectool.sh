@@ -14,7 +14,7 @@ if [ -z "$LOGFILE" ]; then LOGFILE='/var/log/pyff_mdsplit.log'; fi
 
 
 # Step 1. Split aggregate and create an XML and a pipeline file per EntityDescriptor
-rm -f $MDSPLIT_UNSIGNED/*.xml
+rm -rf $MDSPLIT_UNSIGNED/*
 [ "$LOGLEVEL" == "DEBUG" ] && echo "processing md aggregate"
 /usr/bin/pyff_mdsplit.py $* \
     --nocleanup \
