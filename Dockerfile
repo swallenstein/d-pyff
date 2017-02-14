@@ -1,7 +1,9 @@
 FROM centos:centos7
-MAINTAINER Rainer Hörbe <r2h2@hoerbe.at>
+LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
+      version="0.4.0" \
+      capabilites='--cap-drop=all'
 
-RUN yum -y install epel-release curl ip lsof net-tools \
+RUN yum -y install epel-release curl ip lsof net-tools unzip wget which \
  && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core opensc pcsc-lite \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all \
@@ -38,17 +40,30 @@ ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
  && ln -sf /dev/stderr /var/log/pyff_batch.error
 
-# Application will run as a non-root user/group that must map to the docker host
-ARG USERNAME
-ARG UID
-RUN groupadd -g $UID $USERNAME \
- && adduser -g $UID -u $UID $USERNAME \
- && mkdir -p /opt \
- && chmod 750 /opt
-
 COPY install/sample_data /opt/sample_data
 COPY install/sample_data/etc/pki/tls/openssl.cnf /etc/pki/tls/
 COPY install/scripts/*.sh /
-RUN chmod +x /*.sh \
- && chmod -R 755 /opt
 
+# Application will run as a non-root user
+# DAC Permission strategy: gruop 0 & no group access for private directories
+ARG USERNAME=pyff
+ARG UID=343003
+ENV GID=0
+RUN adduser -g $GID -u $UID $USERNAME \
+ && mkdir -p /opt
+
+RUN chmod +x /*.sh \
+ && chmod -R 700 $(find /opt -type d) \
+ && chown -R $UID:$GID /opt
+
+ENV VOLDIRS='/etc/pki/pyff /etc/pyff /var/log /var/md_feed /var/md_source'
+RUN mkdir -p $VOLDIRS \
+ && chmod -R 700 $(find $VOLDIRS -type d) \
+ && chmod -R 755 $(find /var/md_feed -type d) \
+ && chown -R $UID:$GID $VOLDIRS
+
+VOLUME /etc/pki/pyff \
+       /etc/pyff \
+       /var/log \
+       /var/md_feed \
+       /var/md_source
