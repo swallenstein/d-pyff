@@ -21,13 +21,13 @@ main() {
 
 
 set_volume_root() {
-    DOCKERVOL_ROOT='/dv'
-    DOCKERLOG_ROOT='/dl'
-    DOCKERLOG_ROOT='/dl'
+    DOCKERVOL_SHORT='/dv'
+    DOCKERLOG_SHORT='/dl'
     if [ "$TRAVIS" == "true" ]; then
-        DOCKERVOL_ROOT='./dv';
-        DOCKERLOG_ROOT='./dl';
+        DOCKERVOL_SHORT='./dv';
+        DOCKERLOG_SHORT='./dl';
     fi
+    DOCKER_VOLUME_ROOT='/var/lib/docker/volumes'  # hard coded - check for your config if applicable!
 }
 
 
@@ -94,11 +94,13 @@ set_vol_mapping() {
     create_user $CONTAINERUSER $CONTAINERUID
 
     # it is good practice to map each VOLUME from the Dockerfile
-    map_docker_volume "${CONTAINERNAME}.etc_pki" '/etc/pki' 'Z' $DOCKERVOL_ROOT
-    map_docker_volume "${CONTAINERNAME}.etc_pyff" '/etc/pyff' 'Z' $DOCKERVOL_ROOT
-    map_docker_volume "${CONTAINERNAME}.var_log" '/var/log' 'Z' $DOCKERLOG_ROOT
-    map_docker_volume "${CONTAINERNAME}.var_md_feed" '/var/md_feed' 'z' $DOCKERVOL_ROOT
-    map_docker_volume "${CONTAINERNAME}.var_md_source" '/var/md_source' 'z' $DOCKERVOL_ROOT
+    map_docker_volume "${CONTAINERNAME}.etc_pki_sign" '/etc/pki/sign' 'Z' $DOCKERVOL_SHORT
+    map_docker_volume "${CONTAINERNAME}.etc_pyff" '/etc/pyff' 'Z' $DOCKERVOL_SHORT
+    map_docker_volume "${CONTAINERNAME}.var_log" '/var/log' 'Z' $DOCKERLOG_SHORT
+    map_docker_volume "${CONTAINERNAME}.var_md_feed" '/var/md_feed' 'z' $DOCKERVOL_SHORT
+    map_docker_volume "${CONTAINERNAME}.var_md_source" '/var/md_source' 'z' $DOCKERVOL_SHORT
+
+	chown -R pyff${IMGID}:pyff${IMGID} $DOCKER_VOLUME_ROOT/${IMGID}pyff.*
 }
 
 

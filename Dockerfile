@@ -56,13 +56,13 @@ RUN chmod +x /*.sh \
  && chmod -R 700 $(find /opt -type d) \
  && chown -R $UID:$GID /opt
 
-ENV VOLDIRS='/etc/pki/pyff /etc/pyff /var/log /var/md_feed /var/md_source'
+ENV VOLDIRS='/etc/pki/sign /etc/pyff /var/log /var/md_feed /var/md_source'
 RUN mkdir -p $VOLDIRS \
  && chmod -R 700 $(find $VOLDIRS -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS
 
-VOLUME /etc/pki/pyff \
+VOLUME /etc/pki/sign \
        /etc/pyff \
        /var/log \
        /var/md_feed \
