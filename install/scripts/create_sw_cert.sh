@@ -5,6 +5,7 @@ set -e -o pipefail
 
 main() {
     get_commandline_args
+    set_openssl_config
     create_cert
     list_cert
 }
@@ -32,18 +33,38 @@ get_commandline_args() {
 }
 
 
+set_openssl_config() {
+    cat > /tmp/openssl.cfg <<EOT
+[req]
+distinguished_name=dn
+[ dn ]
+[ ext ]
+basicConstraints=CA:FALSE
+EOT
+
+}
+
+
 create_cert() {
-    cmd="openssl req -x509 -newkey rsa:4096
-        -keyout /etc/pki/sign/private/metadata_key.pem
+    cmd1="openssl req
+        -config /tmp/openssl.cfg
+        -x509 -newkey rsa:4096
+        -keyout /etc/pki/sign/private/metadata_key_pkcs8.pem
         -out /etc/pki/sign/certs/metadata_crt.pem
         -sha256
         -days 3650 -nodes
         -batch -subj '/C=AT/ST=Wien/L=Wien/O=Bildungsministerium/OU=IT/CN=$CommonName'
     "
+    # pyff requires the old pkcs1 private key format -> convert
+    cmd2="openssl rsa -in /etc/pki/sign/private/metadata_key_pkcs8.pem
+        -out /etc/pki/sign/private/metadata_key.pem
+    "
     if [ "$PRINT" == "True" ]; then
-        echo $cmd
+        echo $cmd1 $cmd2"
     fi
-    $cmd
+    $cmd1
+    $cmd2
+    chmod 600 /etc/pki/sign/private/metadata_key*
 }
 
 list_cert() {
