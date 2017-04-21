@@ -12,10 +12,10 @@ main() {
 
 get_commandline_args() {
     USAGE=$(printf "%s\n" \
-        "usage: $0 [-h] -n <cn> [-p]" \
+        "usage: $0 [-h] [-p] <cn> " \
         "  -h  print this help text" \
-        "  -n  common name part of x509 subject" \
-        "  -p  print command")
+        "  -p  print command") \
+        "  <cn>  common name part of x509 subject"
 
     while getopts ":p" opt; do
       case $opt in
