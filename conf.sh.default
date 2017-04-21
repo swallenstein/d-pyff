@@ -36,7 +36,7 @@ set_image_and_container_name() {
     # processes on the docker host etc.
     IMGID='03'  # range from 02 .. 99; must be unique per node (registered in github.com/identinetics/dscripts/templates/assigned-uids.adoc)
     PROJSHORT='pyff'
-    export IMAGENAME="r2h2/$PROJSHORT${IMGID}"  # [a-z_0-9]
+    export IMAGENAME="rhoerbe/$PROJSHORT${IMGID}"  # [a-z_0-9]
     export CONTAINERNAME="${IMGID}$PROJSHORT"
     export DOCKER_REGISTRY='index.docker.io'
 }
