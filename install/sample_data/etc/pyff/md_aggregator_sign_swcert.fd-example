@@ -9,7 +9,7 @@
      validUntil: P10D
      ID: OurFederationSignedMetadata_
 - sign:
-    key: /etc/pki/pyff/metadata_signing-key.pem
-    cert: /etc/pki/pyff/metadata_signing-crt.pem
+    key: /etc/pki/sign/metadata_signing-key.pem
+    cert: /etc/pki/sign/metadata_signing-crt.pem
 - publish: /var/md_feed/metadata.xml
 
