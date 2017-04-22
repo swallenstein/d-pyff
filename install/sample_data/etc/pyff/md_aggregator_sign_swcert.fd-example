@@ -10,6 +10,6 @@
      ID: OurFederationSignedMetadata_
 - sign:
     key: /etc/pki/pyff/metadata_signing-key.pem
-    cert: /etc/pki/metadata_signing-crt.pem
+    cert: /etc/pki/pyff/metadata_signing-crt.pem
 - publish: /var/md_feed/metadata.xml
 
