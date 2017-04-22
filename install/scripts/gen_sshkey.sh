@@ -3,9 +3,8 @@
 ssh-keygen -t ECDSA -f ~/.ssh/id_ecdsa -N ''
 if [ -z ~/.ssh/config ]; then
     echo "Host frontendhost" > ~/.ssh/config
-    echo "HostName $FRONTEND_HOST" >> ~/.ssh/config
-    echo "Port $FRONTEND_SSHPORT" >> ~/.ssh/config
+    echo "HostName $MDFEED_HOST" >> ~/.ssh/config
 fi
 
 # test connection and confirm host key
-ssh -T $FRONTEND_SSHUSER@$FRONTEND_HOST
+ssh -T $MDFEED_SSHUSER@$MDFEED_HOST
