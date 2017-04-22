@@ -1,7 +1,7 @@
 FROM centos:centos7
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
-      version="0.4.0"
-      # capabilities='--cap-drop=all'
+      version="0.4.0" \
+      jetzt_keine_capabilities='--cap-drop=all'
 
 RUN yum -y install epel-release curl ip lsof net-tools unzip wget which \
  && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core opensc pcsc-lite \
@@ -50,7 +50,8 @@ ARG USERNAME=pyff
 ARG UID=343003
 ENV GID=0
 RUN adduser -g $GID -u $UID $USERNAME \
- && mkdir -p /opt
+ && mkdir -p /opt \
+ && chown -R $USERNAME:root /opt/source
 
 RUN chmod +x /*.sh \
  && chmod -R 700 $(find /opt -type d) \
