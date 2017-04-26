@@ -4,23 +4,29 @@ set -e -o pipefail
 # create a new signing certificate for the aggregator
 
 main() {
-    get_commandline_args
+    get_commandline_args $@
     set_openssl_config
     create_cert
     list_cert
 }
 
+
 get_commandline_args() {
     USAGE=$(printf "%s\n" \
         "usage: $0 [-h] [-p] <cn> " \
         "  -h  print this help text" \
-        "  -p  print command") \
-        "  <cn>  common name part of x509 subject"
-
-    while getopts ":p" opt; do
+        "  -o  Organization Name" \
+        "  -p  print command" \
+        "  -u  Organizational Unit" \
+        "  <cn>  common name part of x509 subject")
+    ORG='unspecified'
+    OU='unspecified'
+    while getopts ":o:pu:" opt; do
       case $opt in
+        o) ORG=$OPTARG;;
         p) PRINT="True";;
-        *) echo $USAGE; exit 0;;
+        u) OU=$OPTARG;;
+        *) echo "$USAGE"; exit 0;;
       esac
     done
     shift $((OPTIND-1))
@@ -53,14 +59,14 @@ create_cert() {
         -out /etc/pki/sign/certs/metadata_crt.pem
         -sha256
         -days 3650 -nodes
-        -batch -subj '/C=AT/ST=Wien/L=Wien/O=Bildungsministerium/OU=IT/CN=$CommonName'
+        -batch -subj /C=AT/ST=Wien/L=Wien/O=${ORG}/OU=${OU}/CN=${CommonName}
     "
     # pyff requires the old pkcs1 private key format -> convert
     cmd2="openssl rsa -in /etc/pki/sign/private/metadata_key_pkcs8.pem
         -out /etc/pki/sign/private/metadata_key.pem
     "
     if [ "$PRINT" == "True" ]; then
-        echo $cmd1 $cmd2"
+        echo "$cmd1 $cmd2"
     fi
     $cmd1
     $cmd2
@@ -74,4 +80,4 @@ list_cert() {
 }
 
 
-main
+main $@
