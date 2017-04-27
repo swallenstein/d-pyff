@@ -39,10 +39,9 @@ ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
  && ln -sf /dev/stderr /var/log/pyff_batch.error
 
-COPY install/sample_data /opt/sample_data
-COPY install/sample_data/etc/pki/tls/openssl.cnf /etc/pki/tls/
+COPY install/testdata /opt/testdata
+COPY install/testdata/etc/pki/tls/openssl.cnf /opt/testdata/etc/pki/tls/
 COPY install/scripts/*.sh /
-RUN mkdir /tests
 COPY install/tests/* /tests/
 
 # Application will run as a non-root user
@@ -62,6 +61,4 @@ RUN mkdir -p $VOLDIRS \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS
 
-RUN git config --global user.email "$USERNAME@MD-aggregator" \
- && git config --global user.name "$USERNAME MD-aggregator" \
- && git config --global push.default simple
+COPY install/gitconfig /home/$USERNAME/.gitconfig
