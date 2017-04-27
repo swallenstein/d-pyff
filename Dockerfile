@@ -61,3 +61,7 @@ RUN mkdir -p $VOLDIRS \
  && chmod -R 700 $(find $VOLDIRS -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS
+
+RUN git config --global user.email "$USERNAME@MD-aggregator" \
+ && git config --global user.name "$USERNAME MD-aggregator" \
+ && git config --global push.default simple
