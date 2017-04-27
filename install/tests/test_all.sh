@@ -38,8 +38,8 @@ git clone /tmp/md_feed .
 # test 05
 echo 'create aggregate from test data and push repo'
 /pyff_aggregate.sh
-python /tests/check_metadata.py /tmp/metadata.xml > /tmp/entities.list
-diff /tmp/entities.list /opt/testdata/results/entities1.list
+python /tests/check_metadata.py /var/md_feed/metadata.xml > /tmp/entities.list
+diff /var/md_feed/entities.list /opt/testdata/results/entities1.list
 
 # test 06
 /pyff_aggregate.sh -g -S

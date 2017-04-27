@@ -62,4 +62,5 @@ RUN mkdir -p $VOLDIRS \
  && chown -R $UID:$GID $VOLDIRS
 VOLUME       /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
 
-COPY install/gitconfig /home/$USERNAME/.gitconfig
+COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
+COPY install/opt/known_hosts /home/$USERNAME/
