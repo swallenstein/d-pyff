@@ -63,4 +63,4 @@ RUN mkdir -p $VOLDIRS \
 VOLUME       /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
 
 COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
-COPY install/opt/known_hosts /home/$USERNAME/
+COPY install/opt/known_hosts /home/$USERNAME/.ssh/
