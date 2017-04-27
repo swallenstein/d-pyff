@@ -19,20 +19,31 @@ RUN pip install future iso8601==0.1.9 \
  && pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
 
 # changed defaults for c14n, digest & signing alg - used rhoerbe fork
-COPY install/opt/pyXMLSecurity /opt/source/pyXMLSecurity
-RUN cd /opt/source/pyXMLSecurity \
+ENV repodir='/opt/source/pyXMLSecurity'
+ENV repourl='https://github.com/rhoerbe/pyXMLSecurity'
+RUN mkdir -p $repodir && cd $repodir \
+ && git clone $repourl . \
  && python setup.py install
 
 # mdsplit function has not been pushed upstream yet - used rhoerbe fork
-COPY install/opt/pyff /opt/source/pyff
+ENV repodir='/opt/source/pyff'
+ENV repourl='https://github.com/identinetics/pyFF'
 # auto-installing  Cherry-Py dependency failed with 7.1.0 (UnicodeDecodeError)
 RUN pip install cherrypy \
- && cd /opt/source/pyff && python setup.py install
+ && mkdir -p $repodir && cd $repodir \
+ && git clone $repourl . && git checkout mdsplit \
+ && python setup.py install
 
 # install Shibboleth XMLSECTOOL used in pyffsplit.sh (requires JRE, but installing JDK because of /etc/alternatives support)
-RUN yum -y install java-1.8.0-openjdk-devel.x86_64
+# --- XMLSECTOOL ---
+ENV version='2.0.0'
+RUN mkdir -p /opt && cd /opt \
+ && wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip" \
+ && unzip "xmlsectool-${version}-bin.zip" \
+ && ln -s "xmlsectool-${version}" 'xmlsectool-2' \
+ && rm "xmlsectool-${version}-bin.zip" \
+ && yum -y install java-1.8.0-openjdk-devel.x86_64
 ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
-COPY install/opt/xmlsectool-2 /opt/xmlsectool-2
 ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 
 # forward request and error logs to docker log collector
@@ -54,11 +65,13 @@ RUN adduser -g $GID -u $UID $USERNAME \
  && chmod -R 700 $(find /opt -type d) \
  && chown -R $UID:$GID /opt
 
-VOLUME       /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
 ENV VOLDIRS="/etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source"
 RUN mkdir -p $VOLDIRS \
+ && mkdir -p /etc/pki/sign/certs /etc/pki/sign/private \
  && chmod -R 700 $(find $VOLDIRS -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS
+VOLUME       /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
 
-COPY install/gitconfig /home/$USERNAME/.gitconfig
+COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
+COPY install/opt/known_hosts /home/$USERNAME/.ssh/

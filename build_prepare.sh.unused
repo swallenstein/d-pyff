@@ -33,25 +33,25 @@ cd $BUILDDIR
 
 
 # --- pyXMLSecurity ---
-repodir='install/opt/pyXMLSecurity'
-repourl='https://github.com/rhoerbe/pyXMLSecurity'
-get_or_update_repo
+#repodir='install/opt/pyXMLSecurity'
+#repourl='https://github.com/rhoerbe/pyXMLSecurity'
+#get_or_update_repo
 
 # --- pyFF/branch=mdsplit ---
-repodir='install/opt/pyff'
-repourl='https://github.com/identinetics/pyFF'
-get_or_update_repo
-echo "changing pyff branch to mdsplit"
-cd $repodir && git checkout mdsplit && cd $OLDPWD
+#repodir='install/opt/pyff'
+#repourl='https://github.com/identinetics/pyFF'
+#get_or_update_repo
+#echo "changing pyff branch to mdsplit"
+#cd $repodir && git checkout mdsplit && cd $OLDPWD
 
 # --- XMLSECTOOL ---
-repodir='xmlsectool-2'
-version='2.0.0'
-cd "$BUILDDIR/install/opt/"
-if [ ! -e $repodir ]; then
-    echo "downloading xmlsectool-${version}-bin.zip"
-    wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip"
-    unzip "xmlsectool-${version}-bin.zip"
-    ln -s "xmlsectool-${version}" $repodir
-    rm "xmlsectool-${version}-bin.zip"
-fi
+#repodir='xmlsectool-2'
+#version='2.0.0'
+#cd "$BUILDDIR/install/opt/"
+#if [ ! -e $repodir ]; then
+#    echo "downloading xmlsectool-${version}-bin.zip"
+#    wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip"
+#    unzip "xmlsectool-${version}-bin.zip"
+#    ln -s "xmlsectool-${version}" $repodir
+#    rm "xmlsectool-${version}-bin.zip"
+#fi

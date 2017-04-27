@@ -23,9 +23,9 @@ main() {
 set_volume_root() {
     DOCKERVOL_SHORT='/dv'
     DOCKERLOG_SHORT='/dl'
-    if [ "$TRAVIS" == "true" ]; then
-        DOCKERVOL_SHORT='./dv';
-        DOCKERLOG_SHORT='./dl';
+    if [[ "$TRAVIS" == "true" ]] || [[ ! -z ${JENKINS_HOME+x} ]]; then
+        DOCKERVOL_SHORT='./dv'
+        DOCKERLOG_SHORT='./dl'
     fi
     DOCKER_VOLUME_ROOT='/var/lib/docker/volumes'  # hard coded - check for your config if applicable!
 }
@@ -34,7 +34,8 @@ set_volume_root() {
 set_image_and_container_name() {
     # This IMGID qualifies image, container, user and IP adddress; this is helpful for managing
     # processes on the docker host etc.
-    IMGID='03'  # range from 02 .. 99; must be unique per node (registered in github.com/identinetics/dscripts/templates/assigned-uids.adoc)
+    #IMGID='03'  # registered default in github.com/identinetics/dscripts/templates/assigned-uids.adoc
+    IMGID='99'  # dev
     PROJSHORT='pyff'
     export IMAGENAME="rhoerbe/$PROJSHORT${IMGID}"  # [a-z_0-9]
     export CONTAINERNAME="${IMGID}$PROJSHORT"
@@ -105,7 +106,9 @@ set_vol_mapping() {
     map_docker_volume "${CONTAINERNAME}.var_md_feed" '/var/md_feed' 'z' $DOCKERVOL_SHORT
     map_docker_volume "${CONTAINERNAME}.var_md_source" '/var/md_source' 'z' $DOCKERVOL_SHORT
 
-    chown -R $CONTAINERUID:$CONTAINERUID $DOCKER_VOLUME_ROOT/$CONTAINERNAME.*
+    if [[ ! $JENKINS_HOME ]]; then
+        chown -R $CONTAINERUID:$CONTAINERUID $DOCKER_VOLUME_ROOT/$CONTAINERNAME.*
+    fi
 }
 
 
