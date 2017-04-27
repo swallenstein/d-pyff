@@ -1,9 +1,9 @@
 FROM centos:centos7
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
-      version="0.4.0" \
-      jetzt_keine_capabilities='--cap-drop=all'
+      version="0.5.0" \
+      capabilities='--cap-drop=all'
 
-RUN yum -y install epel-release curl ip lsof net-tools unzip wget which \
+RUN yum -y install epel-release curl ip lsof net-tools unzip wget which xmlstarlet \
  && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core opensc pcsc-lite \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all \
@@ -20,15 +20,14 @@ RUN pip install future iso8601==0.1.9 \
 
 # changed defaults for c14n, digest & signing alg - used rhoerbe fork
 COPY install/opt/pyXMLSecurity /opt/source/pyXMLSecurity
-WORKDIR /opt/source/pyXMLSecurity
-RUN python setup.py install
+RUN cd /opt/source/pyXMLSecurity \
+ && python setup.py install
 
 # mdsplit function has not been pushed upstream yet - used rhoerbe fork
 COPY install/opt/pyff /opt/source/pyff
-WORKDIR /opt/source/pyff
 # auto-installing  Cherry-Py dependency failed with 7.1.0 (UnicodeDecodeError)
 RUN pip install cherrypy \
- && python setup.py install
+ && cd /opt/source/pyff && python setup.py install
 
 # install Shibboleth XMLSECTOOL used in pyffsplit.sh (requires JRE, but installing JDK because of /etc/alternatives support)
 RUN yum -y install java-1.8.0-openjdk-devel.x86_64
@@ -43,28 +42,22 @@ RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
 COPY install/sample_data /opt/sample_data
 COPY install/sample_data/etc/pki/tls/openssl.cnf /etc/pki/tls/
 COPY install/scripts/*.sh /
+RUN mkdir /tests
+COPY install/tests/* /tests/
 
 # Application will run as a non-root user
-# DAC Permission strategy: gruop 0 & no group access for private directories
+# DAC Permission strategy: group 0 & no group access for private directories
 ARG USERNAME=pyff
 ARG UID=343003
 ENV GID=0
 RUN adduser -g $GID -u $UID $USERNAME \
- && mkdir -p /opt \
- && chown -R $USERNAME:root /opt/source
-
-RUN chmod +x /*.sh \
+ && chmod +x /*.sh /tests/* \
  && chmod -R 700 $(find /opt -type d) \
  && chown -R $UID:$GID /opt
 
-ENV VOLDIRS='/etc/pki/sign /etc/pyff /var/log /var/md_feed /var/md_source'
+VOLUME       /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
+ENV VOLDIRS="/etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source"
 RUN mkdir -p $VOLDIRS \
  && chmod -R 700 $(find $VOLDIRS -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS
-
-VOLUME /etc/pki/sign \
-       /etc/pyff \
-       /var/log \
-       /var/md_feed \
-       /var/md_source

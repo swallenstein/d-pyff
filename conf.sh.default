@@ -70,7 +70,7 @@ set_run_args() {
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
         -e MDFEED_HOST=github.com
         -e MDFEED_SSHUSER=git
-        -e MDFEED_REPO=rhoerbe/mdfeedWpvAt
+        -e MDFEED_REPO=rhoerbe/mdfeedTestWpvAt
     "
     #get_capabilities
     export STARTCMD='/start_pyffd.sh'  # unset or blank to use image default
@@ -94,6 +94,7 @@ set_network() {
 
 
 set_vol_mapping() {
+    VOLMAPPING=''
     create_user $CONTAINERUSER $CONTAINERUID
 
     # it is good practice to map each VOLUME from the Dockerfile

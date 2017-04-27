@@ -5,6 +5,7 @@ set -e -o pipefail
 
 main() {
     get_commandline_args $@
+    cancel_if_keys_exist
     set_openssl_config
     create_cert
     list_cert
@@ -36,6 +37,14 @@ get_commandline_args() {
         exit 1
     fi
     CommonName=$1
+}
+
+
+cancel_if_keys_exist() {
+    if [[ -e '/etc/pki/sign/private/metadata_key_pkcs8.pem' || -e '/etc/pki/sign/certs/metadata_crt.pem']]; then
+        echo 'need to delete keys before creating new ones'
+        exit 0
+    fi
 }
 
 
