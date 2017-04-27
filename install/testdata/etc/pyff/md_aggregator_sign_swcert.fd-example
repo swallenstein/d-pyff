@@ -9,9 +9,6 @@
      validUntil: P10D
      ID: OurFederationSignedMetadata_
 - sign:
-    key: /etc/pki/sign/metadata_signing-key.pem
-    cert: /etc/pki/sign/metadata_signing-crt.pem
-#- publish: /var/md_feed/metadata.xml
-# Unit Test:
-- publish: /tmp/docker-pyff/install/testdata/md_feed/metadata.xml
-
+    key: /etc/pki/sign/private/metadata_key.pem
+    cert: /etc/pki/sign/certs/metadata_crt.pem
+- publish: /var/md_feed/metadata.xml

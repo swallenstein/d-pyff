@@ -3,10 +3,10 @@
 set -e
 
 echo 'copy test data (not overwriting existing data)'
-cp -np  /opt/sample_data/etc/pki/tls/openssl.cnf /etc/pki/tls/
-cp -np  /opt/sample_data/etc/pyff/* /etc/pyff/
-cp -np  /etc/sign/md_aggregate_sign_swcert.fd-example /etc/pyff/md_aggregator.fd
-cp -npr /opt/sample_data/testdata/md_source/*.xml /var/md_source
+cp -np  /opt/testdata/etc/pki/tls/openssl.cnf /etc/pki/tls/
+cp -np  /opt/testdata/etc/pyff/* /etc/pyff/
+cp -np  /opt/testdata/etc/pyff/md_aggregator_sign_swcert.fd-example /etc/pyff/md_aggregator.fd
+cp -npr /opt/testdata/md_source/*.xml /var/md_source
 
 # test 01
 echo 'create MD signing certificate'
@@ -14,8 +14,10 @@ echo 'create MD signing certificate'
 
 # test 02
 echo 'starting pyffd and expecting html response'
-/start_pyffd.sh && sleep 1
-curl http://localhost:8080/ | grep '<title>pyFF @ localhost:8080</title>'
+/start_pyffd.sh &
+sleep 1
+curl --silent http://localhost:8080/ | grep '<title>pyFF @ localhost:8080</title>' > /tmp/entities.list
+diff /tmp/entities.list /opt/testdata/results/entities1.list
 
 # test 03
 echo "create SSH keys for access to $MDFEED_HOST"
@@ -33,7 +35,11 @@ git --bare init
 cd /var/md_feed
 git clone /tmp/md_feed .
 
-
+# test 05
 echo 'create aggregate from test data and push repo'
 /pyff_aggregate.sh
-/git_push.sh
+python /tests/check_metadata.py /tmp/metadata.xml > /tmp/entities.list
+diff /tmp/entities.list /opt/testdata/results/entities1.list
+
+# test 06
+/pyff_aggregate.sh -g -S

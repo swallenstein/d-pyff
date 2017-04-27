@@ -2,6 +2,10 @@ pipeline {
     agent any
 
     stages {
+        stage('Post-Cleanup') {
+            steps {
+                sh 'docker volume rm 03pyff.etc_pki_sign 03pyff.etc_pyff 03pyff.home_pyff03_ssh 03pyff.var_log 03pyff.var_md_feed 03pyff.var_md_source'
+            }
         stage('Get repo') {
             steps {
                 sh '''
@@ -29,6 +33,11 @@ pipeline {
                 echo 'Testing ..'
                 ./dscripts/run.sh -p
                 '''
+            }
+        }
+        stage('Post-Cleanup') {
+            steps {
+                sh 'docker volume rm 03pyff.etc_pki_sign 03pyff.etc_pyff 03pyff.home_pyff03_ssh 03pyff.var_log 03pyff.var_md_feed 03pyff.var_md_source'
             }
         }
     }

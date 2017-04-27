@@ -54,11 +54,12 @@ RUN adduser -g $GID -u $UID $USERNAME \
  && chmod -R 700 $(find /opt -type d) \
  && chown -R $UID:$GID /opt
 
-VOLUME       /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
 ENV VOLDIRS="/etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source"
 RUN mkdir -p $VOLDIRS \
+ && mkdir -p /etc/pki/sign/certs /etc/pki/sign/private \
  && chmod -R 700 $(find $VOLDIRS -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS
+VOLUME       /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
 
 COPY install/gitconfig /home/$USERNAME/.gitconfig
