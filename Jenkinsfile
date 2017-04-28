@@ -7,7 +7,7 @@ pipeline {
                 sh '''
                 echo 'Updating submodule'
                 git submodule update --init
-                cd dscripts && git checkout master && git pull && cd ..
+                cd ./dscripts && git checkout master && git pull && cd ..
                 '''
             }
         }
@@ -15,8 +15,8 @@ pipeline {
             steps {
                 sh '''
                 echo 'Building..'
-                docker rm --force identidock || true
-                rm conf.sh || true
+                docker rm --force pyff03 || true
+                rm conf.sh 2> /dev/null || true
                 ln -s conf.sh.default conf.sh
                 ./dscripts/build.sh
                 '''
