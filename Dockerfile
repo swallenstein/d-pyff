@@ -36,12 +36,11 @@ RUN pip install cherrypy \
 
 # install Shibboleth XMLSECTOOL used in pyffsplit.sh (requires JRE, but installing JDK because of /etc/alternatives support)
 # --- XMLSECTOOL ---
-ENV repodir='/opt/xmlsectool-2'
 ENV version='2.0.0'
-RUN mkdir -p $repodir && cd $repodir \
+RUN mkdir -p /opt && cd /opt \
  && wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip" \
  && unzip "xmlsectool-${version}-bin.zip" \
- && ln -s "xmlsectool-${version}" $repodir \
+ && ln -s "xmlsectool-${version}" 'xmlsectool-2' \
  && rm "xmlsectool-${version}-bin.zip" \
  && yum -y install java-1.8.0-openjdk-devel.x86_64
 ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
