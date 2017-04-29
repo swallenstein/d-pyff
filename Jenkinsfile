@@ -26,7 +26,7 @@ pipeline {
             steps {
                 sh '''
                 echo 'Testing..'
-                ./dscripts/run.sh -I python tests.py
+                ./dscripts/run.sh -I python /tests/test_all.sh
                 '''
             }
         }
