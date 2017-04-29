@@ -2,7 +2,7 @@
 
 set -e
 
-echo 'copy test data (not overwriting existing data)'
+echo "copy test data (not overwriting existing data)"
 cp -np  /opt/testdata/etc/pki/tls/openssl.cnf /etc/pki/tls/
 cp -np  /opt/testdata/etc/pyff/* /etc/pyff/
 cp -np  /opt/testdata/etc/pyff/md_aggregator_sign_swcert.fd-example /etc/pyff/md_aggregator.fd

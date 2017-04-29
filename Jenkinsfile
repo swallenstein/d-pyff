@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Get repo') {
+        stage('Git submodule') {
             steps {
                 sh '''
                 echo 'Updating submodule'
