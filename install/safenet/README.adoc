@@ -1,0 +1,9 @@
+# eToken Pro Linux Driver
+For licence reasons the driver has to be obtained directly from Gemalto.
+
+Make the file Safenet Authentication Client RPM available in this
+directory before building the docker image. Keep the original
+versioned filename and symlink it to the generic one referenced in Dockerfile::
+
+    ln -s Linux/Installation/Standard/RPM/x64/RPM-GPG-KEY-SafenetAuthenticationClient RPM-GPG-KEY-SafenetAuthenticationClient
+    ln -s Linux/Installation/Standard/RPM/x64/SafenetAuthenticationClient-9.0.43-0.x86_64.rpm SafenetAuthenticationClient_x86_64.rpm
