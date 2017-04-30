@@ -46,4 +46,8 @@ diff /tmp/entities.list /opt/testdata/results/entities2.list
 echo 'Test 06: create aggregate from test data + mdsplit push git repo '
 /pyff_aggregate.sh -g -S
 
+# test 07
+echo 'Test 07: status report '
+/status.sh
+
 echo 'Tests completed'

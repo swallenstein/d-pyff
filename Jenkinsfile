@@ -5,6 +5,7 @@ pipeline {
         stage('Pre-Cleanup') {
             steps {
                 sh 'sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source 2>/dev/null || true '
+                sh './dscripts/tools.sh rm 2>/dev/null || true'
             }
         }
         stage('Git submodule') {
@@ -20,7 +21,6 @@ pipeline {
             steps {
                 sh '''
                 echo 'Building..'
-                docker rm --force pyff99 || true
                 rm conf.sh 2> /dev/null || true
                 ln -s conf.sh.default conf.sh
                 ./dscripts/build.sh
@@ -35,13 +35,14 @@ pipeline {
                 '''
             }
         }
-        stage('Post-Cleanup') {
-            steps {
+        post {
+            always {
+                echo 'removing docker volumes and container '
                 sh '''
                 sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source  2>/dev/null || true
                 sudo docker rm -f pyff99 2>/dev/null || true
                 '''
             }
         }
-    }
+   }
 }
