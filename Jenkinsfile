@@ -35,14 +35,14 @@ pipeline {
                 '''
             }
         }
-        post {
-            always {
-                echo 'removing docker volumes and container '
-                sh '''
-                sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source  2>/dev/null || true
-                sudo docker rm -f pyff99 2>/dev/null || true
-                '''
-            }
+    }
+    post {
+        always {
+            echo 'removing docker volumes and container '
+            sh '''
+            sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source  2>/dev/null || true
+            sudo docker rm -f pyff99 2>/dev/null || true
+            '''
         }
-   }
+    }
 }
