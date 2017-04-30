@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Pre-Cleanup') {
             steps {
-                sh 'docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source'
+                sh 'sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source'
             }
         }
         stage('Git submodule') {
@@ -37,7 +37,7 @@ pipeline {
         }
         stage('Post-Cleanup') {
             steps {
-                sh 'docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source'
+                sh 'sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source'
             }
         }
     }
