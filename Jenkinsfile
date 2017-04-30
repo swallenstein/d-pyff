@@ -8,6 +8,14 @@ pipeline {
                 sh './dscripts/tools.sh rm 2>/dev/null || true'
             }
         }
+        stage('Git branch') {
+            steps {
+                sh '''
+                echo 'hard coding git branch - TOD: move this to the jenkins git plugin'
+                git checkout master
+                '''
+            }
+        }
         stage('Git submodule') {
             steps {
                 sh '''

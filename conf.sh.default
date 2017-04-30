@@ -128,7 +128,7 @@ container_status() {
 
 
 logrotate() {
-    find $DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/ -mtime +5 -exec ls -ld {} \;"
+    find $DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/ -mtime +5 -exec ls -ld --time-style long-iso {} \;
 }
 
 
