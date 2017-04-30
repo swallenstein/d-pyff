@@ -78,7 +78,7 @@ COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
 COPY install/opt/known_hosts /home/$USERNAME/.ssh/
 
 # Install PKCS#11 drivers for Safenet eTokenPro
-COPY install/safenet/Linux/Installation/Standard/RPM/x64/RPM-GPG-KEY-SafenetAuthenticationClient /opt/sac/
+COPY install/safenet/Linux/Installation/Standard/RPM/RPM-GPG-KEY-SafenetAuthenticationClient /opt/sac/
 COPY install/safenet/Linux/Installation/Standard/RPM/SafenetAuthenticationClient-9.1.7-0.x86_64.rpm /opt/sac/SafenetAuthenticationClient_x86_64.rpm
 RUN yum -y install gtk2 xdg-utils \
  && rpm --import /opt/sac/RPM-GPG-KEY-SafenetAuthenticationClient \
