@@ -97,7 +97,8 @@ set_network() {
 
 
 set_vol_mapping() {
-    VOLMAPPING=''
+    export VOLLIST=''
+    export VOLMAPPING=''
     create_user $CONTAINERUSER $CONTAINERUID
 
     # it is good practice to map each VOLUME from the Dockerfile
