@@ -15,7 +15,7 @@ echo 'Test 01: create MD signing certificate'
 # test 02
 echo 'Test 02: starting pyffd and expecting html response'
 /start_pyffd.sh &
-sleep 1
+sleep 3
 curl --silent http://localhost:8080/ | grep '<title>pyFF @ localhost:8080</title>' > /tmp/entities.list
 diff /tmp/entities.list /opt/testdata/results/entities1.list
 

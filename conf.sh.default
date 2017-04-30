@@ -67,6 +67,7 @@ set_run_args() {
         -e PIDFILE=/var/log/pyffd.pid
         -e PIPELINEBATCH=/etc/pyff/md_aggregator.fd
         -e PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
+        -e PYKCS11PIN=secret1
         -e MDSIGN_CERT=/etc/pki/sign/metadata_signing-crt.pem
         -e MDSIGN_KEY=/etc/pki/sign/metadata_signing-key.pem
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
