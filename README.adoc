@@ -83,3 +83,19 @@ Config the key name in md_aggregate_sign.fd to match the key name on the HSM.
 (See the line with 'sign -> key')
 
 Provide the PYKCS11PIN env variable if using the HSM
+
+## CI, Staging and Versioning
+
+There are 2 environments defined in the dscripts tool chain:
+
+|===
+|environment | docker image tag| git branch
+|production | pr | master
+|testing | qa | qa
+|===
+
+There is a Jenkinsfile for CI. To use is Jenkins must be able to run docker.
+
+Versions are in $Projectroot/VERSION. To tag a new version run
+
+    git tag $(cat VERSION)

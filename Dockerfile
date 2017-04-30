@@ -54,6 +54,7 @@ COPY install/testdata /opt/testdata
 COPY install/testdata/etc/pki/tls/openssl.cnf /opt/testdata/etc/pki/tls/
 COPY install/scripts/*.sh /
 COPY install/tests/* /tests/
+COPY VERSION /opt/VERSION
 
 # Application will run as a non-root user
 # DAC Permission strategy: group 0 & no group access for private directories
