@@ -25,13 +25,14 @@ echo "Test 03: create SSH keys for access to $MDFEED_HOST"
 
 # test 04
 echo 'Test 04: clone local git repo for md_feed '
-rm -rf /tmp/md_feed || true
+rm -rf /tmp/md_feed 2>/dev/null || true
 mkdir -p /tmp/md_feed
 cd /tmp/md_feed
 git config --global user.email "tester@testinetics.com"
 git config --global user.name "Unit Test"
 git config --global push.default simple
 git --bare init
+rm -rf /var/md_feed 2>/dev/null || true
 cd /var/md_feed
 git clone /tmp/md_feed .
 
