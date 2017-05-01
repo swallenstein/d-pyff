@@ -1,9 +1,9 @@
 FROM centos:centos7
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
-      version="0.5.0" \
-      capabilities='--cap-drop=all'
+      version="0.6.0"
+      # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
-RUN yum -y install epel-release curl ip lsof net-tools unzip wget which xmlstarlet \
+RUN yum -y install epel-release curl ip lsof net-tools sudo unzip wget which xmlstarlet \
  && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core opensc pcsc-lite \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all \
@@ -15,8 +15,8 @@ RUN easy_install --upgrade six \
  && pip install importlib
 #using iso8601 0.1.9 because of str/int compare bug in pyff
 RUN pip install future iso8601==0.1.9 \
- && pip install lxml \
- && pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
+ && pip install lxml
+ #&& pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
 
 # changed defaults for c14n, digest & signing alg - used rhoerbe fork
 ENV repodir='/opt/source/pyXMLSecurity'
@@ -64,7 +64,9 @@ ENV GID=0
 RUN adduser -g $GID -u $UID $USERNAME \
  && chmod +x /*.sh /tests/* \
  && chmod -R 700 $(find /opt -type d) \
- && chown -R $UID:$GID /opt
+ && chown -R $UID:$GID /opt \
+ && mkdir -p /etc/sudoers.d \
+ && echo "$USERNAME ALL=(root) NOPASSWD: /usr/sbin/pcscd" > /etc/sudoers.d/$USERNAME
 
 ENV VOLDIRS="/etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source"
 RUN mkdir -p $VOLDIRS \

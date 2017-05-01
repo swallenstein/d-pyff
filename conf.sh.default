@@ -68,7 +68,6 @@ set_run_args() {
         -e PIDFILE=/var/log/pyffd.pid
         -e PIPELINEBATCH=/etc/pyff/md_aggregator.fd
         -e PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
-        -e PYKCS11PIN=secret1
         -e MDSIGN_CERT=/etc/pki/sign/metadata_signing-crt.pem
         -e MDSIGN_KEY=/etc/pki/sign/metadata_signing-key.pem
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
@@ -76,6 +75,9 @@ set_run_args() {
         -e MDFEED_SSHUSER=git
         -e MDFEED_REPO=rhoerbe/mdfeedTestWpvAt
     "
+    #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/libetvTokenEngine.so"  # enable this for Safenet eTokePro
+    #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/pkcs11/opensc-pkcs11.so"  # enable this for generic OpenSC card
+    #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11PIN=secret1"  # configure token password
     #get_capabilities
     export STARTCMD='/start_pyffd.sh'  # unset or blank to use image default
 }
