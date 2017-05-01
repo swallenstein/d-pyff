@@ -52,7 +52,7 @@ RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
 
 COPY install/testdata /opt/testdata
 COPY install/testdata/etc/pki/tls/openssl.cnf /opt/testdata/etc/pki/tls/
-COPY install/scripts/*.sh /
+COPY install/scripts/*.sh /scripts/
 COPY install/tests/* /tests/
 COPY VERSION /opt/VERSION
 
@@ -62,7 +62,7 @@ ARG USERNAME=pyff
 ARG UID=343003
 ENV GID=0
 RUN adduser -g $GID -u $UID $USERNAME \
- && chmod +x /*.sh /tests/* \
+ && chmod +x /scripts/* /tests/* \
  && chmod -R 700 $(find /opt -type d) \
  && chown -R $UID:$GID /opt \
  && mkdir -p /etc/sudoers.d \
@@ -87,4 +87,3 @@ RUN yum -y install gtk2 xdg-utils \
  && rpm -i /opt/sac/SafenetAuthenticationClient_x86_64.rpm --nodeps \
  && yum clean all
 ENV PKCS11_CARD_DRIVER='/usr/lib64/libetvTokenEngine.so'
-COPY install/scripts/*.sh /
