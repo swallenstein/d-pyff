@@ -15,8 +15,8 @@ RUN easy_install --upgrade six \
  && pip install importlib
 #using iso8601 0.1.9 because of str/int compare bug in pyff
 RUN pip install future iso8601==0.1.9 \
- && pip install lxml
- #&& pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
+ && pip install lxml \
+ && pip install pykcs11   #==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
 
 # changed defaults for c14n, digest & signing alg - used rhoerbe fork
 ENV repodir='/opt/source/pyXMLSecurity'
@@ -52,7 +52,7 @@ RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
 
 COPY install/testdata /opt/testdata
 COPY install/testdata/etc/pki/tls/openssl.cnf /opt/testdata/etc/pki/tls/
-COPY install/scripts/*.sh /scripts/
+COPY install/scripts/* /scripts/
 COPY install/tests/* /tests/
 COPY VERSION /opt/VERSION
 
@@ -87,3 +87,16 @@ RUN yum -y install gtk2 xdg-utils \
  && rpm -i /opt/sac/SafenetAuthenticationClient_x86_64.rpm --nodeps \
  && yum clean all
 ENV PKCS11_CARD_DRIVER='/usr/lib64/libetvTokenEngine.so'
+
+# For development/debugging - map port in config and start sshd with /start_sshd.sh
+RUN yum -y install openssh-server \
+ && yum clean all \
+ && echo changeit | passwd -f --stdin $USERNAME \
+ && echo changeit | passwd -f --stdin root \
+ && echo 'GSSAPIAuthentication no' >> /etc/ssh/sshd_config \
+ && echo 'useDNS no' >> /etc/ssh/sshd_config \
+ && rm -f /etc/ssh/ssh_host_*_key  # generate on first container start, not in image
+COPY dscripts/templates/install/scripts/start_sshd.sh /
+RUN chmod +x /start_sshd.sh
+VOLUME /etc/sshd
+EXPOSE 2022
