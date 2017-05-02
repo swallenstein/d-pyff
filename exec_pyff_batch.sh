@@ -57,17 +57,17 @@ prepare_command() {
 
 exec_commands() {
     if [[ $git == 'True' ]]; then
-        print_and_exec_command "$cmd /git_pull.sh"
+        print_and_exec_command "$cmd /scripts/git_pull.sh"
     fi
-    print_and_exec_command "$cmd /pyff_aggregate.sh"
+    print_and_exec_command "$cmd /scripts/pyff_aggregate.sh"
     if [[ "$split" = "pyff" ]]; then
-        print_and_exec_command "$cmd /pyff_mdsplit.sh"
+        print_and_exec_command "$cmd /scripts/pyff_mdsplit.sh"
     fi
     if [[ "$split" = "xmlsectool" ]]; then
-        print_and_exec_command "$cmd /pyff_mdsplit_xmlsectool.sh"
+        print_and_exec_command "$cmd /scripts/pyff_mdsplit_xmlsectool.sh"
     fi
     if [[ $git == 'True' ]]; then
-        print_and_exec_command "$cmd /git_push.sh"
+        print_and_exec_command "$cmd /scripts/git_push.sh"
     fi
 }
 
