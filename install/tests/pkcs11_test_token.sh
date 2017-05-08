@@ -6,7 +6,7 @@ main() {
     opensc_list_reades_and_drivers
     show_pkcs11_info
     run_pykcs11
-    show_pkcs15_objects
+    #show_pkcs15_objects
     exec bash
 }
 

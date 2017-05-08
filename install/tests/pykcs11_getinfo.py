@@ -146,6 +146,6 @@ if __name__ == '__main__':
             gi.getSlotInfo(slot)
             gi.getSessionInfo(slot, pin)
             gi.getTokenInfo(slot)
-            gi.getMechanismInfo(slot)
+            # gi.getMechanismInfo(slot)
         except PyKCS11.PyKCS11Error as e:
             print("Error:", e)

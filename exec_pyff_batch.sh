@@ -56,6 +56,7 @@ prepare_command() {
 
 
 exec_commands() {
+    set -e
     if [[ $git == 'True' ]]; then
         print_and_exec_command "$cmd /scripts/git_pull.sh"
     fi

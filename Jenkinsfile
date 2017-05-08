@@ -11,7 +11,7 @@ pipeline {
         stage('Git branch') {
             steps {
                 sh '''
-                echo 'hard coding git branch - TOD: move this to the jenkins git plugin'
+                echo 'hard coding git branch - TODO: move this to the jenkins git plugin'
                 git checkout master
                 '''
             }
