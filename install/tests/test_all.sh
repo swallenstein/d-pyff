@@ -10,18 +10,18 @@ cp -npr /opt/testdata/md_source/*.xml /var/md_source
 
 # test 01
 echo 'Test 01: create MD signing certificate'
-/create_sw_cert.sh -p unittest
+/scripts/create_sw_cert.sh -p unittest
 
 # test 02
 echo 'Test 02: starting pyffd and expecting html response'
-/start_pyffd.sh &
+/scripts/start_pyffd.sh &
 sleep 3
 curl --silent http://localhost:8080/ | grep '<title>pyFF @ localhost:8080</title>' > /tmp/entities.list
 diff /tmp/entities.list /opt/testdata/results/entities1.list
 
 # test 03
 echo "Test 03: create SSH keys for access to $MDFEED_HOST"
-/gen_sshkey.sh
+/scripts/gen_sshkey.sh
 
 # test 04
 echo 'Test 04: clone local git repo for md_feed '
@@ -44,10 +44,10 @@ diff /tmp/entities.list /opt/testdata/results/entities2.list
 
 # test 06
 echo 'Test 06: create aggregate from test data + mdsplit push git repo '
-/pyff_aggregate.sh -g -S
+/scripts/pyff_aggregate.sh -g -S
 
 # test 07
 echo 'Test 07: status report '
-/status.sh
+/scripts/status.sh
 
 echo 'Tests completed'

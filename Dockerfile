@@ -33,13 +33,14 @@ RUN pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper 
 # && python setup.py install
 
 # mdsplit function has not been pushed upstream yet - used rhoerbe fork
-ENV repodir='/opt/source/pyff'
-ENV repourl='https://github.com/identinetics/pyFF'
 # auto-installing  Cherry-Py dependency failed with 7.1.0 (UnicodeDecodeError)
-RUN pip install cherrypy \
- && mkdir -p $repodir && cd $repodir \
- && git clone $repourl . && git checkout mdsplit \
- && python setup.py install
+RUN pip install cherrypy
+#ENV repodir='/opt/source/pyff'
+#ENV repourl='https://github.com/identinetics/pyFF'
+# && mkdir -p $repodir && cd $repodir \
+# && git clone $repourl . && git checkout mdsplit \
+COPY install/opt/pyff/ /opt/source/pyff/
+RUN cd /opt/source/pyff/ && python setup.py install
 
 # install Shibboleth XMLSECTOOL used in pyffsplit.sh (requires JRE, but installing JDK because of /etc/alternatives support)
 # --- XMLSECTOOL ---
