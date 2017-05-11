@@ -15,15 +15,22 @@ RUN easy_install --upgrade six \
  && pip install importlib
 #using iso8601 0.1.9 because of str/int compare bug in pyff
 RUN pip install future iso8601==0.1.9 \
- && pip install lxml \
- && pip install pykcs11   #==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
+ && pip install lxml
+
+RUN pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
+# use leifj's fork of pykcs11
+#ENV repodir='/opt/source/PyKCS11'
+#ENV repourl='https://github.com/leifj/PyKCS11'
+#RUN mkdir -p $repodir && cd $repodir \
+# && git clone $repourl . \
+# && python setup.py install
 
 # changed defaults for c14n, digest & signing alg - used rhoerbe fork
-ENV repodir='/opt/source/pyXMLSecurity'
-ENV repourl='https://github.com/rhoerbe/pyXMLSecurity'
-RUN mkdir -p $repodir && cd $repodir \
- && git clone $repourl . \
- && python setup.py install
+#ENV repodir='/opt/source/pyXMLSecurity'
+#ENV repourl='https://github.com/rhoerbe/pyXMLSecurity'
+#RUN mkdir -p $repodir && cd $repodir \
+# && git clone $repourl . \
+# && python setup.py install
 
 # mdsplit function has not been pushed upstream yet - used rhoerbe fork
 ENV repodir='/opt/source/pyff'
@@ -36,15 +43,15 @@ RUN pip install cherrypy \
 
 # install Shibboleth XMLSECTOOL used in pyffsplit.sh (requires JRE, but installing JDK because of /etc/alternatives support)
 # --- XMLSECTOOL ---
-ENV version='2.0.0'
-RUN mkdir -p /opt && cd /opt \
- && wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip" \
- && unzip "xmlsectool-${version}-bin.zip" \
- && ln -s "xmlsectool-${version}" 'xmlsectool-2' \
- && rm "xmlsectool-${version}-bin.zip" \
- && yum -y install java-1.8.0-openjdk-devel.x86_64
-ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
-ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
+#ENV version='2.0.0'
+#RUN mkdir -p /opt && cd /opt \
+# && wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip" \
+# && unzip "xmlsectool-${version}-bin.zip" \
+# && ln -s "xmlsectool-${version}" 'xmlsectool-2' \
+# && rm "xmlsectool-${version}-bin.zip" \
+# && yum -y install java-1.8.0-openjdk-devel.x86_64
+#ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
+#ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
