@@ -38,11 +38,11 @@ cd $BUILDDIR
 #get_or_update_repo
 
 # --- pyFF/branch=mdsplit ---
-#repodir='install/opt/pyff'
-#repourl='https://github.com/identinetics/pyFF'
-#get_or_update_repo
-#echo "changing pyff branch to mdsplit"
-#cd $repodir && git checkout mdsplit && cd $OLDPWD
+repodir='install/opt/pyff'
+repourl='https://github.com/identinetics/pyFF'
+get_or_update_repo
+echo "changing pyff branch to mdsplit"
+cd $repodir && git checkout mdsplit && cd $OLDPWD
 
 # --- XMLSECTOOL ---
 #repodir='xmlsectool-2'
