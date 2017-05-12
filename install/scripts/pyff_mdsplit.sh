@@ -20,6 +20,7 @@ rm -rf $MDSPLIT_UNSIGNED/*.xml
     --certfile $MDSIGN_CERT --key $MDSIGN_KEY \
     --outdir_signed $MDSPLIT_SIGNED \
     --logfile $LOGFILE --loglevel DEBUG \
+    --nosign \
     $MD_AGGREGATE $MDSPLIT_UNSIGNED
 
 # Step 2. Delete stale files (EDs removed from aggregate or failure to sign)
