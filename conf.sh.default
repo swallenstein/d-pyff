@@ -122,7 +122,7 @@ set_vol_mapping() {
     map_docker_volume "${CONTAINERNAME}.var_md_source" '/var/md_source' 'z' $DOCKERVOL_SHORT
 
     if [[ ! $JENKINS_HOME ]]; then
-        $sudo chown -R $CONTAINERUID:$CONTAINERUID $DOCKER_VOLUME_ROOT/$CONTAINERNAME.*
+        $sudo chown -R $CONTAINERUID:$CONTAINERUID $DOCKER_VOLUME_ROOT/$CONTAINERNAME.* 2>/dev/null || true
     fi
 
     export LOGFILES="
