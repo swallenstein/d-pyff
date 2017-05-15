@@ -1,6 +1,7 @@
 FROM centos:centos7
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
       version="0.6.0"
+      #didi_dir="https://raw.githubusercontent.com/identinetics/docker-pyff/master/didi" \
       # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
 RUN yum -y install epel-release curl ip lsof net-tools sudo unzip wget which xmlstarlet \
@@ -26,11 +27,11 @@ RUN pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper 
 # && python setup.py install
 
 # changed defaults for c14n, digest & signing alg - used rhoerbe fork
-#ENV repodir='/opt/source/pyXMLSecurity'
-#ENV repourl='https://github.com/rhoerbe/pyXMLSecurity'
-#RUN mkdir -p $repodir && cd $repodir \
-# && git clone $repourl . \
-# && python setup.py install
+ENV repodir='/opt/source/pyXMLSecurity'
+ENV repourl='https://github.com/rhoerbe/pyXMLSecurity'
+RUN mkdir -p $repodir && cd $repodir \
+ && git clone $repourl . \
+ && python setup.py install
 
 # mdsplit function has not been pushed upstream yet - used rhoerbe fork
 # auto-installing  Cherry-Py dependency failed with 7.1.0 (UnicodeDecodeError)
@@ -44,15 +45,15 @@ RUN cd /opt/source/pyff/ && python setup.py install
 
 # install Shibboleth XMLSECTOOL used in pyffsplit.sh (requires JRE, but installing JDK because of /etc/alternatives support)
 # --- XMLSECTOOL ---
-#ENV version='2.0.0'
-#RUN mkdir -p /opt && cd /opt \
-# && wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip" \
-# && unzip "xmlsectool-${version}-bin.zip" \
-# && ln -s "xmlsectool-${version}" 'xmlsectool-2' \
-# && rm "xmlsectool-${version}-bin.zip" \
-# && yum -y install java-1.8.0-openjdk-devel.x86_64
-#ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
-#ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
+ENV version='2.0.0'
+RUN mkdir -p /opt && cd /opt \
+ && wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip" \
+ && unzip "xmlsectool-${version}-bin.zip" \
+ && ln -s "xmlsectool-${version}" 'xmlsectool-2' \
+ && rm "xmlsectool-${version}-bin.zip" \
+ && yum -y install java-1.8.0-openjdk-devel.x86_64
+ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
+ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
@@ -97,14 +98,14 @@ RUN yum -y install gtk2 xdg-utils \
 ENV PKCS11_CARD_DRIVER='/usr/lib64/libetvTokenEngine.so'
 
 # For development/debugging - map port in config and start sshd with /start_sshd.sh
-RUN yum -y install openssh-server \
- && yum clean all \
- && echo changeit | passwd -f --stdin $USERNAME \
- && echo changeit | passwd -f --stdin root \
- && echo 'GSSAPIAuthentication no' >> /etc/ssh/sshd_config \
- && echo 'useDNS no' >> /etc/ssh/sshd_config \
- && rm -f /etc/ssh/ssh_host_*_key  # generate on first container start, not in image
-COPY dscripts/templates/install/scripts/start_sshd.sh /
-RUN chmod +x /start_sshd.sh
-VOLUME /etc/sshd
-EXPOSE 2022
+#RUN yum -y install openssh-server \
+# && yum clean all \
+# && echo changeit | passwd -f --stdin $USERNAME \
+# && echo changeit | passwd -f --stdin root \
+# && echo 'GSSAPIAuthentication no' >> /etc/ssh/sshd_config \
+# && echo 'useDNS no' >> /etc/ssh/sshd_config \
+# && rm -f /etc/ssh/ssh_host_*_key  # generate on first container start, not in image
+#COPY dscripts/templates/install/scripts/start_sshd.sh /
+#RUN chmod +x /start_sshd.sh
+#VOLUME /etc/sshd
+#EXPOSE 2022
