@@ -4,8 +4,9 @@ pipeline {
     stages {
         stage('Pre-Cleanup') {
             steps {
-                sh 'sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source 2>/dev/null || true '
-                sh './dscripts/tools.sh rm 2>/dev/null || true'
+                #sh 'sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source 2>/dev/null || true '
+                sh './dscripts/manage.sh rm 2>/dev/null || true'
+                sh './dscripts/manage.sh rmvol 2>/dev/null || true'
             }
         }
         stage('Git branch') {
