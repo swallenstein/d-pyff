@@ -41,7 +41,7 @@ show_pkcs11_info() {
     pkcs11-tool --module $PKCS11_CARD_DRIVER --show-info
     echo
     echo "=== show token slots ==="
-    pkcs11-tool --module $PKCS11_CARD_DRIVER --list-token-slots
+    pkcs11-tool --module $PKCS11_CARD_DRIVER --list-token-slots --slot 0
     echo
     echo "=== show token objects ==="
     pkcs11-tool --module $PKCS11_CARD_DRIVER --list-objects
