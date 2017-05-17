@@ -7,6 +7,8 @@
     - pipe:
         - when accept application/xml:
              - xslt:
+                 stylesheet: unsign.xsl
+             - xslt:
                  stylesheet: tidy.xsl
              - first
              - finalize:

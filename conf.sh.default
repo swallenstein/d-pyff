@@ -74,8 +74,8 @@ set_run_args() {
         -e PIDFILE=/var/log/pyffd.pid
         -e PIPELINEBATCH=/etc/pyff/md_aggregator.fd
         -e PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
-        -e MDSIGN_CERT=/etc/pki/sign/metadata_signing-crt.pem
-        -e MDSIGN_KEY=/etc/pki/sign/metadata_signing-key.pem
+        -e MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
+        -e MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
         -e MDFEED_HOST=github.com
         -e MDFEED_SSHUSER=git
@@ -126,9 +126,9 @@ set_vol_mapping() {
     fi
 
     export LOGFILES="
-        tail -f DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyffd.log
-        tail -f DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyffd.err
-        tail -f DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyff_mdsplit.log
+        $DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyffd.log
+        $DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyffd.err
+        $DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyff_mdsplit.log
     "
 }
 

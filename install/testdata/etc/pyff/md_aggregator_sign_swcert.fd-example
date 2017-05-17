@@ -2,6 +2,10 @@
    - /var/md_source
 #- select: "!//md:EntityDescriptor[md:SPSSODescriptor]"
 - select
+- xslt:
+    stylesheet: unsign.xsl
+- xslt:
+    stylesheet: tidy.xsl
 - store:
      directory: /tmp/
 - finalize:
