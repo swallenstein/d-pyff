@@ -45,5 +45,5 @@ find $MDSPLIT_SIGNED -maxdepth 1 -mmin +59 -type f -name "*.xml" -exec rm -f {} 
 chmod 644 $MDSPLIT_SIGNED/*.xml 2> /dev/null
 
 # Step 5. Make metadata aggregate the default page in /entities
-[[ -e "$MDSPLIT_SIGNED/.htaccess" ]] || echo 'DirectoryIndex ../metadata.xml' > $MDSPLIT_SIGNED/.htaccess
+[[ -e "$MDSPLIT_SIGNED/.htaccess" ]] || echo 'Options +Indexes' > $MDSPLIT_SIGNED/.htaccess
 
