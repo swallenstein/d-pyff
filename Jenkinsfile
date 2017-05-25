@@ -39,7 +39,7 @@ pipeline {
             steps {
                 sh '''
                 echo 'Testing..'
-                ./dscripts/run.sh -I /tests/test_all.sh
+                ./dscripts/run.sh -IV /tests/test_all.sh
                 '''
             }
         }
