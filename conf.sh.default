@@ -82,10 +82,12 @@ set_run_args() {
         -e MDFEED_REPO=rhoerbe/mdfeedTestWpvAt
     "
     # settings if using a USB-based PKCS11 device:
-    #enable_pkcs11
-    #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/libetvTokenEngine.so"  # enable this for Safenet eTokePro
-    #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/pkcs11/opensc-pkcs11.so"  # enable this for generic OpenSC card
-    #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11PIN=secret1"  # configure token password
+    if [[ "$(lsusb | grep 'Aladdin Knowledge Systems Token JC')" ]] && [[ ! -z ${JENKINS_HOME+x} ]]; then
+        enable_pkcs11
+        export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/libetvTokenEngine.so"  # enable this for Safenet eTokePro
+        #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/pkcs11/opensc-pkcs11.so"  # enable this for generic OpenSC card
+        export ENVSETTINGS="$ENVSETTINGS -e PYKCS11PIN=Secret.1"  # configure token password
+    fi
 
     get_capabilities
     export STARTCMD='/scripts/start_pyffd.sh'  # unset or blank to use image default

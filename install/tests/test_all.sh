@@ -5,7 +5,11 @@ set -e
 echo "copy test data (not overwriting existing data)"
 cp -np  /opt/testdata/etc/pki/tls/openssl.cnf /etc/pki/tls/
 cp -np  /opt/testdata/etc/pyff/* /etc/pyff/
-cp -np  /opt/testdata/etc/pyff/md_aggregator_sign_swcert.fd-example /etc/pyff/md_aggregator.fd
+if [[! -z ${PYKCS11LIB+x} ]]; then
+    cp -np  /opt/testdata/etc/pyff/md_aggregator_sign_hsm.fd-example /etc/pyff/md_aggregator.fd
+else
+    cp -np  /opt/testdata/etc/pyff/md_aggregator_sign_swcert.fd-example /etc/pyff/md_aggregator.fd
+fi
 cp -npr /opt/testdata/md_source/*.xml /var/md_source
 
 # test 01
