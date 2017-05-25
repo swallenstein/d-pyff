@@ -38,7 +38,7 @@ git clone /tmp/md_feed .
 
 # test 05
 echo 'Test 05: create aggregate from test data'
-scripts/pyff_aggregate.sh
+/scripts/pyff_aggregate.sh
 python /tests/check_metadata.py /var/md_feed/metadata.xml > /tmp/entities.list
 diff /tmp/entities.list /opt/testdata/results/entities2.list
 
