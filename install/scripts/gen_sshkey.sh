@@ -12,4 +12,6 @@ fi
 ssh -T $MDFEED_SSHUSER@$MDFEED_HOST
 
 echo "created new public key - register with $MDFEED_HOST/$MDFEED_REPO:"
-cat ~/.ssh/id_ed25519.pub || true
+if [[ ! -e ~/.ssh/id_ed25519.pub ]]; then
+    cat ~/.ssh/id_ed25519.pub
+fi
