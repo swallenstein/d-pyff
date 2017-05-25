@@ -8,11 +8,13 @@ pipeline {
                 sh './dscripts/manage.sh rmvol 2>/dev/null || true'
             }
         }
-        stage('Git branch') {
+        stage('Git branch + pull') {
             steps {
                 sh '''
                 echo 'hard coding git branch - TODO: move this to the jenkins git plugin'
                 git checkout master
+                echo 'pulling updates'
+                git pull
                 '''
             }
         }
