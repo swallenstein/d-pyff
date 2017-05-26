@@ -4,11 +4,11 @@ set -e
 
 # test 20
 echo 'Test 20: HSM'
-if [[ ! -z ${PYKCS11LIB+x} ]]; then
+if [[ -z ${PYKCS11LIB+x} ]]; then
     echo 'PYKCS11LIB not set - failed HSM test'
     exit 1
 fi
-if [[ ! -z ${PYKCS11PIN+x} ]]; then
+if [[ -z ${PYKCS11PIN+x} ]]; then
     echo 'PYKCS11PIN not set - failed HSM test'
     exit 1
 fi

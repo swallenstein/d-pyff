@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Git branch + pull + submodule') {
+        stage('Git pull + branch + submodule') {
             steps {
                 sh '''
                 echo 'hard coding git branch - TODO: move this to the jenkins git plugin'
