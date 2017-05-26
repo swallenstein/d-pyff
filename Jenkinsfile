@@ -38,7 +38,7 @@ pipeline {
                 '''
             }
         }
-        stage('Test') {
+        stage('Test ') {
             steps {
                 sh '''
                 echo 'Testing..'
@@ -49,10 +49,10 @@ pipeline {
     }
     post {
         always {
-            echo 'removing docker volumes and container '
+            echo 'removing docker container and volumes'
             sh '''
-            sudo docker volume rm 99pyff.etc_pki_sign 99pyff.etc_pyff 99pyff.home_pyff99_ssh 99pyff.var_log 99pyff.var_md_feed 99pyff.var_md_source  2>/dev/null || true
-            sudo ./dscripts/tools.sh rm 2>/dev/null || true
+            ./dscripts/manager.sh rm 2>&1
+            ./dscripts/manage.sh rmvol 2>&1
             '''
         }
     }
