@@ -14,7 +14,7 @@ if [[ -z ${PYKCS11PIN+x} ]]; then
 fi
 
 echo 'copy config data (not overwriting existing data)'
-cp -np  /opt/testdata/etc/pyff/md_aggregator_sign_hsm.fd-example /etc/pyff/md_aggregator.fd
+cp /opt/testdata/etc/pyff/md_aggregator_sign_hsm.fd-example /etc/pyff/md_aggregator.fd
 
 # test 21
 echo 'Test 21: create aggregate from test data'

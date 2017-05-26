@@ -2,9 +2,6 @@
 
 set -e
 
-echo 'copy test config for pyffd (not overwriting existing file)'
-cp -np  /opt/testdata/etc/pyff/md_aggregator_sign_swcert.fd-example /etc/pyff/md_aggregator.fd
-
 # test 10
 echo 'Test 10: starting pyffd and expecting html response'
 /scripts/start_pyffd.sh &
