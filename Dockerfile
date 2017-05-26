@@ -54,6 +54,7 @@ ENV repodir='/opt/source/pyff'
 ENV repourl='https://github.com/identinetics/pyFF'
 RUN mkdir -p $repodir && cd $repodir \
  && git clone $repourl . && git checkout mdsplit \
+ && python setup.py install \
 # forward request and error logs to docker log collector
  && ln -sf /dev/stdout /var/log/pyff_batch.log \
  && ln -sf /dev/stderr /var/log/pyff_batch.error
