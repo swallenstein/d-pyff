@@ -8,7 +8,7 @@ if [[ ! -e ~/.ssh/id_ed25519 ]]; then
     ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ''
 fi
 
-# test connection and confirm host key
+echo "test connection to $MDFEED_HOST"
 ssh -T $MDFEED_SSHUSER@$MDFEED_HOST
 
 echo "created new public key - register with $MDFEED_HOST/$MDFEED_REPO:"

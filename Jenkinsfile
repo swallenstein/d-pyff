@@ -2,20 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('Git branch + pull') {
+        stage('Git branch + pull + submodule') {
             steps {
                 sh '''
                 echo 'hard coding git branch - TODO: move this to the jenkins git plugin'
                 git checkout master
                 echo 'pulling updates'
                 git pull
-                '''
-            }
-        }
-        stage('Git submodule') {
-            steps {
-                sh '''
-                echo 'Updating submodule'
                 git submodule update --init
                 cd ./dscripts && git checkout master && git pull && cd ..
                 '''
