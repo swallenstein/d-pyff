@@ -50,7 +50,7 @@ RUN mkdir -p $repodir && cd $repodir \
 RUN pip install cherrypy
 ENV repodir='/opt/source/pyff'
 ENV repourl='https://github.com/identinetics/pyFF'
- && mkdir -p $repodir && cd $repodir \
+RUN mkdir -p $repodir && cd $repodir \
  && git clone $repourl . && git checkout mdsplit \
 #COPY install/opt/pyff/ /opt/source/pyff/
 #RUN cd /opt/source/pyff/ && python setup.py install
