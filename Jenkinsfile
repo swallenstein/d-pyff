@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Pre-Cleanup') {
-            steps {
-                sh './dscripts/manage.sh rm 2>/dev/null || true'
-                sh './dscripts/manage.sh rmvol 2>/dev/null || true'
-            }
-        }
         stage('Git branch + pull') {
             steps {
                 sh '''
@@ -25,6 +19,13 @@ pipeline {
                 git submodule update --init
                 cd ./dscripts && git checkout master && git pull && cd ..
                 '''
+            }
+        }
+        stage('docker cleanup') {
+            steps {
+                sh './dscripts/manage.sh rm 2>/dev/null || true'
+                sh './dscripts/manage.sh rmvol 2>/dev/null || true'
+                sh 'sudo docker ps --all'
             }
         }
         stage('Build') {
