@@ -2,7 +2,7 @@
 
 set -e
 
-echo "copy test data (not overwriting existing data)"
+echo 'copy test data (not overwriting existing data)'
 cp -np  /opt/testdata/etc/pki/tls/openssl.cnf /etc/pki/tls/
 cp -np  /opt/testdata/etc/pyff/* /etc/pyff/
 if [[ ! -z ${PYKCS11LIB+x} ]]; then

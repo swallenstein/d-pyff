@@ -16,8 +16,8 @@
                 validUntil: P10D
                 ID: testWpvPortalverbundAt_
              - sign:
-                key: /etc/pki/metadata_signing-key.pem
-                cert: /etc/pki/metadata_signing-crt.pem
+                  key: /etc/pki/sign/private/metadata_key.pem
+                  cert: /etc/pki/sign/certs/metadata_crt.pem
              - emit application/xml
              - break
         - when accept application/json:
