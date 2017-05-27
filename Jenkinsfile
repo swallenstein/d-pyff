@@ -44,7 +44,7 @@ pipeline {
         always {
             echo 'removing docker container and volumes'
             sh '''
-            ./dscripts/manage.sh rm 2>&1
+            ./dscripts/manage.sh rm 2>&1 || true
             ./dscripts/manage.sh rmvol 2>&1
             '''
         }
