@@ -13,9 +13,11 @@ main() {
 
 start_pcscd() {
     init_sudo
-    echo
-    echo "=== Starting Smartcard Service ==="
-    $sudo /usr/sbin/pcscd
+    if [[ "$OSTYPE" != darwin* ]]; then
+        echo
+        echo "=== Starting Smartcard Service ==="
+        $sudo /usr/sbin/pcscd
+    fi
 }
 
 
@@ -28,8 +30,12 @@ init_sudo() {
 
 test_carddriver_setting() {
     if [[ -z "$PKCS11_CARD_DRIVER" ]]; then
-        echo "Env variable PKCS11_CARD_DRIVER not set"
-        exit 1
+        if [[ "$OSTYPE" == darwin* ]]; then
+            PKCS11_CARD_DRIVER='/Library/Frameworks/eToken.framework/Versions/A/libeToken.dylib'
+        else
+            echo "Env variable PKCS11_CARD_DRIVER not set"
+            exit 1
+        fi
     fi
 }
 
@@ -69,7 +75,7 @@ opensc_list_reades_and_drivers() {
     echo
     echo "=== opensc list readers and drivers ==="
     opensc-tool --list-readers
-    opensc-tool --list-drivers
+    #opensc-tool --list-drivers
 }
 
 main

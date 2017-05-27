@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 
-[ -z "$TOKENPW" ] && TOKENPW='secret1'
-[ -z "$SecurityOfficerPIN" ] && SecurityOfficerPIN='secret2'
+[ -z "$TOKENPW" ] && TOKENPW='Secret.1'
+[ -z "$SecurityOfficerPIN" ] && SecurityOfficerPIN='Secret.2'
 echo 'Initializing Token'
 pkcs11-tool --module $PKCS11_CARD_DRIVER --init-token --label test --pin $TOKENPW --so-pin $SecurityOfficerPIN || exit -1
 

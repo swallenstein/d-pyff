@@ -1,6 +1,5 @@
 - load:
   - /var/md_source
-#- select: "!//md:EntityDescriptor[md:SPSSODescriptor]"
 - select
 - xslt:
     stylesheet: unsign.xsl
@@ -14,7 +13,6 @@
      ID: your_metadatafeed_prefix_
 - sign:
     # pkcs11URI: pkcs11://<token-library-path>/<tokenname>
+    # Token password from ENV PYKCS11PIN
     key: pkcs11:///usr/lib64/libeToken.so/test
-    # Token PW from ENV PYKCS11PIN
-    cert: /etc/pki/sign/certs/metadata_crt.pem
 - publish: /var/md_feed/metadata.xml

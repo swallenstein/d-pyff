@@ -141,7 +141,7 @@ if __name__ == '__main__':
         slots = [slots[slot]]
         print("Using slot:", slots[0])
 
-    for slot in slots:
+    for slot in (0, ):
         try:
             gi.getSlotInfo(slot)
             gi.getSessionInfo(slot, pin)
