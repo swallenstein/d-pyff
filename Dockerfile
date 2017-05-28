@@ -4,7 +4,7 @@ LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
       #didi_dir="https://raw.githubusercontent.com/identinetics/docker-pyff/master/didi" \
       # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
-RUN yum -y install epel-release curl ip lsof net-tools sudo unzip wget which xmlstarlet \
+RUN yum -y install epel-release curl ip lsof net-tools sudo sysvinit-tools unzip wget which xmlstarlet \
  && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core opensc pcsc-lite \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all \

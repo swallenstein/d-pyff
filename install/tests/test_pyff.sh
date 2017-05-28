@@ -2,20 +2,6 @@
 
 set -e
 
-# test 20
-echo 'Test 20: HSM'
-if [[ -z ${PYKCS11LIB+x} ]]; then
-    echo 'PYKCS11LIB not set - failed HSM test'
-    exit 1
-fi
-if [[ -z ${PYKCS11PIN+x} ]]; then
-    echo 'PYKCS11PIN not set - failed HSM test'
-    exit 1
-fi
-
-echo 'copy config data (not overwriting existing data)'
-cp /opt/testdata/etc/pyff/md_aggregator_sign_hsm.fd-example /etc/pyff/md_aggregator.fd
-
 # test 21
 echo 'Test 21: create aggregate from test data'
 /scripts/pyff_aggregate.sh

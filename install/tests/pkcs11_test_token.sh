@@ -41,19 +41,22 @@ test_carddriver_setting() {
 
 
 show_pkcs11_info() {
-    [ -z "$TOKENPW" ] && TOKENPW='secret1'
+    [ -z "$USERPIN" ] && USERPIN='secret1'
     echo
     echo "=== show token info ==="
     pkcs11-tool --module $PKCS11_CARD_DRIVER --show-info
     echo
     echo "=== show token slots ==="
-    pkcs11-tool --module $PKCS11_CARD_DRIVER --list-token-slots --slot 0
+    pkcs11-tool --module $PKCS11_CARD_DRIVER --list-token-slots
     echo
     echo "=== show token objects ==="
-    pkcs11-tool --module $PKCS11_CARD_DRIVER --list-objects
+    pkcs11-tool --module $PKCS11_CARD_DRIVER --list-objects --slot 0
     echo
-    echo "=== test token ==="
-    pkcs11-tool --module $PKCS11_CARD_DRIVER --login -O --pin $TOKENPW --test
+    echo "=== login ==="
+    pkcs11-tool --module $PKCS11_CARD_DRIVER --list-objects --slot 0 --login --pin $USERPIN
+    echo
+    echo "=== test keys ==="
+    pkcs11-tool --module $PKCS11_CARD_DRIVER --list-objects --slot 0 --login --pin $USERPIN --test
 }
 
 

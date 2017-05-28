@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-
+ 
 [ -z "$USERPIN" ] && USERPIN='Secret.1'
 [ -z "$SOPIN" ] && SOPIN='Secret.2'
 echo 'Initializing Token'
