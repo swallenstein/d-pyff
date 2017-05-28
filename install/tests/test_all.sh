@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+export USERPIN=$PYKCS11PIN
+export PKCS11_CARD_DRIVER=$PYKCS11LIB
+
 echo '=== test_setup_swcert.sh ==='
 /tests/test_setup_swcert.sh
 
