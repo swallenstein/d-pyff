@@ -72,8 +72,8 @@ set_run_args() {
         -e LOGDIR=/var/log
         -e LOGLEVEL=INFO
         -e PIDFILE=/var/log/pyffd.pid
-        -e PIPELINEBATCH=/etc/pyff/md_aggregator.fd
-        -e PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
+        -e PIPELINEBATCH=/etc/pyff/md_aggregator_sign_swcert.fd
+        -e PIPELINEDAEMON=/etc/pyff/mdx_discosign.fd
         -e MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
         -e MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
