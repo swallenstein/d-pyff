@@ -2,6 +2,7 @@
 
 main(){
     set -e
+    setup_logging
     prepare_test_config_sw_cert
     prepare_git_user
     prepare_mdfeed_repo
@@ -11,14 +12,20 @@ main(){
 }
 
 
+setup_logging() {
+    LOGDIR=/tmp/$0.log
+    mkdir -p $LOGDIR
+    export LOGLEVEL=INFO
+}
+
+
 prepare_test_config_sw_cert() {
-    echo 'Test setup 01: set test config and add mdsource data (not overwriting existing data)'
+    echo 'Test setup 01: set test config and add metadata source data (not overwriting existing data)'
     cp -np  /opt/testdata/etc/pki/tls/openssl.cnf /etc/pki/tls/
     cp -np  /opt/testdata/etc/pyff/* /etc/pyff/
     cp -npr /opt/testdata/md_source/*.xml /var/md_source/
-
-    echo 'copy config data'
     cp /opt/testdata/etc/pyff/mdx_discosign_swcert.fd-example /etc/pyff/mdx_discosign.fd
+    eport PIPELINEDAEMON=/etc/pyff/mdx_discosign.fd
     cp /opt/testdata/etc/pyff/md_aggregator_sign_swcert.fd-example /etc/pyff/md_aggregator_sign_swcert.fd
     export PIPELINEBATCH=/etc/pyff/md_aggregator_sign_swcert.fd
 }
@@ -35,10 +42,10 @@ prepare_git_user() {
 prepare_mdfeed_repo() {
     echo 'Test setup 03: create local mdfeed repo '
     cd /var/md_feed
-    git init
-    git add --all
+    git init > $LOGDIR/prepare_mdfeed_repo.log
+    git add --all >> $LOGDIR/prepare_mdfeed_repo.log
     touch .gitignore
-    git commit -m 'empty'
+    git commit -m 'empty' >> $LOGDIR/prepare_mdfeed_repo.log
 }
 
 
