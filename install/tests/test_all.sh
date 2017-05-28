@@ -4,10 +4,13 @@ export USERPIN=$PYKCS11PIN
 export PKCS11_CARD_DRIVER=$PYKCS11LIB
 
 echo '=== test_setup_swcert.sh ==='
-/tests/test_setup_swcert.sh
+source /tests/test_setup_swcert.sh
 
-echo; echo '=== test_pyffd.sh ==='
+echo; echo '=== test_pyffd.sh (MDX/DS) ==='
 /tests/test_pyffd.sh
+
+echo; echo '=== test_pyff.sh (Aggregator) with SW-cert ==='
+/tests/test_pyff.sh
 
 echo; echo '=== start_pkcs11_services.sh ==='
 /scripts/start_pkcs11_services.sh
@@ -27,8 +30,10 @@ if (( $? > 0 )); then
     exit 1
 fi
 
-echo '=== test_setup_swcert.sh ==='
-/tests/test_setup_hsm.sh
-
 echo '=== test_setup_hsm.sh ==='
-/tests/test_hsm_token.sh
+source /tests/test_setup_hsm.sh
+
+echo; echo '=== test_pyff.sh (Aggregator) with HSM ==='
+/tests/test_pyff.sh
+
+echo '=== All tests completed ==='
