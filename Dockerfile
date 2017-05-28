@@ -16,9 +16,10 @@ RUN easy_install --upgrade six \
  && pip install importlib
 #using iso8601 0.1.9 because of str/int compare bug in pyff
 RUN pip install future iso8601==0.1.9 \
- && pip install lxml
+ && pip install lxml \
+ && pip install pykcs11
 
-RUN pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1
+#RUN pip install pykcs11==1.3.0 # using pykcs11 1.3.0 because of missing wrapper in v 1.3.1 - tested with 1.4.2: OK
 # use leifj's fork of pykcs11
 #ENV repodir='/opt/source/PyKCS11'
 #ENV repourl='https://github.com/leifj/PyKCS11'
