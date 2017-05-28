@@ -81,9 +81,9 @@ set_run_args() {
         -e MDFEED_SSHUSER=git
         -e MDFEED_REPO=rhoerbe/mdfeedTestWpvAt
     "
-    # settings if using a USB-based PKCS11 device:
+    # Default setup: activate if USB-based PKCS11 device is available
     HSMUSBDEVICE='Aladdin Knowledge Systems Token JC'  # output of lsusb
-    if [[ "$(lsusb | grep "$HSMUSBDEVICE")" ]] && [[ ! -z ${JENKINS_HOME+x} ]]; then
+    if [[ "$(lsusb | grep "$HSMUSBDEVICE")" ]]; then
         enable_pkcs11
         export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/libetvTokenEngine.so"  # enable this for Safenet eTokePro
         #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/pkcs11/opensc-pkcs11.so"  # enable this for generic OpenSC card

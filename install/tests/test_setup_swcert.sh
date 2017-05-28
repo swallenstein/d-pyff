@@ -7,7 +7,6 @@ main(){
     prepare_mdfeed_repo
     create_sw_signing_cert
     create_git_ssh_keys
-    create_mdfeed_repo
     echo 'Test setup completed'; echo
 }
 
@@ -52,12 +51,6 @@ create_sw_signing_cert() {
 create_git_ssh_keys() {
     echo "Test setup 05: create SSH keys for access to $MDFEED_HOST"
     /scripts/gen_sshkey.sh
-}
-
-
-create_mdfeed_repo() {
-    echo 'Test setup 06: mdfeed repo setup'
-    /tests/init_mdfeed_local.sh
 }
 
 
