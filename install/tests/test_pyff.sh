@@ -10,7 +10,7 @@ diff /tmp/entities.list /opt/testdata/results/entities2.list
 # test 22
 echo 'Test 22: verify metadata signature with xmlsectool'
 /opt/xmlsectool-2/xmlsectool.sh --verifySignature --inFile /var/md_feed/metadata.xml \
-    --certificate /etc/pki/sign/certs/metadata_crt.pem
+    --certificate /etc/pki/sign/certs/metadata_crt.pem --whitelistDigest SHA-1
 if (( $? > 0 )); then
     echo 'Metadata signature not valid'
     exit 1

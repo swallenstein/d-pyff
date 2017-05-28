@@ -43,7 +43,7 @@ ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 ENV repodir='/opt/source/pyXMLSecurity'
 ENV repourl='https://github.com/rhoerbe/pyXMLSecurity'
 # the branch has patches for sig/digest als and unlabeld privated keys in HSM
-ENV repobranch='default-digestalg-sha2'
+ENV repobranch='master'
 RUN mkdir -p $repodir && cd $repodir \
  && git clone $repourl . \
  && git checkout $repobranch \
