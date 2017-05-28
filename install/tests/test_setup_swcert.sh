@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
 main(){
-    set -e
+    set +e
     setup_logging
     prepare_test_config_sw_cert
     prepare_git_user
     prepare_mdfeed_repo
     create_sw_signing_cert
     create_git_ssh_keys
-    echo 'Test setup completed'; echo
 }
 
 
@@ -25,7 +24,7 @@ prepare_test_config_sw_cert() {
     cp -np  /opt/testdata/etc/pyff/* /etc/pyff/
     cp -npr /opt/testdata/md_source/*.xml /var/md_source/
     cp /opt/testdata/etc/pyff/mdx_discosign_swcert.fd-example /etc/pyff/mdx_discosign.fd
-    eport PIPELINEDAEMON=/etc/pyff/mdx_discosign.fd
+    export PIPELINEDAEMON=/etc/pyff/mdx_discosign.fd
     cp /opt/testdata/etc/pyff/md_aggregator_sign_swcert.fd-example /etc/pyff/md_aggregator_sign_swcert.fd
     export PIPELINEBATCH=/etc/pyff/md_aggregator_sign_swcert.fd
 }
@@ -57,7 +56,15 @@ create_sw_signing_cert() {
 
 create_git_ssh_keys() {
     echo "Test setup 05: create SSH keys for access to $MDFEED_HOST"
-    /scripts/gen_sshkey.sh
+    /scripts/gen_sshkey.sh > $LOGDIR/create_git_ssh_keys.log
+    diff $LOGDIR/create_git_ssh_keys.log /opt/testdata/results/create_git_ssh_keys.log
+    if (( $? != 0 )); then
+        echo "$0 log does not match expected value. Expected:'
+        cat create_git_ssh_keys.log
+        echo 'Found:'
+        cat $LOGDIR/create_git_ssh_keys.log
+        exit 1
+    fi
 }
 
 
