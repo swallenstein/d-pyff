@@ -16,6 +16,7 @@ setup_logging() {
     SCRIPT=${SCRIPT%.*}
     LOGDIR="/tmp/${SCRIPT%.*}"
     mkdir -p $LOGDIR
+    echo "    Logfiles in $LOGDIR"
     export LOGLEVEL=INFO
 }
 

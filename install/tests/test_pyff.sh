@@ -4,6 +4,7 @@ SCRIPT=$(basename $0)
 SCRIPT=${SCRIPT%.*}
 LOGDIR="/tmp/${SCRIPT%.*}"
 mkdir -p $LOGDIR
+echo "    Logfiles in $LOGDIR"
 set +e
 
 # test 21
@@ -39,5 +40,3 @@ if (( $? != 0 )); then
     cat $LOGDIR/test24.log
     exit 1
 fi
-
-echo 'Tests completed'

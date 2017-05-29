@@ -7,6 +7,7 @@ SCRIPT=$(basename $0)
 SCRIPT=${SCRIPT%.*}
 LOGDIR="/tmp/${SCRIPT%.*}"
 mkdir -p $LOGDIR
+echo "    Logfiles in $LOGDIR"
 set +e
 
 echo 'Test 30: HSM USB device'

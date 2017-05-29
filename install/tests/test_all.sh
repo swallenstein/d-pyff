@@ -18,10 +18,6 @@ echo; echo '=== start_pkcs11_services.sh ==='
 echo; echo '=== test_hsm_token.sh ==='
 /tests/test_hsm_token.sh
 
-echo; echo '=== container status report ==='
-/scripts/status.sh
-
-
 HSMUSBDEVICE='Aladdin Knowledge Systems Token JC'  # output of lsusb
 HSMP11DEVICE='eToken 5110'                         # output of pkcs11-tool --list-token-slots
 lsusb | grep "$HSMUSBDEVICE"
