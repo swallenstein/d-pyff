@@ -63,7 +63,7 @@ fi
 
 
 echo 'Test 35: List certificate(s)'
-pkcs11-tool --module $PKCS11_CARD_DRIVER --login --pin $USERPIN --list-objects  --type cert \
+pkcs11-tool --module $PKCS11_CARD_DRIVER --login --pin $USERPIN --list-objects  --type cert 2>&1 \
     | grep 'Certificate Object'  > $LOGDIR/test35.log
 if (( $? > 0 )); then
     echo 'No certificate found'
@@ -72,7 +72,7 @@ fi
 
 
 echo 'Test 36: List private key(s)'
-pkcs11-tool --module $PKCS11_CARD_DRIVER --login --pin $USERPIN --list-objects  --type privkey \
+pkcs11-tool --module $PKCS11_CARD_DRIVER --login --pin $USERPIN --list-objects  --type privkey 2>&1 \
     | grep 'Private Key Object'  > $LOGDIR/test36.log
 if (( $? > 0 )); then
     echo 'No private key found'
@@ -82,8 +82,8 @@ fi
 
 echo 'Test 37: Sign test data'
 echo "foo" > /tmp/bar
-pkcs11-tool --module $PKCS11_CARD_DRIVER --login --pin $USERPIN \
-    --sign --input /tmp/bar --output /tmp/bar.sig  > $LOGDIR/test38.log
+pkcs11-tool --module $PKCS11_CARD_DRIVER --login --pin $USERPIN  \
+    --sign --input /tmp/bar --output /tmp/bar.sig  > $LOGDIR/test38.log 2>&1
 if (( $? > 0 )); then
     echo 'Signature failed'
     exit 1
@@ -92,7 +92,7 @@ fi
 
 echo 'Test 38: Count objects using PyKCS11'
 
-/tests/pykcs11_getkey.py --pin=$USERPIN --slot=0 --lib=$PKCS11_CARD_DRIVER \
+/tests/pykcs11_getkey.py --pin=$USERPIN --slot=0 --lib=$PKCS11_CARD_DRIVER 2>&1 \
     | grep -a -c '=== Object '  > $LOGDIR/test38.log
 if (( $? > 0 )); then
     echo 'Listing HSM token object with PyKCS11 lib failed'
