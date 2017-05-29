@@ -6,7 +6,7 @@ export PKCS11_CARD_DRIVER=$PYKCS11LIB
 echo '=== test_setup_swcert.sh ==='
 source /tests/test_setup_swcert.sh
 
-echo; echo '=== test_pyffd.sh (MDX/DS) ==='
+echo; echo '=== test_pyffd (MDX/DS) ==='
 /tests/test_pyffd.sh
 
 echo; echo '=== test_pyff.sh (Aggregator) with SW-cert ==='

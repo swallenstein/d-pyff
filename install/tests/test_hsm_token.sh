@@ -3,6 +3,9 @@
 HSMUSBDEVICE='Aladdin Knowledge Systems Token JC'  # output of lsusb
 HSMP11DEVICE='eToken 5110'                         # output of pkcs11-tool --list-token-slots
 
+SCRIPT=$(basename $0)
+LOGDIR="/tmp/${SCRIPT%.*}"
+mkdir -p $LOGDIR
 set +e
 
 echo 'Test 20: HSM USB device'

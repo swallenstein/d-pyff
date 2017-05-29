@@ -12,7 +12,8 @@ main(){
 
 
 setup_logging() {
-    LOGDIR=/tmp/$0.log
+    SCRIPT=$(basename $0)
+    LOGDIR="/tmp/${SCRIPT%.*}"
     mkdir -p $LOGDIR
     export LOGLEVEL=INFO
 }
@@ -56,16 +57,8 @@ create_sw_signing_cert() {
 
 create_git_ssh_keys() {
     echo "Test setup 05: create SSH keys for access to $MDFEED_HOST"
-    /scripts/gen_sshkey.sh > $LOGDIR/create_git_ssh_keys.log
-    diff $LOGDIR/create_git_ssh_keys.log /opt/testdata/results/create_git_ssh_keys.log
-    if (( $? != 0 )); then
-        echo "$0 log does not match expected value. Expected:'
-        cat create_git_ssh_keys.log
-        echo 'Found:'
-        cat $LOGDIR/create_git_ssh_keys.log
-        exit 1
-    fi
-}
+    /scripts/gen_sshkey.sh > $LOGDIR/test05.log
+    /tests/assert_nodiff.sh $LOGDIR/test05.log /opt/testdata/results/$SCRIPT/test05.log
 
 
 main "$@"
