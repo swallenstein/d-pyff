@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-main(){
+main() {
     set +e
     setup_logging
     prepare_test_config_sw_cert
@@ -13,6 +13,7 @@ main(){
 
 setup_logging() {
     SCRIPT=$(basename $0)
+    SCRIPT=${SCRIPT%.*}
     LOGDIR="/tmp/${SCRIPT%.*}"
     mkdir -p $LOGDIR
     export LOGLEVEL=INFO
@@ -40,7 +41,7 @@ prepare_git_user() {
 
 
 prepare_mdfeed_repo() {
-    echo 'Test setup 03: create local mdfeed repo '
+    echo 'Test setup 03: create local mdfeed repo'
     cd /var/md_feed
     git init > $LOGDIR/prepare_mdfeed_repo.log
     git add --all >> $LOGDIR/prepare_mdfeed_repo.log
@@ -59,6 +60,6 @@ create_git_ssh_keys() {
     echo "Test setup 05: create SSH keys for access to $MDFEED_HOST"
     /scripts/gen_sshkey.sh > $LOGDIR/test05.log
     /tests/assert_nodiff.sh $LOGDIR/test05.log /opt/testdata/results/$SCRIPT/test05.log
-
+}
 
 main "$@"

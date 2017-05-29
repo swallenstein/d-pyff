@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPT=$(basename $0)
+SCRIPT=${SCRIPT%.*}
 LOGDIR="/tmp/${SCRIPT%.*}"
 mkdir -p $LOGDIR
 

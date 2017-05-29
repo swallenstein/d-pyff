@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPT=$(basename $0)
+SCRIPT=${SCRIPT%.*}
 LOGDIR="/tmp/${SCRIPT%.*}"
 mkdir -p $LOGDIR
 set +e
@@ -8,8 +9,7 @@ set +e
 # test 21
 echo "Test 21: create aggregate from test data. Pipeline: ${PIPELINEBATCH}"
 /scripts/pyff_aggregate.sh
-python /tests/check_metadata.py /var/md_feed/metadata.xml > /tmp/entities.list
-diff /tmp/entities.list /opt/testdata/results/entities2.list
+python /tests/check_metadata.py /var/md_feed/metadata.xml > $LOGDIR/test21.log
 /tests/assert_nodiff.sh $LOGDIR/test21.log /opt/testdata/results/$SCRIPT/test21.log
 
 
