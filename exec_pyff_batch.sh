@@ -11,9 +11,10 @@ main() {
 
 
 get_commandline_opts() {
-    while getopts ":ghin:psS" opt; do
+    while getopts ":ghHin:psS" opt; do
       case $opt in
         g) git='True';;
+        g) htmlout='-H';;
         i) runopt='-it';;
         n) re='^[0-9][0-9]$'
            if ! [[ $OPTARG =~ $re ]] ; then
@@ -33,9 +34,10 @@ get_commandline_opts() {
 
 
 usage() {
-    echo "usage: $0 [-h] [-i] [-s|-S]
+    echo "usage: $0 [-h] [-H] [-i] [-s|-S]
        -g  git pull before pyff and push afterwards (use if PYFFOUT has a git repo)
        -h  print this help text
+       -H  generate HTML output from metadata
        -i  interactive mode
        -n  configuration number ('<NN>' in conf<NN>.sh) (use if there is more than one)
        -p  print docker exec command on stdout
@@ -60,7 +62,7 @@ exec_commands() {
     if [[ $git == 'True' ]]; then
         print_and_exec_command "$cmd /scripts/git_pull.sh"
     fi
-    print_and_exec_command "$cmd /scripts/pyff_aggregate.sh"
+    print_and_exec_command "$cmd /scripts/pyff_aggregate.sh $htmlout"
     if [[ "$split" = "pyff" ]]; then
         print_and_exec_command "$cmd /scripts/pyff_mdsplit.sh"
     fi

@@ -1,14 +1,54 @@
 #!/bin/sh
-# entrypoint of the docker container
-# use this script if you do not need
 
-if (( $(id -u) == 0 )); then
-    echo "Do not start as root."
-fi
+main() {
+    get_commandline_opts "$@"
+    block_root
+    aggregate_metadata
+    generate_html
+}
 
 
-#     --logfile option not working; linking stdout to logfile instead (-> Dockerfile)
-/usr/bin/pyff --loglevel=$LOGLEVEL $PIPELINEBATCH
+get_commandline_opts() {
+    while getopts ":hH" opt; do
+      case $opt in
+        H) htmlout='True';;
+        *) usage; exit 1;;
+      esac
+    done
+    shift $((OPTIND-1))
+}
 
-# make metadata files availabe to nginx container:
-chmod 644 /var/md_feed/*.xml 2> /dev/null
+
+usage() {
+    echo "usage: $0 [-h] [-H]
+       run metadata aggregator
+       -h  print this help text
+       -H  generate html output from metadata
+       "
+}
+
+
+block_root() {
+    if (( $(id -u) == 0 )); then
+        echo "Do not start as root."
+        exit 1
+    fi
+}
+
+
+aggregate_metadata() {
+    /usr/bin/pyff --loglevel=$LOGLEVEL $PIPELINEBATCH
+    chmod 644 /var/md_feed/*.xml 2> /dev/null
+}
+
+
+generate_html() {
+    if [[ "$htmlout" == 'True' ]]; then
+        cd /var/md_feed
+        xsltproc -o idp.html /etc/pyff/xslt/idp.xsl metadata.xml
+        xsltproc -o sp.html /etc/pyff/xslt/sp.xsl metadata.xml
+    fi
+}
+
+
+main "$@"
