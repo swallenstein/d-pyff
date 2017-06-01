@@ -14,7 +14,7 @@ get_commandline_opts() {
     while getopts ":ghHin:psS" opt; do
       case $opt in
         g) git='True';;
-        g) htmlout='-H';;
+        H) htmlout='-H';;
         i) runopt='-it';;
         n) re='^[0-9][0-9]$'
            if ! [[ $OPTARG =~ $re ]] ; then
