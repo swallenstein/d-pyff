@@ -47,7 +47,7 @@ test_required_env_vars() {
 
 
 generate_sshkey() {
-    if [[ ! -e ~/.ssh/id_ed25519 ]] && [[ "$dryrun"=='True' ]]; then
+    if [[ ! -e ~/.ssh/id_ed25519 ]] && [[ "$dryrun" != 'True' ]]; then
         ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_${keyname} -N ''
     fi
 }
@@ -63,7 +63,7 @@ IdentityFile /home/$(whoami)/.ssh/id_ed25519_${keyname}
 
 EOT
     fi
-    chmod 600 /home/username/.ssh/config
+    chmod 600 /home/$(whoami)/.ssh/config
 }
 
 
