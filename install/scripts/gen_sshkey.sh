@@ -15,7 +15,7 @@ main() {
 get_commandline_opts() {
     while getopts ":hn:" opt; do
       case $opt in
-        n) keyname=$OPTARG
+        n) keyname=$OPTARG;;
         :) echo "Option -$OPTARG requires an argument"; exit 1;;
         *) usage; exit 1;;
       esac
@@ -54,16 +54,15 @@ generate_sshkey() {
 
 create_repo_host_alias() {
     if [[ ! -z ${keyname+x} ]]; then
-        cat > ~/.ssh/config << EOT
+        cat >> ~/.ssh/config << EOT
 
 Host ${keyname}
 Hostname $MDFEED_HOST
-IdentityFile /home/username/.ssh/id_ed25519_${keyname}
+IdentityFile /home/$(whoami)/.ssh/id_ed25519_${keyname}
 
 EOT
     fi
-    chmod 400 /home/username/.ssh/config
-    git clone  git@repo1:owner/repo1.git
+    chmod 600 /home/username/.ssh/config
 }
 
 
@@ -73,8 +72,9 @@ register_sshkey() {
         cat ~/.ssh/id_ed25519_${keyname}.pub
     fi
 
-    echo "After registration: test connection with:"
+    read -p "Register the key, then press Enter) to continue" cont
     echo "ssh -T $MDFEED_SSHUSER@$MDFEED_HOST"
+    ssh -T $MDFEED_SSHUSER@$MDFEED_HOST
 }
 
 

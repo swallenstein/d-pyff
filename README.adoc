@@ -9,22 +9,25 @@ any time without loss of data, because data is stored on mounted volumes.
 
 The image is prepared for for metadata signature creation with pkcs#11 devices.
 
-## Build the docker image
-1. adapt conf.sh
-2. run build.sh: 
+## Prepare project and build the docker image
+
+    git clone --recurse-submodules --shallow-submodules https://github.com/identinetics/docker-pyff
+    cd docker-pyff
+    cp conf.sh.default conf.sh # adapt afer copying
+    ./dscripts/build.sh
 
    To run multiple pyff containers on the same system you need to create separate conf.sh files
    and build separate images:
    E.g. to create pyff container instance 3:
    a) create a file conf3.sh, and set the IMGID=3; and
-   b) build the container with the -n option, e.g. `build.sh -n 3`
-   c) run the container with the -n option, e.g. `run.sh -n 3`
+   b) build the container with the -n option, e.g. `./dscripts/build.sh -n 3`
+   c) run the container with the -n option, e.g. `./dscripts/run.sh -n 3`
 
 
 ## Usage: pyffd
 Initialize mounted volumes with sample data (optional):
     
-    run.sh -i init_sample.sh
+    ./dscripts/run.sh -iV init_sample.sh
 
 Configure pyff: 
     Copy a default file to md_aggregate_sign.fd and edit the settings.
