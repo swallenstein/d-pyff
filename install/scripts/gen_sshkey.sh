@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# make ssh-keys for github deploy keys
+# make ssh-key for github deploy keys and register ssh host alias
 
 main() {
     get_commandline_opts "$@"
@@ -13,8 +13,9 @@ main() {
 
 
 get_commandline_opts() {
-    while getopts ":hn:" opt; do
+    while getopts ":hdn:" opt; do
       case $opt in
+        d) dryrun='True';;
         n) keyname=$OPTARG;;
         :) echo "Option -$OPTARG requires an argument"; exit 1;;
         *) usage; exit 1;;
@@ -26,6 +27,7 @@ get_commandline_opts() {
 usage() {
     echo "Generate ssh-keys and test
        usage: $0 [-h] [-n keyname]
+       -d  dry run
        -h  print this help text
        -n  suffix for the key file name (used for multiple ssh keys with git)
        "
@@ -40,13 +42,12 @@ block_root() {
 
 
 test_required_env_vars() {
-    [[ -z $MDFEED_HOST ]] && echo "MDFEED_HOST not set" && exit 1
-    [[ -z $MDFEED_REPO ]] && echo "MDFEED_REPO not set" && exit 1
+    [[ -z $REPO_HOST ]] && echo "REPO_HOST not set" && exit 1
 }
 
 
 generate_sshkey() {
-    if [[ ! -e ~/.ssh/id_ed25519 ]]; then
+    if [[ ! -e ~/.ssh/id_ed25519 ]] && [[ "$dryrun"=='True' ]]; then
         ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_${keyname} -N ''
     fi
 }
@@ -57,7 +58,7 @@ create_repo_host_alias() {
         cat >> ~/.ssh/config << EOT
 
 Host ${keyname}
-Hostname $MDFEED_HOST
+Hostname $REPO_HOST
 IdentityFile /home/$(whoami)/.ssh/id_ed25519_${keyname}
 
 EOT
@@ -67,14 +68,10 @@ EOT
 
 
 register_sshkey() {
-    echo "created new public key - register with $MDFEED_HOST/$MDFEED_REPO:"
+    echo "created new public key - register with $REPO_HOST/$repo:"
     if [[ -e ~/.ssh/id_ed25519_${keyname}.pub ]]; then
         cat ~/.ssh/id_ed25519_${keyname}.pub
     fi
-
-    read -p "Register the key, then press Enter) to continue" cont
-    echo "ssh -T $MDFEED_SSHUSER@$MDFEED_HOST"
-    ssh -T $MDFEED_SSHUSER@$MDFEED_HOST
 }
 
 

@@ -78,9 +78,10 @@ set_run_args() {
         -e MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
         -e MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
-        -e MDFEED_HOST=github.com
-        -e MDFEED_SSHUSER=git
+        -e REPO_HOST=github.com
+        -e REPO_SSHUSER=git
         -e MDFEED_REPO=rhoerbe/mdfeedTestWpvAt
+        -e MDSOURCE_REPO=rhoerbe/mdsourceTestWpvAt
     "
     # Default setup: activate if USB-based PKCS11 device is available
     HSMUSBDEVICE='Aladdin Knowledge Systems Token JC'  # output of lsusb
