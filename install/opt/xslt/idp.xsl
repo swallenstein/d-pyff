@@ -26,6 +26,9 @@
                 exclude-result-prefixes="md mdui mdrpi shibmd">
   <xsl:output method="xml" omit-xml-declaration="yes" indent="yes"/>
   <xsl:template match="/md:EntitiesDescriptor">
+    <html>
+    <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/></head>
+    <body>
     <table id="datatable" border="1" cellpadding="5" cellspacing="0">
     <thead>
       <tr class="eduid_head"><th>Organisation</th><th>Techn.<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>Kontakt</th><th>Attribut<xsl:text disable-output-escaping="yes">&amp;#8209;</xsl:text>"Scope"</th><th>SAML Entity</th></tr>
@@ -38,6 +41,8 @@
     </tfoot>
     </table>
     <br />
+    </body>
+    </html>
   </xsl:template>
 
   <xsl:template match="md:EntityDescriptor">
