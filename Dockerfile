@@ -1,10 +1,11 @@
 FROM centos:centos7
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
-      version="0.6.0"
+      version="0.6.1"
       #didi_dir="https://raw.githubusercontent.com/identinetics/docker-pyff/master/didi" \
       # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
-RUN yum -y install epel-release curl ip lsof net-tools sudo sysvinit-tools unzip wget which xmlstarlet \
+RUN yum update -y && yum clean all \
+ && yum -y install epel-release curl ip lsof net-tools sudo sysvinit-tools unzip wget which xmlstarlet \
  && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core opensc pcsc-lite \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all \
