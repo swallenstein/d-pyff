@@ -14,11 +14,13 @@
 
   You should have received a copy of the GNU Affero General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+  Modifications by Rainer Hörbe, Stadt Wien, MA14.
 -->
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
-                xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" 
+                xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
                 xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
                 xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
                 exclude-result-prefixes="md mdui mdrpi shibmd">
@@ -254,26 +256,26 @@
 
     <!-- Home Federation -->
     <!--
- xslt<xsl:if test="string-length($regAuth) > 0">
-      <bxslt<xsl:text>(Registered bxslt/xsl:text>
-     xslt<xsl:choose>
-     xslt<xsl:when test="contains($regAuth, '://')">
-       xslt<xsl:element name="a">
-         xslt<xsl:attribute name="hrexslt<xsl:value-of select="$regAuth"xslt/xsl:attribute>
-         xslt<xsl:value-of select="$regAuth"/>
-        xslt/xsl:element>
-      xslt/xsl:when>
-     xslt<xsl:otherwise>
-       xslt<xsl:value-of select="$regAuth"/>
-      xslt/xsl:otherwise>
-    xslt/xsl:choose>
-   xslt<xsl:textxslt/xsl:text>
-  xslt/xsl:if>
+    <xsl:if test="string-length($regAuth) > 0">
+      <br/><xsl:text>(Registered by </xsl:text>
+        <xsl:choose>
+        <xsl:when test="contains($regAuth, '://')">
+          <xsl:element name="a">
+            <xsl:attribute name="href"><xsl:value-of select="$regAuth"/></xsl:attribute>
+            <xsl:value-of select="$regAuth"/>
+          </xsl:element>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$regAuth"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>)</xsl:text>
+    </xsl:if>
     -->
     </td>
 
     </tr>
-    <!xslt<xsl:text disable-output-escaping="yes">&lt;/tr&gxslt/xsl:text> -->
+    <!-- <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text> -->
   </xsl:template>
 
 
