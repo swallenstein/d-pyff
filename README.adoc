@@ -27,7 +27,7 @@ The image is prepared for for metadata signature creation with pkcs#11 devices.
 ## Usage: pyffd
 Initialize mounted volumes with sample data (optional):
     
-    ./dscripts/run.sh -iV init_sample.sh
+    ./dscripts/run.sh -i init_sample.sh
 
 Configure pyff: 
     Copy a default file to md_aggregate_sign.fd and edit the settings.
