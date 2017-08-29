@@ -88,11 +88,17 @@ RUN mkdir -p $VOLDIRS \
  && chmod -R 700 $(find $VOLDIRS -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS
-VOLUME       /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
+VOLUME /etc/pki/sign \
+       /etc/pyff \
+       /home/$USERNAME/.ssh \
+       /var/log \
+       /var/md_feed \
+       /var/md_source
 
 COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
 COPY install/opt/known_hosts /home/$USERNAME/.ssh/
 COPY install/opt/xslt/* /etc/pyff/xslt/
+COPY install/opt/html_resources/* /var/md_feed/
 
 # Install PKCS#11 drivers for Safenet eTokenPro
 COPY install/safenet/Linux/Installation/Standard/RPM/RPM-GPG-KEY-SafenetAuthenticationClient /opt/sac/
@@ -102,6 +108,8 @@ RUN yum -y install gtk2 xdg-utils \
  && rpm -i /opt/sac/SafenetAuthenticationClient_x86_64.rpm --nodeps \
  && yum clean all
 ENV PKCS11_CARD_DRIVER='/usr/lib64/libetvTokenEngine.so'
+
+EXPOSE 8080
 
 # For development/debugging - map port in config and start sshd with /start_sshd.sh
 #RUN yum -y install openssh-server \
