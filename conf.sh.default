@@ -39,9 +39,8 @@ _set_image_and_container_name() {
     IMGID='99'  # dev
     PROJSHORT='pyff'
     SERVICEDESCRIPTION=MDaggregator-idpDisco
-    set_staging_env
-    export IMAGENAME="rhoerbe/${PROJSHORT}${IMGID}:${STAGING_ENV}"  # [a-z_0-9]
-    export CONTAINERNAME="${IMGID}${PROJSHORT}-${STAGING_ENV}"
+    export IMAGENAME="rhoerbe/${PROJSHORT}${IMGID}"  # [a-z_0-9]
+    export CONTAINERNAME="${IMGID}${PROJSHORT}"
     export DOCKER_REGISTRY=''
 }
 
@@ -86,7 +85,7 @@ _set_run_args() {
     "
     # Default setup: activate if USB-based PKCS11 device is available
     HSMUSBDEVICE='Aladdin Knowledge Systems Token JC'  # output of lsusb
-    if [[ "$HOSTNAME" && $(lsusb | grep "$HSMUSBDEVICE")" ]]; then
+    if [[ "$HOSTNAME" == 'kal2' && $(lsusb | grep "$HSMUSBDEVICE") ]]; then
         enable_pkcs11
         export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/libetvTokenEngine.so"  # enable this for Safenet eTokePro
         #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/pkcs11/opensc-pkcs11.so"  # enable this for generic OpenSC card
