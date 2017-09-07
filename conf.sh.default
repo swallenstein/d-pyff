@@ -69,8 +69,7 @@ _set_run_args() {
         -e LOGDIR=/var/log
         -e LOGLEVEL=INFO
         -e PIDFILE=/var/log/pyffd.pid
-        -e PIPELINEBATCH=/etc/pyff/md_aggregator_sign_swcert.fd
-        -e PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
+        -e PIPELINEDAEMON=/etc/pyff/mdx_discosign_swcert.fd
         -e MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
         -e MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
@@ -86,6 +85,9 @@ _set_run_args() {
         export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/libetvTokenEngine.so"  # enable this for Safenet eTokePro
         #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/pkcs11/opensc-pkcs11.so"  # enable this for generic OpenSC card
         export ENVSETTINGS="$ENVSETTINGS -e PYKCS11PIN=Secret.1"  # configure token password
+        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEBATCH=/etc/pyff/md_aggregator_sign_hwcert.fd"
+    else
+        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEBATCH=/etc/pyff/md_aggregator_sign_swcert.fd"
     fi
 
     get_capabilities
