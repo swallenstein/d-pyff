@@ -42,11 +42,8 @@ pipeline {
     }
     post {
         always {
-            echo 'removing docker container and volumes'
-            sh '''
-            ./dscripts/manage.sh rm 2>&1 || true
-            ./dscripts/manage.sh rmvol 2>&1 || true
-            '''
+            echo 'removing docker volumes'
+            sh './dscripts/manage.sh rmvol 2>&1 || true'
         }
     }
 }
