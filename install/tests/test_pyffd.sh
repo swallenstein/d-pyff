@@ -9,8 +9,10 @@ echo "    Logfiles in $LOGDIR"
 set +e
 
 # setup test configuration
+cp -pr /opt/testdata/etc/pki/sign/* /etc/pki/sign/
 cp -pr /opt/testdata/etc/pyff/* /etc/pyff/
 cp -pr /opt/testdata/md_source/* /var/md_source/
+
 
 # test 10
 echo 'Test 10: starting pyffd and expecting html response'
@@ -19,6 +21,7 @@ export LOGLEVEL=INFO
 sleep 2
 curl --silent http://localhost:8080/ | grep '<title>pyFF @ localhost:8080</title>' > $LOGDIR/test10.log
 /tests/assert_nodiff.sh $LOGDIR/test10.log /opt/testdata/results/$SCRIPT/test10.log
+
 
 # test 11
 echo 'Test 11: clone local git repo for md_feed'
@@ -34,3 +37,13 @@ cd /var/md_feed
 git clone /tmp/md_feed . >> $LOGDIR/test11.log  2>&1
 /tests/assert_nodiff.sh $LOGDIR/test11.log /opt/testdata/results/$SCRIPT/test11.log
 
+
+# test 12
+echo 'Test 12: status report '
+/scripts/status.sh | tee > $LOGDIR/test24.log
+grep 'TCP \*:8080 (LISTEN)' $LOGDIR/test24.log > /dev/null
+if (( $? != 0 )); then
+    echo 'Status report: "TCP *:8080 (LISTEN)" not found'
+    cat $LOGDIR/test24.log
+    exit 1
+fi

@@ -5,12 +5,14 @@ SCRIPT=${SCRIPT%.*}
 LOGDIR="/tmp/${SCRIPT%.*}"
 mkdir -p $LOGDIR
 echo "    Logfiles in $LOGDIR"
+
 set +e
 
-
 # setup test configuration
+cp -pr /opt/testdata/etc/pki/sign/* /etc/pki/sign/
 cp -pr /opt/testdata/etc/pyff/* /etc/pyff/
 cp -pr /opt/testdata/md_source/* /var/md_source/
+
 
 # test 21
 echo "Test 21: create aggregate from test data. Pipeline: ${PIPELINEBATCH}"
@@ -32,16 +34,6 @@ fi
 
 
 # test 23
-echo "Test 23: create aggregate from test data + mdsplit + push git repo. Pipeline: ${PIPELINEBATCH}"
-/scripts/pyff_aggregate.sh -g -S
+echo "Test 23: create aggregate from test data + push git repo. Pipeline: ${PIPELINEBATCH}"
+/scripts/pyff_aggregate.sh
 
-
-# test 24
-echo 'Test 24: status report '
-/scripts/status.sh > $LOGDIR/test24.log
-grep 'TCP \*:8080 (LISTEN)' $LOGDIR/test24.log > /dev/null
-if (( $? != 0 )); then
-    echo 'Status report: "TCP *:8080 (LISTEN)" not found'
-    cat $LOGDIR/test24.log
-    exit 1
-fi
