@@ -10,6 +10,7 @@ set +e
 
 # setup test configuration
 cp -pr /opt/testdata/etc/pyff/* /etc/pyff/
+cp -pr /opt/testdata/md_source/* /var/md_source/
 
 # test 10
 echo 'Test 10: starting pyffd and expecting html response'
