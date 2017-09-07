@@ -23,7 +23,7 @@ HSMP11DEVICE='eToken 5110'                         # output of pkcs11-tool --lis
 lsusb | grep "$HSMUSBDEVICE"
 if (( $? > 0 )); then
     echo 'HSM USB Device not found - skipping HSM tests'
-    exit 1
+    exit 0
 fi
 
 echo '=== test_setup_hsm.sh ==='
