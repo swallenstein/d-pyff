@@ -9,7 +9,7 @@ set +e
 
 
 # setup test configuration
-cp -pr /opt/etc/pyff/* etc/pyff/
+cp -pr /opt/testdata/etc/pyff/* /etc/pyff/
 
 # test 21
 echo "Test 21: create aggregate from test data. Pipeline: ${PIPELINEBATCH}"
