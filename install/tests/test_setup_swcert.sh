@@ -26,10 +26,11 @@ prepare_test_config_sw_cert() {
     cp -np  /opt/testdata/etc/pki/tls/openssl.cnf /etc/pki/tls/
     cp -np  /opt/testdata/etc/pyff/* /etc/pyff/
     cp -npr /opt/testdata/md_source/*.xml /var/md_source/
-    cp /opt/testdata/etc/pyff/mdx_discosign_swcert.fd-example /etc/pyff/mdx_discosign.fd
-    export PIPELINEDAEMON=/etc/pyff/mdx_discosign.fd
-    cp /opt/testdata/etc/pyff/md_aggregator_sign_swcert.fd-example /etc/pyff/md_aggregator_sign_swcert.fd
-    export PIPELINEBATCH=/etc/pyff/md_aggregator_sign_swcert.fd
+    cp -pr /opt/testdata/etc/pki/sign/* /etc/pki/sign/
+    cp -pr /opt/testdata/etc/pyff/* /etc/pyff/
+    cp -pr /opt/testdata/md_source/* /var/md_source/
+
+
 }
 
 
