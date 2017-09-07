@@ -98,7 +98,7 @@ VOLUME /etc/pki/sign \
 COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
 COPY install/opt/known_hosts /home/$USERNAME/.ssh/
 COPY install/opt/xslt/* /etc/pyff/xslt/
-COPY install/opt/html_resources/* /var/md_feed/
+COPY install/opt/html_resources/* /opt/md_feed/
 
 # Install PKCS#11 drivers for Safenet eTokenPro
 COPY install/safenet/Linux/Installation/Standard/RPM/RPM-GPG-KEY-SafenetAuthenticationClient /opt/sac/

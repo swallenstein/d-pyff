@@ -5,7 +5,7 @@
 TESTFILE=$1
 REF_FILE=$2
 
-diff $TESTFILE $REF_FILE
+diff --ignore-space-change $TESTFILE $REF_FILE
 if (( $? != 0 )); then
     echo 'Output of test does not match expected value. Expected:'
     cat $REF_FILE

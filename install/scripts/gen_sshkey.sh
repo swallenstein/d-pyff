@@ -55,6 +55,7 @@ generate_sshkey() {
 
 create_repo_host_alias() {
     if [[ ! -z ${keyname+x} ]]; then
+        touch ~/.ssh/config
         cat >> ~/.ssh/config << EOT
 
 Host ${keyname}
