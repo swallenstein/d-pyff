@@ -63,8 +63,8 @@ Hostname $REPO_HOST
 IdentityFile /home/$(whoami)/.ssh/id_ed25519_${keyname}
 
 EOT
+        chmod 600 /home/$(whoami)/.ssh/config
     fi
-    chmod 600 /home/$(whoami)/.ssh/config
 }
 
 

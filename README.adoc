@@ -1,4 +1,4 @@
-# deploy pyFF using docker 
+# Deploy pyFF using docker
 
 A docker image for running a pyFF instance in either of 2 modes:
     1. daemon mode (mdx service and idp discovery as implemented by pyff/mdx).
@@ -16,12 +16,12 @@ The image is prepared for for metadata signature creation with pkcs#11 devices.
     cp conf.sh.default conf.sh # adapt afer copying
     ./dscripts/build.sh
 
-   To run multiple pyff containers on the same system you need to create separate conf.sh files
+   Option: To run multiple pyff containers on the same system you need to create separate conf.sh files
    and build separate images:
-   E.g. to create pyff container instance 3:
-   a) create a file conf3.sh, and set the IMGID=3; and
-   b) build the container with the -n option, e.g. `./dscripts/build.sh -n 3`
-   c) run the container with the -n option, e.g. `./dscripts/run.sh -n 3`
+   E.g. to create pyff container instance 03:
+   a) create a file conf03.sh, and set the IMGID=3; and
+   b) build the container with the -n option, e.g. `./dscripts/build.sh -n 03`
+   c) run the container with the -n option, e.g. `./dscripts/run.sh -n 03`
 
 
 ## Usage: pyffd
@@ -30,7 +30,8 @@ Initialize mounted volumes with sample data (optional):
     ./dscripts/run.sh -i init_sample.sh
 
 Configure pyff: 
-    Copy a default file to md_aggregate_sign.fd and edit the settings.
+    Copy a default file to /etc/pyff/md_aggregate_sign.fd and adjust the settings.
+    (/etc/pyff is the interal path of the container, see conf.sh for the extermanl mapping)
 
 
 Start pyffd as discovery and mdx service:
@@ -62,7 +63,7 @@ Documentation: See http://leifj.github.io/pyFF
 If the git pull/push operations require authentication your need to provide a default ssh keypair
 and register it with Github (Gitlab, ..) in the home directory of the container user, such as:
 
-    dscipts/exec.sh
+    dscripts/exec.sh
     ssh-keygen -t ed25519
     # add ~/.ssh/id_ed25519.pub as a deploy key with write access to the remote repo
     ssh git@github.com  # validate that the github key fingerprint is valid
@@ -73,11 +74,11 @@ and register it with Github (Gitlab, ..) in the home directory of the container 
 Start pyff:
  
     # see exec_pyff_batch.sh -h for options with per-entity-descriptor outpout and git integration
-    exec_pyff_batch.sh 
+    ./exec_pyff_batch.sh
 
 Sample entry for /etc/crontab to run pyff every hour:
 
-    29 *  *  *  *  root /docker_images/pyff/exec_pyff_batch.sh -n 3 2>&1 > /var/log/exec_pyff_batch-3.log 
+    29 *  *  *  *  root /docker_images/pyff/exec_pyff_batch.sh 2>&1 > /var/log/exec_pyff_batch.log
    
     
 ## HSM/pyFF config
@@ -99,6 +100,6 @@ There are 2 environments defined in the dscripts tool chain:
 
 There is a Jenkinsfile for CI. To use is Jenkins must be able to run docker.
 
-Versions are in $Projectroot/VERSION. To tag a new version run
+Versions are in $Projectroot/VERSION. To tag a new version run:
 
     git tag $(cat VERSION)

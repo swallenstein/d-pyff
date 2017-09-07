@@ -11,7 +11,8 @@ RUN yum update -y && yum clean all \
  && yum clean all
 RUN pip install --upgrade pip \
  && pip install six
-#use easy_install solves install bug
+
+# use easy_install, solves install bug
 # InsecurePlatformWarning can be ignored - this system does not use TLS
 RUN easy_install --upgrade six \
  && pip install importlib
