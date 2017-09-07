@@ -9,7 +9,7 @@ echo "    Logfiles in $LOGDIR"
 set +e
 
 # setup test configuration
-cp -pr /opt/etc/pyff/* etc/pyff/
+cp -pr /opt/testdata/etc/pyff/* /etc/pyff/
 
 # test 10
 echo 'Test 10: starting pyffd and expecting html response'

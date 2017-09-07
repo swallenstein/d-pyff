@@ -53,7 +53,7 @@ prepare_mdfeed_repo() {
 
 create_sw_signing_cert() {
     echo 'Test setup 04: create MD signing certificate'
-    /scripts/create_sw_cert.sh -p unittest
+    /scripts/create_sw_cert.sh unittest
 }
 
 
