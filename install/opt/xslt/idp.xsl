@@ -94,13 +94,13 @@
       <xsl:value-of select="normalize-space(md:IDPSSODescriptor/md:Extensions/mdui:UIInfo/mdui:Description[@xml:lang and @xml:lang!='de' and @xml:lang!='en'][1])"/>
     </xsl:variable>
     <xsl:variable name="orgName.de">
-      <xsl:value-of select="normalize-space(md:Organization/md:OrganizationDisplayName[@xml:lang='de'])"/>
-    </xsl:variable>
-    <xsl:variable name="orgName.en">
-      <xsl:value-of select="normalize-space(md:Organization/md:OrganizationDisplayName[@xml:lang='en'])"/>
+      <xsl:value-of select="normalize-space(md:Organization/md:OrganizationName[@xml:lang='de'])"/>
     </xsl:variable>
     <xsl:variable name="orgName.any">
-      <xsl:value-of select="normalize-space(md:Organization/md:OrganizationDisplayName[@xml:lang and @xml:lang!='de' and @xml:lang!='en'][1])"/>
+      <xsl:value-of select="normalize-space(md:Organization/md:OrganizationName[@xml:lang and @xml:lang!='de' and @xml:lang!='en'][1])"/>
+    </xsl:variable>
+    <xsl:variable name="orgName.en">
+      <xsl:value-of select="normalize-space(md:Organization/md:OrganizationName[@xml:lang='en'])"/>
     </xsl:variable>
     <xsl:variable name="Name">
       <xsl:choose>
