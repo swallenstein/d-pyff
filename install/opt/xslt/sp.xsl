@@ -42,10 +42,10 @@
         <table id="datatable" border="1" cellpadding="5" cellspacing="0" class="tablesorter">
           <thead>
             <tr class="eduid_head">
+              <th>Organisation</th>
               <th>Service</th>
               <th>Beschreibung</th>
               <th>Attribute</th>
-              <th>Organisation</th>
               <th>SAML Entity</th>
             </tr>
           </thead>
@@ -54,10 +54,10 @@
           </tbody>
           <tfoot>
             <tr class="eduid_head">
+              <th>Organisation</th>
               <th>Service</th>
               <th>Beschreibung</th>
               <th>Attribute</th>
-              <th>Organisation</th>
               <th>SAML Entity</th>
             </tr>
           </tfoot>
@@ -238,6 +238,23 @@
 
     <tr>
 
+      <!-- Organization + URL -->
+      <td valign="top">
+        <xsl:choose>
+          <xsl:when test="$orgURL and contains($orgURL, '://')">
+            <xsl:element name="a">
+              <xsl:attribute name="href">
+                <xsl:value-of select="$orgURL"/>
+              </xsl:attribute>
+              <xsl:value-of select="$orgName"/>
+            </xsl:element>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$orgName"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+
       <!-- Service name + URL -->
       <td valign="top">
         <xsl:choose>
@@ -286,24 +303,7 @@
         </table>
       </td>
 
-      <!-- Organization + URL -->
-      <td valign="top">
-        <xsl:choose>
-          <xsl:when test="$orgURL and contains($orgURL, '://')">
-            <xsl:element name="a">
-              <xsl:attribute name="href">
-                <xsl:value-of select="$orgURL"/>
-              </xsl:attribute>
-              <xsl:value-of select="$orgName"/>
-            </xsl:element>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$orgName"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-
-      <!-- Entity 
+      <!-- Entity
         The file name is derived from the URL with by replacing '/' with '_' and ':' with '.'.
       -->
       <td valign="top">
