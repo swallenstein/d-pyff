@@ -104,20 +104,11 @@
     </xsl:variable>
     <xsl:variable name="Name">
       <xsl:choose>
-        <xsl:when test="string-length($mduiName.de) &gt; 0">
-          <xsl:value-of select="$mduiName.de"/>
-        </xsl:when>
-        <xsl:when test="string-length($mduiName.en) &gt; 0">
-          <xsl:value-of select="$mduiName.en"/>
-        </xsl:when>
         <xsl:when test="string-length($orgName.de) &gt; 0">
           <xsl:value-of select="$orgName.de"/>
         </xsl:when>
         <xsl:when test="string-length($orgName.en) &gt; 0">
           <xsl:value-of select="$orgName.en"/>
-        </xsl:when>
-        <xsl:when test="string-length($mduiName.any) &gt; 0">
-          <xsl:value-of select="$mduiName.any"/>
         </xsl:when>
         <xsl:when test="string-length($orgName.any) &gt; 0">
           <xsl:value-of select="$orgName.any"/>
