@@ -6,7 +6,9 @@ LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
 
 RUN yum update -y && yum clean all \
  && yum -y install epel-release curl ip lsof net-tools sudo sysvinit-tools unzip wget which xmlstarlet \
- && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core opensc pcsc-lite \
+ && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core \
+                   # packages for HSMs, including diagnostics
+                   opensc pcsc-lite engine_pkcs11 gnutls-utils \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all
 RUN pip install --upgrade pip \
