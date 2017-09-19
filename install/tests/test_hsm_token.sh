@@ -99,3 +99,30 @@ if (( $? > 0 )); then
     echo 'Listing HSM token object with PyKCS11 lib failed'
     exit 1
 fi
+
+echo 'Test 39: List objects and PKCS11-URIs with p11tool'
+
+export GNUTLS_PIN=$USERPIN
+p11tool --provider $PYKCS11LIB --list-all --login pkcs11:token=testtoken;id=%01
+if (( $? > 0 )); then
+    echo 'Listing HSM objects with p11tool failed'
+    exit 1
+fi
+
+echo 'Test 40: List certificates with Java keytool'
+
+# debug option to select slot: cf. https://stackoverflow.com/questions/8247115/java-keytool-with-opensc-pkcs11-provider-only-works-with-debug-option-enabled
+keytool -list -keystore NONE -storetype PKCS11 -providerClass sun.security.pkcs11.SunPKCS11 \
+    -providerArg /opt/testdata/etc/java/eToken.cfg \
+    -J-Djava.security.debug=sunpkcs11 -storepass Secret.1 2>&1 > $LOGDIR/test39.log 2>&1
+if (( $? > 0 )); then
+    echo 'Listing HSM token object with Java keytool failed'
+    exit 1
+fi
+
+echo 'Test 50: Sign metadata document with xmlsectool'
+
+/opt/xmlsectool-2/xmlsectool.sh --sign \
+    --pkcs11Config eToken.cfg --keystoreProvider sun.security.pkcs11.SunPKCS11 \
+    --key test --keyPassword Secret.1 \
+    --inFile md.xml --outFile md_signed.xml
