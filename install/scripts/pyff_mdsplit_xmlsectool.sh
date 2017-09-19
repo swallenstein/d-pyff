@@ -22,7 +22,6 @@ rm -rf $MDSPLIT_UNSIGNED/*
     --logfile $LOGFILE --loglevel DEBUG \
     $MD_AGGREGATE $MDSPLIT_UNSIGNED
 
-
 # Step 2. Execute xmlsectool to sign each EntityDescriptor (ignoring pyff pipeline)
 # Problem: pyff does not create signatures with exclusive c14n (http://www.w3.org/2001/10/xml-exc-c14n#)
 # -> use xmlsectool for ADFS
@@ -47,3 +46,17 @@ chmod 644 $MDSPLIT_SIGNED/*.xml 2> /dev/null
 # Step 5. Make metadata aggregate the default page in /entities
 [[ -e "$MDSPLIT_SIGNED/.htaccess" ]] || echo 'Options +Indexes' > $MDSPLIT_SIGNED/.htaccess
 
+# Step 6. Strip signature from signed aggregate
+MDSOURCE_DIR=$(dirname $MDSPLIT_UNSIGNED)
+xsltproc /etc/pyff/xslt/rm_signature.xsl $MD_AGGREGATE | \
+    perl -pe 's/><md:EntityDescriptor/>\n<md:EntityDescriptor/' > $MDSOURCE_DIR/metadata_nosig.xml
+
+# Step 7. Sign aggregate with xmlsectool
+$XMLSECTOOL --sign --digest SHA-256 \
+    --inFile 	$MDSOURCE_DIR/metadata_nosig.xml \
+    --outFile 	$MDSOURCE_DIR/metadata2.xml \
+    --key 		$MDSIGN_KEY \
+    --certificate $MDSIGN_CERT $VERBOSE
+
+# Step 8. Delete source EDs
+rm -rf $MDSPLIT_UNSIGNED/*
