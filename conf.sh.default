@@ -90,7 +90,6 @@ _set_run_args() {
         export ENVSETTINGS="$ENVSETTINGS -e PIPELINEBATCH=/etc/pyff/md_aggregator_sign_swcert.fd"
     fi
 
-    get_capabilities
     export STARTCMD='/scripts/start_pyffd.sh'  # unset or blank to use image default
 }
 
