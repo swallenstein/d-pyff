@@ -39,7 +39,8 @@ RUN mkdir -p /opt && cd /opt \
  && unzip "xmlsectool-${version}-bin.zip" \
  && ln -s "xmlsectool-${version}" 'xmlsectool-2' \
  && rm "xmlsectool-${version}-bin.zip" \
- && yum -y install java-1.8.0-openjdk-devel.x86_64
+ && yum -y install java-1.8.0-openjdk-devel.x86_64 \
+ && yum clean all
 ENV JAVA_HOME=/etc/alternatives/jre_1.8.0_openjdk
 ENV XMLSECTOOL=/opt/xmlsectool-2/xmlsectool.sh
 
