@@ -19,7 +19,7 @@ RUN pip install --upgrade pip \
 RUN easy_install --upgrade six \
  && pip install importlib
 #using iso8601 0.1.9 because of str/int compare bug in pyff
-RUN pip install future iso8601==0.1.9 \
+RUN pip install babel future iso8601==0.1.9 \
  && pip install lxml \
  && pip install pykcs11
 
@@ -62,7 +62,10 @@ RUN pip install cherrypy
 ENV repodir='/opt/source/pyff'
 ENV repourl='https://github.com/identinetics/pyFF'
 RUN mkdir -p $repodir && cd $repodir \
- && git clone $repourl . && git checkout mdsplit \
+ && git clone $repourl . \
+ && git checkout i18n \
+# && git checkout mdsplit \
+ && python setup.py compile_catalog  \
  && python setup.py install \
 # forward request and error logs to docker log collector
  && ln -sf /dev/stdout /var/log/pyff_batch.log \
