@@ -7,7 +7,6 @@ LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
 RUN yum update -y && yum clean all \
  && yum -y install epel-release curl ip lsof net-tools sudo sysvinit-tools unzip wget which xmlstarlet \
  && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core \
-                   # packages for HSMs, including diagnostics
                    opensc pcsc-lite engine_pkcs11 gnutls-utils \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all
@@ -64,11 +63,10 @@ ENV repourl='https://github.com/identinetics/pyFF'
 RUN mkdir -p $repodir && cd $repodir \
  && git clone $repourl . \
  && git checkout i18n \
-# && git checkout mdsplit \
- && python setup.py compile_catalog  \
- && python setup.py install \
+ && python setup.py compile_catalog \
+ && python setup.py install
 # forward request and error logs to docker log collector
- && ln -sf /dev/stdout /var/log/pyff_batch.log \
+RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
  && ln -sf /dev/stderr /var/log/pyff_batch.error
 
 COPY install/testdata /opt/testdata
