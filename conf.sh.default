@@ -59,6 +59,7 @@ _set_buildargs() {
         --build-arg USERNAME=$CONTAINERUSER
         --build-arg UID=$CONTAINERUID
     "
+    export REPO_STATUS='True'  # if set: generate 'REPO_STATUS' file to be included in docker image at /opt/etc/
 }
 
 

@@ -128,3 +128,5 @@ EXPOSE 8080
 #RUN chmod +x /start_sshd.sh
 #VOLUME /etc/sshd
 #EXPOSE 2022
+
+COPY REPO_STATUS  /opt/etc/REPO_STATUS
