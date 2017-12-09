@@ -56,17 +56,15 @@ RUN mkdir -p $repodir && cd $repodir \
 # mdsplit function has not been pushed upstream yet - used rhoerbe fork
 # auto-installing  Cherry-Py dependency failed with 7.1.0 (UnicodeDecodeError)
 RUN pip install cherrypy
-#COPY install/opt/pyff/ /opt/source/pyff/
-#RUN cd /opt/source/pyff/ && python setup.py install
-ENV repodir='/opt/source/pyff'
-ENV repourl='https://github.com/identinetics/pyFF'
+COPY install/opt/pyFF /opt/source/pyff/
+RUN cd /opt/source/pyff/ && python setup.py install
+#ENV repodir='/opt/source/pyff'
+#ENV repourl='https://github.com/identinetics/pyFF'
 #RUN mkdir -p $repodir && cd $repodir \
 # && git clone $repourl . \
 # && git checkout i18n \
-COPY install/opt/pyff/* /opt/install/pyff/ 
-RUN cd /opt/install/pyff/ \
- && python setup.py compile_catalog \
- && python setup.py install
+# && python setup.py compile_catalog \
+# && python setup.py install
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/pyff_batch.log \
  && ln -sf /dev/stderr /var/log/pyff_batch.error
