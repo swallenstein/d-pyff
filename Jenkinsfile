@@ -1,3 +1,5 @@
+// Build-Setup-Test (no prior cleanup; leave container running after test)
+
 pipeline {
     agent any
 
