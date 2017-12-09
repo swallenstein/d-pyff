@@ -60,9 +60,11 @@ RUN pip install cherrypy
 #RUN cd /opt/source/pyff/ && python setup.py install
 ENV repodir='/opt/source/pyff'
 ENV repourl='https://github.com/identinetics/pyFF'
-RUN mkdir -p $repodir && cd $repodir \
- && git clone $repourl . \
- && git checkout i18n \
+#RUN mkdir -p $repodir && cd $repodir \
+# && git clone $repourl . \
+# && git checkout i18n \
+COPY install/opt/pyff/* /opt/install/pyff/ 
+RUN cd /opt/install/pyff/ \
  && python setup.py compile_catalog \
  && python setup.py install
 # forward request and error logs to docker log collector
