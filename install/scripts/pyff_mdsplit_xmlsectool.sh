@@ -50,11 +50,11 @@ chmod 644 $MDSPLIT_SIGNED/*.xml 2> /dev/null
 MDSOURCE_DIR=$(dirname $MDSPLIT_UNSIGNED)
 MDFEED_DIR=$(dirname $MDSPLIT_SIGNED)
 xsltproc /etc/pyff/xslt/rm_signature.xsl $MD_AGGREGATE | \
-    perl -pe 's/><md:EntityDescriptor/>\n<md:EntityDescriptor/' > $MDSOURCE_DIR/metadata_nosig.xml
+    perl -pe 's/><md:EntityDescriptor/>\n<md:EntityDescriptor/' > /tmp/metadata_nosig.xml
 
 # Step 7. Sign aggregate with xmlsectool
 $XMLSECTOOL --sign --digest SHA-256 \
-    --inFile 	$MDSOURCE_DIR/metadata_nosig.xml \
+    --inFile 	/tmp/metadata_nosig.xml \
     --outFile 	$MDFEED_DIR/metadata2.xml \
     --key 		$MDSIGN_KEY \
     --certificate $MDSIGN_CERT $VERBOSE
