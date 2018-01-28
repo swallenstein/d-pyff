@@ -37,7 +37,9 @@ block_root() {
 
 
 aggregate_metadata() {
-    /usr/bin/pyff --loglevel=$LOGLEVEL --logfile=$LOGDIR/pyff.log $PIPELINEBATCH
+    /usr/bin/pyff --loglevel=$LOGLEVEL --logfile=$LOGDIR/pyff.lastlog $PIPELINEBATCH
+    touch $LOGDIR/pyff.log
+    cat $LOGDIR/pyff.lastlog >> $LOGDIR/pyff.log
     chmod 644 /var/md_feed/*.xml 2> /dev/null
 }
 
