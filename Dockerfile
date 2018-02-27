@@ -1,6 +1,6 @@
 FROM centos:centos7
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
-      version="0.6.1"
+      version="0.6.2"
       #didi_dir="https://raw.githubusercontent.com/identinetics/docker-pyff/master/didi" \
       # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
@@ -10,8 +10,8 @@ RUN yum update -y && yum clean all \
                    opensc pcsc-lite engine_pkcs11 gnutls-utils \
  && yum -y install python-pip python-devel libxslt-devel \
  && yum clean all
-RUN pip install --upgrade pip \
- && pip install six
+#RUN pip install --upgrade pip  # failing on certain deployments: "Directory not empty: '/usr/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches'"
+RUN pip install six
 
 # use easy_install, solves install bug
 # InsecurePlatformWarning can be ignored - this system does not use TLS
