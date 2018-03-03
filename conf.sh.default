@@ -66,6 +66,7 @@ _set_buildargs() {
 _set_run_args() {
     LOGPURGEFILES='/var/log/httpd/* /var/log/shibboleth/*'
     export ENVSETTINGS="
+        -e DOCKERHOSTNAME=$HOSTNAME
         -e FREQUENCY=600
         -e LANG=de
         -e LOGDIR=/var/log
