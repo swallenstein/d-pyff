@@ -27,7 +27,11 @@ pipeline {
                 echo 'Building..'
                 rm conf.sh 2> /dev/null || true
                 ln -s conf.sh.default conf.sh
-                ./dscripts/build.sh
+                if [[ $nocache ]]; then
+                    ./dscripts/build.sh -p -c
+                else
+                    ./dscripts/build.sh -p
+                fi
                 '''
             }
         }
