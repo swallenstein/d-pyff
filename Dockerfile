@@ -1,6 +1,6 @@
 FROM centos:centos7
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
-      version="0.6.2"
+      version="0.6.3"
       #didi_dir="https://raw.githubusercontent.com/identinetics/docker-pyff/master/didi" \
       # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
@@ -8,7 +8,7 @@ RUN yum update -y && yum clean all \
  && yum -y install epel-release curl ip lsof net-tools sudo sysvinit-tools unzip wget which xmlstarlet \
  && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core \
                    opensc pcsc-lite engine_pkcs11 gnutls-utils \
- && yum -y install python-pip python-devel libxslt-devel \
+ && yum -y install python-pip python-devel libxslt-devel swig \
  && yum clean all
 #RUN pip install --upgrade pip  # failing on certain deployments: "Directory not empty: '/usr/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches'"
 RUN pip install six
