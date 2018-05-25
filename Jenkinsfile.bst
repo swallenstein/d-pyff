@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    parameters {
+        string(defaultValue: '', description: 'Force "docker build --nocache"', name: 'nocache')
+        string(defaultValue: '', description: 'push docker image after build', name: 'pushimage')
+    }
+
     stages {
         /*stage('Git pull + branch + submodule') {
             steps {
@@ -27,11 +32,9 @@ pipeline {
                 echo 'Building..'
                 rm conf.sh 2> /dev/null || true
                 ln -s conf.sh.default conf.sh
-                if [[ $nocache ]]; then
-                    ./dscripts/build.sh -p -c
-                else
-                    ./dscripts/build.sh -p
-                fi
+                    [[ "$pushimage" ]] && pushopt='-P'
+                    [[ "$nocache" ]] && nocacheopt='-c'
+                    ./dscripts/build.sh -p $nocacheopt $pushopt
                 '''
             }
         }

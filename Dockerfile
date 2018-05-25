@@ -131,3 +131,6 @@ EXPOSE 8080
 
 COPY REPO_STATUS  /opt/etc/REPO_STATUS
 USER $USERNAME
+RUN mkdir -p $HOME/.config/pip \
+ && printf "[global]\ndisable-pip-version-check = True\n" > $HOME/.config/pip/pip.conf
+COPY install/opt/bin/manifest2.sh /opt/bin/manifest2.sh
