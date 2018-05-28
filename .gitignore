@@ -2,3 +2,4 @@
 .idea/
 conf*.sh
 REPO_STATUS
+out/
