@@ -130,6 +130,8 @@ EXPOSE 8080
 #EXPOSE 2022
 
 COPY REPO_STATUS  /opt/etc/REPO_STATUS
+RUN yum -y install python34 \
+ && yum clean all && rm -rf /var/cache/yum
 USER $USERNAME
 RUN mkdir -p $HOME/.config/pip \
  && printf "[global]\ndisable-pip-version-check = True\n" > $HOME/.config/pip/pip.conf

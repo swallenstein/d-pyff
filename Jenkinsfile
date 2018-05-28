@@ -23,10 +23,16 @@ pipeline {
                 sh '''
                     echo 'Building..'
                     rm conf.sh 2> /dev/null || true
-                    ln -s conf.sh.default conf.sh
+                    cp conf.sh.default conf.sh
+                    echo '#!/bin/bash'  > local_conf.sh
+                    echo '[[ "'$docker_registry_user'" ]] && export DOCKER_REGISTRY_USER=$docker_registry_user'  >> local_conf.sh
+                    echo '[[ "'$docker_registry_host'" ]] && export DOCKER_REGISTRY=$docker_registry_host'  >> local_conf.sh
+                    echo 'return'  >> local_conf.sh
+                    source ./conf.sh
                     [[ "$pushimage" ]] && pushopt='-P'
                     [[ "$nocache" ]] && nocacheopt='-c'
-                    ./dscripts/build.sh -n39 -p $nocacheopt $pushopt
+                    ./dscripts/build.sh -p $nocacheopt $pushopt
+                    echo "=== build completed with rc $?"
                 '''
             }
         }
