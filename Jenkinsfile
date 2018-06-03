@@ -13,26 +13,33 @@ pipeline {
     stages {
         stage('docker cleanup') {
             steps {
-                sh './dscripts/manage.sh rm 2>/dev/null || true'
-                sh './dscripts/manage.sh rmvol 2>/dev/null || true'
-                sh 'sudo docker ps --all'
+                sh '''
+                    rm conf.sh 2> /dev/null || true
+                    cp conf.sh.default conf.sh
+                    ./dscripts/manage.sh rm 2>/dev/null || true
+                    ./dscripts/manage.sh rmvol 2>/dev/null || true
+                '''
             }
         }
         stage('Build') {
             steps {
+                echo "==========================="
+                sh 'set +x; source ./conf.sh; echo "Building $IMAGENAME"'
+                echo "Pipeline args: nocache=$nocache; pushimage=$pushimage; docker_registry_user=$docker_registry_user; docker_registry_host=$docker_registry_host"
+                echo "==========================="
                 sh '''
-                    echo 'Building..'
-                    rm conf.sh 2> /dev/null || true
-                    cp conf.sh.default conf.sh
-                    echo '#!/bin/bash'  > local_conf.sh
-                    echo '[[ "'$docker_registry_user'" ]] && export DOCKER_REGISTRY_USER=$docker_registry_user'  >> local_conf.sh
-                    echo '[[ "'$docker_registry_host'" ]] && export DOCKER_REGISTRY=$docker_registry_host'  >> local_conf.sh
-                    echo 'return'  >> local_conf.sh
+                    set +x
+                    echo [[ "$docker_registry_user" ]] && echo "DOCKER_REGISTRY_USER $docker_registry_user"  > local.conf
+                    echo [[ "$docker_registry_host" ]] && echo "DOCKER_REGISTRY_HOST $docker_registry_host"  >> local.conf
                     source ./conf.sh
                     [[ "$pushimage" ]] && pushopt='-P'
                     [[ "$nocache" ]] && nocacheopt='-c'
                     ./dscripts/build.sh -p $nocacheopt $pushopt
                     echo "=== build completed with rc $?"
+                '''
+                sh '''
+                    echo "generate run script"
+                    ./dscripts/run.sh -w
                 '''
             }
         }
@@ -40,7 +47,7 @@ pipeline {
             steps {
                 sh '''
                     echo 'Testing..'
-                    ./dscripts/run.sh -IV /tests/test_all.sh
+                    ./dscripts/run.sh -iV /tests/test_all.sh
                 '''
             }
         }
