@@ -11,10 +11,12 @@ The image is prepared for for metadata signature creation with pkcs#11 devices.
 ## Why using this docker image?
 
 The pyff project includes a Dockerfile based on Ubuntu. The differences of this image are:
+
 - Based on CentOS 7
 - Based on 'dscripts' submodule, a thing wrapper around the Docker CLI to conveniently build, run and manage images and containers
 - Does not start as root, drops capabilities and builds behind proxy. 
 - Includes Jenkinsfile to test deployment with HSM-configuration
+- Automatic generation of image build numbers for both source repo and dependency changes
 
 ## Prepare project and build the docker image
 
@@ -93,16 +95,5 @@ Provide the PYKCS11PIN env variable if using the HSM.
 
 ## CI, Staging and Versioning
 
-There are 2 environments defined in the dscripts tool chain:
-
-|===
-|environment | docker image tag| git branch
-|production | pr | master
-|testing | qa | qa
-|===
-
 There is a Jenkinsfile for CI. To use it the jenkins user must be able to run docker.
 
-Versions are in $Projectroot/VERSION. To tag a new version run:
-
-    git tag $(cat VERSION)
