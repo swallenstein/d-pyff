@@ -74,6 +74,9 @@ _set_run_args() {
         -e MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
         -e MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
+    "
+    # following settings are only required for the -g option of pyff_aggregate.sh
+    export ENVSETTINGS="$ENVSETTINGS
         -e REPO_HOST=github.com
         -e REPO_SSHUSER=git
         -e MDFEED_REPO=rhoerbe/mdfeedTestWpvAt
