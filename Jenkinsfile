@@ -16,8 +16,10 @@ pipeline {
                 sh '''
                     rm conf.sh 2> /dev/null || true
                     cp conf.sh.default conf.sh
-                    ./dscripts/manage.sh rm 2>/dev/null || true
-                    ./dscripts/manage.sh rmvol 2>/dev/null || true
+                    if [[ "$start_clean" ]]; then
+                        ./dscripts/manage.sh rm 2>/dev/null || true
+                        ./dscripts/manage.sh rmvol 2>/dev/null || true
+                    fi
                 '''
             }
         }
@@ -54,8 +56,15 @@ pipeline {
     }
     post {
         always {
-            echo 'removing docker volumes'
-            sh './dscripts/manage.sh rmvol 2>&1 || true'
+            sh '''
+                if [[ "$keep_running" ]]; then
+                   echo "Keep container running"
+                else
+                    echo 'Removing container, volumes'
+                    ./dscripts/manage.sh rm 2>/dev/null || true
+                    ./dscripts/manage.sh rmvol 2>/dev/null || true
+                fi
+            '''
         }
     }
 }
