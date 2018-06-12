@@ -51,6 +51,7 @@ pipeline {
             steps {
                 sh '''
                     echo 'Testing..'
+                    export REPO_HOST='localhost'  #  for ssh-config only, no test yet
                     ./dscripts/run.sh -iV /tests/test_all.sh
                 '''
             }

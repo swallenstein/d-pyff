@@ -1,7 +1,5 @@
 FROM centos:centos7
-LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>" \
-      version="0.6.3"
-      #didi_dir="https://raw.githubusercontent.com/identinetics/docker-pyff/master/didi" \
+LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>"
       # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
 RUN yum update -y && yum clean all \
@@ -34,7 +32,7 @@ RUN pip install babel future iso8601==0.1.9 \
 # --- XMLSECTOOL ---
 ENV version='2.0.0'
 RUN mkdir -p /opt && cd /opt \
- && wget "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip" \
+ && wget -q "https://shibboleth.net/downloads/tools/xmlsectool/${version}/xmlsectool-${version}-bin.zip" \
  && unzip "xmlsectool-${version}-bin.zip" \
  && ln -s "xmlsectool-${version}" 'xmlsectool-2' \
  && rm "xmlsectool-${version}-bin.zip" \
@@ -93,12 +91,7 @@ RUN mkdir -p $VOLDIRS \
  && chmod -R 700 $(find $VOLDIRS -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS
-VOLUME /etc/pki/sign \
-       /etc/pyff \
-       /home/$USERNAME/.ssh \
-       /var/log \
-       /var/md_feed \
-       /var/md_source
+VOLUME $VOLDIRS
 
 COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
 COPY install/opt/known_hosts /home/$USERNAME/.ssh/
@@ -131,7 +124,8 @@ EXPOSE 8080
 
 COPY REPO_STATUS  /opt/etc/REPO_STATUS
 RUN yum -y install python34 \
- && yum clean all && rm -rf /var/cache/yum
+ && yum clean all && rm -rf /var/cache/yum \
+ && curl https://bootstrap.pypa.io/get-pip.py | python3
 USER $USERNAME
 RUN mkdir -p $HOME/.config/pip \
  && printf "[global]\ndisable-pip-version-check = True\n" > $HOME/.config/pip/pip.conf

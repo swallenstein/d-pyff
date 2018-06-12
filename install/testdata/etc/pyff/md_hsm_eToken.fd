@@ -1,8 +1,6 @@
 - load:
-  - /var/md_source
+  - ../testdata/md_source
 - select
-- xslt:
-    stylesheet: unsign.xsl
 - xslt:
     stylesheet: tidy.xsl
 - store: 
@@ -12,7 +10,7 @@
      validUntil: P10D
      ID: your_metadatafeed_prefix_
 - sign:
-    # pkcs11URI: pkcs11://<token-library-path>/<tokenname>
-    # Token password from ENV PYKCS11PIN
+    # the last part of the "URI" is the key name on the eToken
     key: pkcs11:///usr/lib64/libeToken.so/test
-- publish: /var/md_feed/metadata.xml
+    # Token PW from ENV PYKCS11PIN
+- publish: ../testdata/md_feed/metadata_hsm.xml

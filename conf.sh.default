@@ -12,7 +12,6 @@ main() {
     _set_users
     _set_buildargs
     _set_run_args
-    #enable_pkcs11
     #set_enable_sshd     # usually used only for debugging - requires installed sshd in image
 }
 
@@ -61,7 +60,7 @@ _set_buildargs() {
 
 
 _set_run_args() {
-    LOGPURGEFILES='/var/log/httpd/* /var/log/shibboleth/*'
+    # Common attributes that can be left with default values in most cases
     export ENVSETTINGS="
         -e DOCKERHOSTNAME=$HOSTNAME
         -e FREQUENCY=600
@@ -70,33 +69,52 @@ _set_run_args() {
         -e LOGLEVEL=INFO
         -e PIDFILE=/var/log/pyffd.pid
         -e PORT=8080
-        -e PIPELINEDAEMON=/etc/pyff/mdx_discosign_swcert.fd
-        -e MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
-        -e MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
         -e MD_AGGREGATE=/var/md_feed/metadata.xml
+        -e REPO_HOST
     "
-    # following settings are only required for the -g option of pyff_aggregate.sh
-    export ENVSETTINGS="$ENVSETTINGS
-        -e REPO_HOST=github.com
-        -e REPO_SSHUSER=git
-        -e MDFEED_REPO=rhoerbe/mdfeedTestWpvAt
-        -e MDSOURCE_REPO=rhoerbe/mdsourceTestWpvAt
-    "
-    # Default setup: activate if USB-based PKCS11 device is available
-    HSMUSBDEVICE='Aladdin Knowledge Systems Token JC'  # output of lsusb
-    if [[ "$HOSTNAME" == 'kal3' && $(lsusb | grep "$HSMUSBDEVICE") ]]; then
-        enable_pkcs11
+
+    # Default setup: activate if USB-based PKCS11 device "eToken" is available
+    HSMUSBDEVICE='Aladdin Knowledge Systems Token JC'  # expected output of lsusb
+    HSMUSBDEVICE=$(echo $HSMUSBDEVICE | sed -r 's/\s+/./g') # remove spaces for further processing
+    if [[ "$(lsusb | egrep $HSMUSBDEVICE)" ]]; then
         export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/libetvTokenEngine.so"  # enable this for Safenet eTokePro
-        #export ENVSETTINGS="$ENVSETTINGS -e PYKCS11LIB=/usr/lib64/pkcs11/opensc-pkcs11.so"  # enable this for generic OpenSC card
         export ENVSETTINGS="$ENVSETTINGS -e PYKCS11PIN=Secret.1"  # configure token password
-        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEBATCH=/etc/pyff/md_aggregator_sign_hwcert.fd"
-    elif [[ $PIPELINEBATCH ]]; then
-        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEBATCH=$PIPELINEBATCH"
-    else
-        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEBATCH=/etc/pyff/md_aggregator_sign_swcert.fd"
+        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEBATCH=/etc/pyff/md_hsm_etoken.fd"
+        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEDAEMON=/etc/pyff/mdx_hsm_eToken.fd"
+        enable_pkcs11
+    else         # Enable the software HSM
+        pkcs11lib=/usr/lib64/libsofthsm2.so # SoftHSM2
+        export ENVSETTINGS="-e PYKCS11LIB=$pkcs11lib"
+        export ENVSETTINGS="$ENVSETTINGS -e PYKCS11PIN=Secret.1"  # configure token password
+        export ENVSETTINGS="$ENVSETTINGS -e SOPIN=Secret.2"  # configure admin password
+        export ENVSETTINGS="$ENVSETTINGS -e HSMUSBDEVICE=none" # output of lsusb
+        export ENVSETTINGS="$ENVSETTINGS -e HSMP11DEVICE=SoftHSM"  # output of pkcs11-tool --list-token-slots
+        export ENVSETTINGS="$ENVSETTINGS -e SOFTHSM=True"  # causes test scripts to skip lsusb
+        export ENVSETTINGS="$ENVSETTINGS -e JCE_CONF=/etc/softhsm_JCE.cfg"  # JCE PKCS11 config file
+        export ENVSETTINGS="$ENVSETTINGS -e P11KIT_DESC=SoftHSM.project"
+        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEBATCH=/etc/pyff/md_softhsm.fd"
+        export ENVSETTINGS="$ENVSETTINGS -e PIPELINEDAEMON=/etc/pyff/mdx_softhsm.fd"
+        enable_pkcs11
     fi
 
-    export STARTCMD='/scripts/start_pyffd.sh'  # unset or blank to use image default
+    # following settings are only required for the -g option of pyff_aggregate.sh
+    #export ENVSETTINGS="$ENVSETTINGS
+    #    -e REPO_HOST=github.com
+    #    -e REPO_SSHUSER=git
+    #    -e MDFEED_REPO=rhoerbe/mdfeedTestWpvAt
+    #    -e MDSOURCE_REPO=rhoerbe/mdsourceTestWpvAt
+    #"
+
+    # MDSIGN_CERT/_KEY are only required if using a SW signing certificate
+    #export ENVSETTINGS="$ENVSETTINGS
+    #    -e MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
+    #    -e MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
+    #    -e PIPELINEBATCH=/etc/pyff/md_swcert.fd
+    #    -e PIPELINEDAEMON=/etc/pyff/mdx_swcert.fd
+    #"
+
+    export STARTCMD='/scripts/start_pyffd.sh'  # idp-discovery + mdq
+    # export STARTCMD='tail -f /dev/null'  # start container + wait for aggregator
 }
 
 
