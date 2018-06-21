@@ -22,7 +22,6 @@ _set_volume_root() {
     DOCKERLOG_SHORT='./dl'
     mkdir -p $DOCKERVOL_SHORT $DOCKERLOG_SHORT
     DOCKER_VOLUME_ROOT='/var/lib/docker/volumes'  # hard coded - check for your config if applicable!
-    #export DOCKERFILE_DIR=  # set this if the Dockerfile is not in the directory containing the dscripts subproject
 }
 
 
@@ -109,6 +108,8 @@ _set_run_args() {
     #export ENVSETTINGS="$ENVSETTINGS
     #    -e MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
     #    -e MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
+    #    -e MDSPLIT_UNSIGNED=/var/md_source/entities
+    #    -e MDSPLIT_SIGNED=/var/md_feed/entities
     #    -e PIPELINEBATCH=/etc/pyff/md_swcert.fd
     #    -e PIPELINEDAEMON=/etc/pyff/mdx_swcert.fd
     #"
@@ -156,18 +157,28 @@ setup_vol_mapping() {
     #    $sudo chown -R $CONTAINERUID:$CONTAINERUID $DOCKER_VOLUME_ROOT/$CONTAINERNAME.* 2>/dev/null || true
     #fi
 
-    export LOGFILES="
-        $DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyffd.log
-        $DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyffd.err
-        $DOCKERLOG_SHORT/${CONTAINERNAME}.var_log/pyff_mdsplit.log
+}
+
+
+_set_logfiles() {
+    export KNOWN_LOGFILES="
+        ${DOCKERLOG_SHORT}/${CONTAINERNAME}.var_log/pyffd.log
+        ${DOCKERLOG_SHORT}/${CONTAINERNAME}.var_log/pyffd.error
+        ${DOCKERLOG_SHORT}/${CONTAINERNAME}.var_log/pyff_mdsplit.log
     "
+    LOGFILES=''
+    for lf in $KNOWN_LOGFILES; do
+        if [[ -e $lf ]]; then
+            export LOGFILES="$LOGFILES $lf"
+        fi
+    done
 }
 
 
 container_status() {
     $sudo docker ps | head -1
     $sudo docker ps --all | egrep $CONTAINERNAME\$
-    $sudo docker exec $CONTAINERNAME /scripts/status.sh
+    $sudo docker exec -it $CONTAINERNAME /scripts/status.sh
 }
 
 
