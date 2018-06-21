@@ -122,7 +122,7 @@ EXPOSE 8080
 #VOLUME /etc/sshd
 #EXPOSE 2022
 
-COPY REPO_STATUS  /opt/etc/REPO_STATUS
+# create manitest for automatic build number generation
 RUN yum -y install python34 \
  && yum clean all && rm -rf /var/cache/yum \
  && curl https://bootstrap.pypa.io/get-pip.py | python3
@@ -130,3 +130,5 @@ USER $USERNAME
 RUN mkdir -p $HOME/.config/pip \
  && printf "[global]\ndisable-pip-version-check = True\n" > $HOME/.config/pip/pip.conf
 COPY install/opt/bin/manifest2.sh /opt/bin/manifest2.sh
+
+CMD ["/scripts/start_pyffd.sh"]
