@@ -92,7 +92,7 @@ RUN mkdir -p $VOLDIRS_UNSHARED $VOLDIRS_SHARED \
  && chmod -R 700 $(find $VOLDIRS_UNSHARED -type d) \
  && chmod -R 770 $(find $VOLDIRS_SHARED -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
- && chown -R $UID:$GID $VOLDIRS_UNSHARED $VOLDIRS_SHARED \
+ && chown -R $UID:$GID $VOLDIRS_UNSHARED $VOLDIRS_SHARED
 VOLUME $VOLDIRS_UNSHARED $VOLDIRS_SHARED
 
 COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
