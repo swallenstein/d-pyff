@@ -85,13 +85,15 @@ RUN adduser -g $GID -u $UID $USERNAME \
  && mkdir -p /etc/sudoers.d \
  && echo "$USERNAME ALL=(root) NOPASSWD: /usr/sbin/pcscd" > /etc/sudoers.d/$USERNAME
 
-ENV VOLDIRS="/etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source"
-RUN mkdir -p $VOLDIRS \
+ENV VOLDIRS_UNSHARED="/etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed"
+ENV VOLDIRS_SHARED="/var/md_source"
+RUN mkdir -p $VOLDIRS_UNSHARED $VOLDIRS_SHARED \
  && mkdir -p /etc/pki/sign/certs /etc/pki/sign/private \
- && chmod -R 700 $(find $VOLDIRS -type d) \
+ && chmod -R 700 $(find $VOLDIRS_UNSHARED -type d) \
+ && chmod -R 770 $(find $VOLDIRS_SHARED -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
- && chown -R $UID:$GID $VOLDIRS
-VOLUME $VOLDIRS
+ && chown -R $UID:$GID $VOLDIRS_UNSHARED $VOLDIRS_SHARED \
+VOLUME $VOLDIRS_UNSHARED $VOLDIRS_SHARED
 
 COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
 COPY install/opt/known_hosts /home/$USERNAME/.ssh/
