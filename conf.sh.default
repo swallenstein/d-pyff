@@ -51,8 +51,8 @@ _set_buildargs() {
     export BUILDARGS="
         --build-arg USERNAME=$CONTAINERUSER
         --build-arg UID=$CONTAINERUID
+        --build-arg TIMEZONE=Europe/Vienna
     "
-    unset REPO_STATUS  # if set: generate 'REPO_STATUS' file to be included in docker image at /opt/etc/
     export MANIFEST_SCOPE='local'  # valid values: 'global', 'local'. Extension for manifest library.
                                    # must be local for targets. Requires write access to git for 'global'.
 }

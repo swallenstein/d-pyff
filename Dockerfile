@@ -11,6 +11,9 @@ RUN yum update -y && yum clean all \
 #RUN pip install --upgrade pip  # failing on certain deployments: "Directory not empty: '/usr/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches'"
 RUN pip install six
 
+ARG TIMEZONE='UTC'
+RUN ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+
 # use easy_install, solves install bug
 # InsecurePlatformWarning can be ignored - this system does not use TLS
 RUN easy_install --upgrade six \
