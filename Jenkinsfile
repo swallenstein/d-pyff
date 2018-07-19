@@ -31,8 +31,16 @@ pipeline {
                 sh 'set +x; source ./conf.sh; echo "Building $IMAGENAME"'
                 echo "Pipeline args: nocache=$nocache; pushimage=$pushimage; docker_registry_user=$docker_registry_user; docker_registry_host=$docker_registry_host"
                 echo "==========================="
-                withDockerRegistry([ credentialsId: "DockerRepoUpload", url: "$docker_registry_host" ]) {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DockerRepoUpload',
+                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                     sh '''
+                        if [[ "$docker_registry_user" != "$USERNAME" ]]; then
+                            echo "User name in Jenkins credential 'DockerRepoUpload' and $docker_registry_user do not match"
+                            exit 1
+                        fi
+
+                        # Login works, but push results in "no basic auth credentials"
+                        #docker login -u $docker_registry_user -p $PASSWORD $docker_registry_host
                         set +x
                         echo [[ "$docker_registry_user" ]] && echo "DOCKER_REGISTRY_USER $docker_registry_user"  > local.conf
                         echo [[ "$docker_registry_host" ]] && echo "DOCKER_REGISTRY_HOST $docker_registry_host"  >> local.conf

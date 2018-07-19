@@ -6,9 +6,9 @@ if (( $(id -u) == 0 )); then
     exit 1
 fi
 
-[[ "$LOGDIR" ]] || ='/var/log'
-[[ "$LOGLEVEL" ]] || ='INFO'
-[[ "$FREQUENCY" ]] || =600
+[[ "$LOGDIR" ]] || LOGDIR='/var/log'
+[[ "$LOGLEVEL" ]] || LOGLEVEL='INFO'
+[[ "$FREQUENCY" ]] || FREQUENCY=600
 [[ "$PORT" ]] || PORT='8080'
 [[ "$PIDFILE" ]] || PIDFILE='/var/log/pyffd.pid'
 
