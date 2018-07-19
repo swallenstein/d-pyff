@@ -31,16 +31,18 @@ pipeline {
                 sh 'set +x; source ./conf.sh; echo "Building $IMAGENAME"'
                 echo "Pipeline args: nocache=$nocache; pushimage=$pushimage; docker_registry_user=$docker_registry_user; docker_registry_host=$docker_registry_host"
                 echo "==========================="
-                sh '''
-                    set +x
-                    echo [[ "$docker_registry_user" ]] && echo "DOCKER_REGISTRY_USER $docker_registry_user"  > local.conf
-                    echo [[ "$docker_registry_host" ]] && echo "DOCKER_REGISTRY_HOST $docker_registry_host"  >> local.conf
-                    source ./conf.sh
-                    [[ "$pushimage" ]] && pushopt='-P'
-                    [[ "$nocache" ]] && nocacheopt='-c'
-                    ./dscripts/build.sh -p $nocacheopt $pushopt
-                    echo "=== build completed with rc $?"
-                '''
+                withDockerRegistry([ credentialsId: "DockerRepoUpload", url: "$docker_registry_host" ]) {
+                    sh '''
+                        set +x
+                        echo [[ "$docker_registry_user" ]] && echo "DOCKER_REGISTRY_USER $docker_registry_user"  > local.conf
+                        echo [[ "$docker_registry_host" ]] && echo "DOCKER_REGISTRY_HOST $docker_registry_host"  >> local.conf
+                        source ./conf.sh
+                        [[ "$pushimage" ]] && pushopt='-P'
+                        [[ "$nocache" ]] && nocacheopt='-c'
+                        ./dscripts/build.sh -p $nocacheopt $pushopt
+                        echo "=== build completed with rc $?"
+                    '''
+                }
                 sh '''
                     echo "generate run script"
                     ./dscripts/run.sh -w
