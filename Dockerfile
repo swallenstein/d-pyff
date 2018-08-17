@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM centos:7
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>"
       # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
