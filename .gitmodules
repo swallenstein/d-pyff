@@ -4,3 +4,6 @@
 [submodule "install/opt/pyFF"]
 	path = install/opt/pyFF
 	url = https://github.com/identinetics/pyFF
+[submodule "dcshell"]
+	path = dcshell
+	url = https://github.com/identinetics/dcshell

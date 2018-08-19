@@ -1,0 +1,55 @@
+version: "2"
+services:
+  pyff:
+    build:
+        context: .
+        args:
+            - TIMEZONE=Europe/Vienna
+    image: r2h2/pyff:latest
+    container_name: pyff
+    hostname: pyff
+    labels:
+      x.service: MD_Aggr/IDP_Disco
+    restart: unless-stopped
+    environment:
+        - FREQUENCY=600
+        - LANG=de
+        - LOGDIR=/var/log
+        - LOGLEVEL=INFO
+        - MDSIGN_CERT=/etc/pki/sign/certs/metadata_crt.pem
+        - MDSIGN_KEY=/etc/pki/sign/private/metadata_key.pem
+        - MD_AGGREGATE=/var/md_feed/metadata.xml
+        - MDFEED_HOST=github.com
+        - MDFEED_SSHUSER=git
+        - MDFEED_REPO=myaccount/mdfeedMydomainOrg
+        - MDSPLIT_UNSIGNED=/var/md_source/entities
+        - MDSPLIT_SIGNED=/var/md_feed/entities
+        - PIDFILE=/var/log/pyffd.pid
+        - PIPELINEBATCH=/etc/pyff/md_aggregator.fd
+        - PIPELINEDAEMON=/etc/pyff/mdx_disco.fd
+
+    #ports:
+    #  - "8080:8080"
+    networks:
+      dockernet:
+        ipv4_address: 10.1.1.3 
+    volumes:
+        - 03pyff.etc_pki_sign:/etc/pki/sign:Z
+        - 03pyff.etc_pyff:/etc/pyff:Z
+        - 03pyff.home_pyff_ssh:/home/pyff/.ssh:Z
+        - 03pyff.var_log:/var/log:Z
+        - 03pyff.var_md_feed:/var/md_feed:z
+        - 03pyff.var_md_source:/var/md_source:z
+    cap_drop:
+      - ALL
+networks:
+  dockernet:
+    external: true
+volumes:
+    03pyff.etc_pki_sign:
+    03pyff.etc_pyff:
+    03pyff.home_pyff_ssh:
+    03pyff.var_log:
+    03pyff.var_md_feed:
+    03pyff.var_md_source:
+
