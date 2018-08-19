@@ -5,7 +5,7 @@ services:
         context: .
         args:
             - TIMEZONE=Europe/Vienna
-    image: r2h2/pyff:latest
+    image: r2h2/pyff
     container_name: pyff
     hostname: pyff
     labels:
