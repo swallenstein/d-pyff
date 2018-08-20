@@ -21,7 +21,7 @@ pipeline {
                         ./dcshell/build -f dc.yaml $nocacheopt $pushopt
                         echo "=== build completed with rc $?"
                     '''
-                }
+                //}
             }
         }
         stage('Test ') {
