@@ -12,8 +12,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo "==========================="
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DockerRepoUpload',
-                                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                //withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DockerRepoUpload',
+                //                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                     sh '''
                         [[ "$nocache" ]] && nocacheopt='-c'
                         [[ "$pushimage" ]] && pushopt='-p'
