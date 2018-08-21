@@ -1,4 +1,5 @@
-FROM centos:7
+FROM intra/centos7_base
+# the image is an alias for library/centos:7, or a modification directing to intranet-proxies for dependencies
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>"
       # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
