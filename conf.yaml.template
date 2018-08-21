@@ -1,6 +1,0 @@
-# template file to map env variables (from conf.sh) into a yaml file
-DockerCompose:
-    imagename: $IMAGENAME$tag_suffix
-    containername: $CONTAINERNAME
-    servicename: $SERVICEDESCRIPTION
-    ipv4_address: $IPV4_ADDRESS

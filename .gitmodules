@@ -1,6 +1,3 @@
-[submodule "dscripts"]
-	path = dscripts
-	url = https://github.com/identinetics/dscripts.git
 [submodule "install/opt/pyFF"]
 	path = install/opt/pyFF
 	url = https://github.com/identinetics/pyFF

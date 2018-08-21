@@ -95,5 +95,9 @@ Provide the PYKCS11PIN env variable if using the HSM.
 
 ## CI, Staging and Versioning
 
-There is a Jenkinsfile for CI. To use it the jenkins user must be able to run docker and have python3 in the path.
+There is a Jenkinsfile for CI. To use it the jenkins user:
+
+ * Must be able to run docker and docker-compose;
+ * Must have python3 in the path;
+ * Must have pytest and pyYaml installed in python3
 
