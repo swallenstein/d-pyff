@@ -1,23 +1,20 @@
-FROM intra/centos7_base
-# the image is an alias for library/centos:7, or a modification directing to intranet-proxies for dependencies
+FROM intra/centos7_py34_base
 LABEL maintainer="Rainer Hörbe <r2h2@hoerbe.at>"
-      # capabilities='--cap-drop=all'  # TODO: needs testing to enable
 
-RUN yum update -y && yum clean all \
- && yum -y install epel-release curl ip lsof net-tools sudo sysvinit-tools unzip wget which xmlstarlet \
- && yum -y install usbutils gcc gcc-c++ git openssl redhat-lsb-core \
+RUN yum -y update \
+ && yum -y install sudo sysvinit-tools wget xmlstarlet \
+ && yum -y install usbutils gcc gcc-c++ git redhat-lsb-core \
                    opensc pcsc-lite engine_pkcs11 gnutls-utils \
  && yum -y install python-pip python-devel libxslt-devel swig \
  && yum clean all
-#RUN pip install --upgrade pip  # failing on certain deployments: "Directory not empty: '/usr/lib/python2.7/site-packages/pip/_vendor/cachecontrol/caches'"
-RUN pip install six
 
 ARG TIMEZONE='UTC'
 RUN ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 
 # use easy_install, solves install bug
 # InsecurePlatformWarning can be ignored - this system does not use TLS
-RUN easy_install --upgrade six \
+RUN pip install six \
+ && easy_install --upgrade six \
  && pip install importlib
 #using iso8601 0.1.9 because of str/int compare bug in pyff
 RUN pip install babel future iso8601==0.1.9 \
@@ -97,7 +94,7 @@ RUN mkdir -p $VOLDIRS_UNSHARED $VOLDIRS_SHARED \
  && chmod -R 770 $(find $VOLDIRS_SHARED -type d) \
  && chmod -R 755 $(find /var/md_feed -type d) \
  && chown -R $UID:$GID $VOLDIRS_UNSHARED $VOLDIRS_SHARED
-VOLUME $VOLDIRS_UNSHARED $VOLDIRS_SHARED
+VOLUME /etc/pki/sign /etc/pyff /home/$USERNAME/.ssh /var/log /var/md_feed /var/md_source
 
 COPY install/opt/gitconfig /home/$USERNAME/.gitconfig
 COPY install/opt/known_hosts /home/$USERNAME/.ssh/
@@ -129,12 +126,7 @@ EXPOSE 8080
 #EXPOSE 2022
 
 # create manitest for automatic build number generation
-RUN yum -y install python34 \
- && yum clean all && rm -rf /var/cache/yum \
- && curl https://bootstrap.pypa.io/get-pip.py | python3
 USER $USERNAME
-RUN mkdir -p $HOME/.config/pip \
- && printf "[global]\ndisable-pip-version-check = True\n" > $HOME/.config/pip/pip.conf
 COPY install/opt/bin/manifest2.sh /opt/bin/manifest2.sh
 
 CMD ["/scripts/start_pyffd.sh"]
