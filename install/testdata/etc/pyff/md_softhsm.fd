@@ -1,5 +1,5 @@
 - load:
-  - ../testdata/md_source
+  - /var/md_source
 - select
 - xslt:
     stylesheet: tidy.xsl
@@ -13,4 +13,4 @@
     # the last part of the "URI" is the key name on the eToken
     key: pkcs11:///usr/lib64/libsofthsm2.so/test
     # Token PW from ENV PYKCS11PIN
-- publish: ../testdata/md_feed/metadata_softhsm.xml
+- publish: /var/md_feed/metadata_softhsm.xml

@@ -4,8 +4,10 @@ pipeline {
     agent any
     options { disableConcurrentBuilds() }
     parameters {
+        string(defaultValue: 'True', description: '"True": initial cleanup: remove container and volumes; otherwise leave empty', name: 'start_clean')
         string(description: '"True": "Set --nocache for docker build; otherwise leave empty', name: 'nocache')
         string(description: '"True": push docker image after build; otherwise leave empty', name: 'pushimage')
+        string(description: '"True": keep running after test; otherwise leave empty to delete container and volumes', name: 'keep_running')
     }
 
     stages {
@@ -22,6 +24,16 @@ pipeline {
                         default_registry=$(docker info 2> /dev/null |egrep '^Registry' | awk '{print $2}')
                         echo "  Docker default registry: $default_registry"
                     fi
+                '''
+            }
+        }
+        stage('Cleanup ') {
+            steps {
+                sh '''
+                if [[ ! "$start_clean" ]]; then
+                    echo 'removing docker volumes and container (tests need initial data to pass)'
+                    docker-compose -f dc.yaml down -v 2>/dev/null | true
+                fi
                 '''
             }
         }
@@ -53,6 +65,16 @@ pipeline {
             steps {
                 sh 'docker-compose -f dc.yaml push pyff'
             }
+        }
+    }
+    post {
+        always {
+            sh '''
+                if [[ ! "$keep_running" ]]; then
+                    echo 'removing docker volumes and container'
+                    docker-compose -f dc.yaml down -v
+                fi
+            '''
         }
     }
 }

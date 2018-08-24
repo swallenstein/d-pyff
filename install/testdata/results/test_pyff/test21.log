@@ -1,0 +1,3 @@
+{'entityID': 'https://idp.example.com/idp.xml'}
+{'entityID': 'https://idp5.test.example.org/idp.xml'}
+{'entityID': 'https://sp5.test.example.org/sp.xml'}
