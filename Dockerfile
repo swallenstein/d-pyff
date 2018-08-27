@@ -8,9 +8,6 @@ RUN yum -y update \
  && yum -y install python-pip python-devel libxslt-devel swig \
  && yum clean all
 
-ARG TIMEZONE='UTC'
-RUN ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
-
 # use easy_install, solves install bug
 # InsecurePlatformWarning can be ignored - this system does not use TLS
 RUN pip install six \

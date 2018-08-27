@@ -30,23 +30,22 @@ pipeline {
         stage('Cleanup ') {
             steps {
                 sh '''
-                if [[ ! "$start_clean" ]]; then
-                    echo 'removing docker volumes and container (tests need initial data to pass)'
-                    docker-compose -f dc.yaml down -v 2>/dev/null | true
-                fi
+                    if [[ ! "$start_clean" ]]; then
+                        echo 'removing docker volumes and container (tests need initial data to pass)'
+                        docker-compose -f dc.yaml down -v 2>/dev/null | true
+                    fi
                 '''
             }
         }
         stage('Build') {
             steps {
-                echo "==========================="
-                    sh '''
-                        [[ "$nocache" ]] && nocacheopt='-c'
-                        export MANIFEST_SCOPE=local
-                        ./dcshell/build -f dc.yaml $nocacheopt
-                        echo "=== build completed with rc $?"
-                    '''
-                //}
+                sh '''
+                    [[ "$nocache" ]] && nocacheopt='-c'
+                    export MANIFEST_SCOPE='local'
+                    export PRJ_HOME='.'
+                    ./dcshell/build -f dc.yaml $nocacheopt
+                    echo "=== build completed with rc $?"
+                '''
             }
         }
         stage('Test ') {
@@ -63,7 +62,11 @@ pipeline {
                 expression { params.pushimage?.trim() != '' }
             }
             steps {
-                sh 'docker-compose -f dc.yaml push pyff'
+                sh '''
+                    export MANIFEST_SCOPE='local'
+                    export PROJ_HOME='.'
+                    ./dcshell/build -f dc.yaml -P
+                '''
             }
         }
     }
@@ -77,4 +80,5 @@ pipeline {
             '''
         }
     }
+
 }

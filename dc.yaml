@@ -3,8 +3,6 @@ services:
   pyff:
     build:
         context: .
-        args:
-            - TIMEZONE=Europe/Vienna
     image: ${DOCKER_REGISTRY_USER}/pyff
     container_name: pyff
     hostname: pyff

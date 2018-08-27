@@ -42,8 +42,10 @@ get_commandline_args() {
 
 cancel_if_keys_exist() {
     if [[ -e '/etc/pki/sign/private/metadata_key_pkcs8.pem' || -e '/etc/pki/sign/certs/metadata_crt.pem' ]]; then
-        red=$(tput setaf 1)
-        reset=$(tput sgr0)
+        if [[ "$TERM" ]]; then
+            red=$(tput setaf 1)
+            reset=$(tput sgr0)
+        fi
         echo "${red}need to delete keys before creating new ones${reset}"
         exit 0
     fi
