@@ -51,7 +51,7 @@ load_library_functions() {
 
 
 prepare_command() {
-    cmd="${sudo} docker-compose -f dc${config_nr}.yaml exec pyff${config_nr}"
+    cmd="${sudo} docker-compose -f ${PROJ_HOME}/dc${config_nr}.yaml exec pyff${config_nr}"
 }
 
 

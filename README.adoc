@@ -13,24 +13,24 @@ The image is prepared for for metadata signature creation with pkcs#11 devices.
 The pyff project includes a Dockerfile based on Ubuntu. The differences of this image are:
 
 - Based on CentOS 7
-- Based on 'dscripts' submodule, a thing wrapper around the Docker CLI to conveniently build, run and manage images and containers
-- Does not start as root, drops capabilities and builds behind proxy. 
+- added docker-compose for build/run
 - Includes Jenkinsfile to test deployment with HSM-configuration
-- Automatic generation of image build numbers for both source repo and dependency changes
+- Does not start as root; drops capabilities
+- Submodule dcshell for automatic generation of image build numbers for both source repo and dependency changes
 
 ## Prepare project and build the docker image
 
     git clone https://github.com/identinetics/docker-pyff
     cd docker-pyff
     git submodules update --init
-    cp conf.sh.default conf.sh    # Use default or edit after copying
-    ./dscripts/build.sh
+    # edit dc.yaml
+    ./dcshell/build
 
 ## Usage: pyffd (IDP discovery and MDQ service)
 
 Initialize mounted volumes with sample data (optional):
     
-    ./dscripts/run.sh -ip init_sample.sh
+    docker-compose -f dc.yaml run pyff bash init_sample.sh
 
 Configure pyff: 
     Copy a default file to /etc/pyff/md_aggregate_sign.fd and adjust the settings.
@@ -44,7 +44,7 @@ Configure environment variables in conf.sh and start the daemon:
     PIDFILE
     PIPELINEDAEMON
 
-    ./dscripts/run.sh
+    docker-compose -f dc.yaml up -d
     curl http://localhost:8080
     
 Take care of appropriate port mapping and/or proxying.
@@ -68,7 +68,7 @@ Functional enhancements to pyFF:
 If the git pull/push operations require authentication your need to provide a default ssh keypair
 and register it with Github (Gitlab, ..) in the home directory of the container user, such as:
 
-    dscripts/exec.sh
+    docker-compose -f dc.yaml exec pyff bash
     ssh-keygen -t ed25519
     # add ~/.ssh/id_ed25519.pub as a deploy key with write access to the remote repo
     ssh git@github.com  # validate that the github key fingerprint is valid
