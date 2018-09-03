@@ -2,8 +2,7 @@
 
 main() {
     get_commandline_opts $@
-    load_library_functions
-    load_config
+    _load_dcshell_lib
     init_sudo
     prepare_command
     exec_commands
@@ -44,9 +43,8 @@ usage() {
 }
 
 
-load_library_functions() {
-    PROJ_HOME=$(cd $(dirname $BASH_SOURCE[0]) && pwd)
-    source $PROJ_HOME/dscripts/conf_lib.sh
+_load_dcshell_lib() {
+    source $DCSHELL_HOME/dcshell_lib.sh
 }
 
 
