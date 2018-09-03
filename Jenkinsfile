@@ -15,22 +15,21 @@ pipeline {
             steps {
                 sh '''
                     set +x
-                    echo "Build parameters:"
-                    echo "  nocache=$nocache"
-                    echo "  DOCKER_REGISTRY_USER=$DOCKER_REGISTRY_USER"
-                    echo "Push parameters:"
-                    echo "  pushimage=$pushimage"
+                    echo "Initial cleanup=start_clean"
+                    echo "Build with option nocache=$nocache"
+                    echo "Push  image=$pushimage"
                     if [[ "$pushimage" ]]; then
                         default_registry=$(docker info 2> /dev/null |egrep '^Registry' | awk '{print $2}')
                         echo "  Docker default registry: $default_registry"
                     fi
+                    echo "Keep running after test=$keep_running"
                 '''
             }
         }
         stage('Cleanup ') {
             steps {
                 sh '''
-                    if [[ ! "$start_clean" ]]; then
+                    if [[ "$start_clean" ]]; then
                         echo 'removing docker volumes and container (tests need initial data to pass)'
                         docker-compose -f dc.yaml down -v 2>/dev/null | true
                     fi
