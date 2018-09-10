@@ -27,12 +27,12 @@ pipeline {
             }
         }
         stage('Cleanup ') {
+            when {
+                expression { params.$start_clean?.trim() != '' }
+            }
             steps {
                 sh '''
-                    if [[ "$start_clean" ]]; then
-                        echo 'removing docker volumes and container (tests need initial data to pass)'
-                        docker-compose -f dc.yaml down -v 2>/dev/null | true
-                    fi
+                    docker-compose -f dc.yaml down -v 2>/dev/null | true
                 '''
             }
         }
@@ -41,7 +41,6 @@ pipeline {
                 sh '''
                     [[ "$nocache" ]] && nocacheopt='-c'
                     export MANIFEST_SCOPE='local'
-                    export PRJ_HOME='.'
                     ./dcshell/build -f dc.yaml $nocacheopt
                     echo "=== build completed with rc $?"
                 '''

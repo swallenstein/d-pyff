@@ -10,8 +10,10 @@ main() {
 
 
 get_commandline_opts() {
-    while getopts ":ghHn:psS" opt; do
+    projdir='.'
+    while getopts ":D:ghHn:psS" opt; do
       case $opt in
+        D) projdir=$OPTARG;;
         g) git='True';;
         H) htmlout='-H';;
         n) re='^[0-9][0-9]$'
@@ -33,6 +35,7 @@ get_commandline_opts() {
 
 usage() {
     echo "usage: $0 [-h] [-H] [-i] [-s|-S]
+       -D  specify docker-compose file directory
        -g  git pull before pyff and push afterwards (use if PYFFOUT has a git repo)
        -h  print this help text
        -H  generate HTML output from metadata
@@ -49,7 +52,7 @@ _load_dcshell_lib() {
 
 
 prepare_command() {
-    cmd="${sudo} docker-compose -f ${PROJ_HOME}/dc${config_nr}.yaml exec pyff${config_nr}"
+    cmd="${sudo} docker-compose -f ${projdir}/dc${config_nr}.yaml exec pyff${config_nr}"
 }
 
 
